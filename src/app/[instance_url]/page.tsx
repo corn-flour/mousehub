@@ -77,7 +77,7 @@ const PostItem = (props: {
         <Card className="relative transition-all hover:border-slate-700">
             <Link
                 href={`/${props.instanceURL}/post/${post.post.id}`}
-                className="absolute left-0 top-0 h-full w-full"
+                className="absolute left-0 top-0 z-10 h-full w-full"
             >
                 <span className="sr-only">{props.post.post.name}</span>
             </Link>
