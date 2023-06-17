@@ -4,6 +4,7 @@ import { Rat } from "lucide-react"
 import Link from "next/link"
 import { type ReactNode } from "react"
 import InstanceSelector from "./instance-selector"
+import ThemeSwitch from "./theme-switch"
 
 const NavBar = async () => {
     const instances = await fetchLemmyInstances()
@@ -13,7 +14,7 @@ const NavBar = async () => {
     }))
 
     return (
-        <header className="fixed top-0 z-20 w-full border-b bg-white p-4">
+        <header className="fixed top-0 z-20 w-full border-b bg-background p-4">
             <div className="mx-auto flex items-center gap-2 lg:max-w-7xl">
                 <Button asChild variant="ghost">
                     <Link href="/">
@@ -22,6 +23,7 @@ const NavBar = async () => {
                     </Link>
                 </Button>
                 <InstanceSelector data={data} />
+                <ThemeSwitch />
             </div>
         </header>
     )

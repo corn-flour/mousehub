@@ -1,4 +1,10 @@
-import { ChevronDown, ChevronUp, ExternalLink, Rat } from "lucide-react"
+import {
+    ChevronDown,
+    ChevronUp,
+    ExternalLink,
+    MessageCircle,
+    Rat,
+} from "lucide-react"
 import Link from "next/link"
 import {
     Card,
@@ -138,7 +144,7 @@ const PostItem = (props: {
                 </div>
                 <CardTitle>{post.post.name}</CardTitle>
             </CardHeader>
-            <CardContent className=" ml-10">
+            <CardContent className="ml-10">
                 <NSFWMask nsfw={post.post.nsfw}>
                     {post.post.body && (
                         <Mdx
@@ -172,7 +178,14 @@ const PostItem = (props: {
                 </NSFWMask>
             </CardContent>
 
-            <CardFooter>{/** TODO: Action buttons here? */}</CardFooter>
+            <CardFooter className="ml-10">
+                <Button variant="ghost" size="sm" asChild className="z-10">
+                    <Link href={`/${instanceURL}/post/${post.post.id}#comments`}>
+                        <MessageCircle className="mr-2 h-4 w-4" />
+                        {post.counts.comments} comments
+                    </Link>
+                </Button>
+            </CardFooter>
         </Card>
     )
 }
