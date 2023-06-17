@@ -14,7 +14,7 @@ const NavBar = async () => {
 
     return (
         <header className="fixed p-4 w-full border-b bg-white z-20 top-0">
-            <div className="flex items-center gap-4 lg:max-w-7xl">
+            <div className="flex items-center gap-4 lg:max-w-7xl mx-auto">
                 <Button asChild variant="ghost">
                     <Link href="/">
                         <Rat className="h-6 w-6" />
