@@ -12,7 +12,7 @@ const PostList = async ({ params }: PostListProps) => {
     const posts = await lemmyClient.getPosts({})
 
     return (
-        <div className="my-4 flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
             {posts.posts.map((post) => (
                 <PostItem
                     key={post.post.id}
