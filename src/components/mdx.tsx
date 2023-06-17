@@ -1,6 +1,5 @@
 import { default as MarkdownIt } from "markdown-it"
 import OverflowMask from "./overflow-mask"
-
 const md = new MarkdownIt()
 
 // TODO: figure out custom markdown render rules

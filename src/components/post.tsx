@@ -11,10 +11,11 @@ import {
 import { type GetPostsResponse } from "lemmy-js-client"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Mdx from "@/components/mdx"
-import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { formatUserInfo } from "@/lib/lemmy"
 import { Button } from "./ui/button"
+import { PostImage } from "./post-image"
+import { NSFWMask } from "./nsfw-mask"
 
 const isImage = (url: string) => {
     return /\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url)
@@ -80,7 +81,6 @@ const PostItem = (props: {
 }) => {
     const { post, instanceURL, isExplorePost } = props
     const creator = formatUserInfo(post.creator)
-
     return (
         <Card
             className={cn(
@@ -97,11 +97,11 @@ const PostItem = (props: {
                 </Link>
             )}
 
-            {/** 
-             * Up/downvote buttons 
+            {/**
+             * Up/downvote buttons
              * TODO: Implement server actions for these
              * */}
-            <div className="absolute left-0 top-0 h-full w-10 z-10 py-4 flex flex-col items-center">
+            <div className="absolute left-0 top-0 z-10 flex h-full w-10 flex-col items-center py-4">
                 <Button variant="ghost" className="px-2">
                     <span className="sr-only">Upvote</span>
                     <ChevronUp />
@@ -139,36 +139,37 @@ const PostItem = (props: {
                 <CardTitle>{post.post.name}</CardTitle>
             </CardHeader>
             <CardContent className=" ml-10">
-                {post.post.body && (
-                    <Mdx text={post.post.body} shouldOverflow={isExplorePost} />
-                )}
-                {post.post.thumbnail_url ? (
-                    <Image
-                        src={post.post.thumbnail_url}
-                        alt=""
-                        className="max-h-[600px] rounded-lg object-cover object-top"
-                        width={672}
-                        height={672}
-                    />
-                ) : (
-                    post.post.url &&
-                    isImage(post.post.url) && (
-                        <Image
-                            src={post.post.url}
-                            alt={post.post.embed_title ?? ""}
-                            className="rounded-lg"
-                            width={672}
-                            height={672}
+                <NSFWMask nsfw={post.post.nsfw}>
+                    {post.post.body && (
+                        <Mdx
+                            text={post.post.body}
+                            shouldOverflow={isExplorePost}
                         />
-                    )
-                )}
-                {post.post.url && !isImage(post.post.url) && (
-                    <Embed
-                        url={post.post.url}
-                        title={post.post.embed_title}
-                        description={post.post.embed_description}
-                    />
-                )}
+                    )}
+                    {post.post.thumbnail_url ? (
+                        <PostImage
+                            imageURL={post.post.thumbnail_url}
+                            alt=""
+                            nsfw={post.post.nsfw}
+                        />
+                    ) : (
+                        post.post.url &&
+                        isImage(post.post.url) && (
+                            <PostImage
+                                imageURL={post.post.url}
+                                alt={post.post.embed_title ?? ""}
+                                nsfw={post.post.nsfw}
+                            />
+                        )
+                    )}
+                    {post.post.url && !isImage(post.post.url) && (
+                        <Embed
+                            url={post.post.url}
+                            title={post.post.embed_title}
+                            description={post.post.embed_description}
+                        />
+                    )}
+                </NSFWMask>
             </CardContent>
 
             <CardFooter>{/** TODO: Action buttons here? */}</CardFooter>

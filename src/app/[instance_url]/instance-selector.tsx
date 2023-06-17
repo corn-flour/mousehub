@@ -18,6 +18,8 @@ import { useState } from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
 import { usePathname, useRouter } from 'next/navigation'
 
+// Cmdk renders every item in the list all the time
+// We may revisit this and introduce custom filter if this has perf issue
 const InstanceSelector = ({data} : {
     data: {
         value: string
