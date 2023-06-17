@@ -101,12 +101,13 @@ const PostItem = (props: {
              * Up/downvote buttons 
              * TODO: Implement server actions for these
              * */}
-            <div className="absolute left-0 top-0 h-full w-10 z-10 py-4">
-                <Button variant="ghost" size='sm'>
+            <div className="absolute left-0 top-0 h-full w-10 z-10 py-4 flex flex-col items-center">
+                <Button variant="ghost" className="px-2">
                     <span className="sr-only">Upvote</span>
                     <ChevronUp />
                 </Button>
-                <Button variant="ghost" size='sm'>
+                <p>{post.counts.score}</p>
+                <Button variant="ghost" className="px-2">
                     <span className="sr-only">Downvote</span>
                     <ChevronDown />
                 </Button>
