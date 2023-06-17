@@ -12,6 +12,8 @@ import { type GetPostsResponse } from "lemmy-js-client"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Mdx from "@/components/mdx"
 import Image from "next/image"
+import { cn } from "@/lib/utils"
+import { formatUserInfo } from "@/lib/lemmy"
 
 const isImage = (url: string) => {
     return /\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url)
@@ -22,6 +24,7 @@ const Embed = (props: {
     url: string
     title?: string
     description?: string
+    isExplorePost?: boolean
 }) => {
     const { url, title, description } = props
     if (!title && !description)
@@ -39,7 +42,11 @@ const Embed = (props: {
     if (!description) {
         return (
             <Link href={url} target="_blank" className="mt-4">
-                <Card>
+                <Card
+                    className={
+                        !props.isExplorePost ? "hover:border-slate-700" : ""
+                    }
+                >
                     <CardHeader>
                         <CardTitle>{title}</CardTitle>
                         <CardDescription>{url}</CardDescription>
@@ -51,7 +58,9 @@ const Embed = (props: {
 
     return (
         <Link href={url} target="_blank" className="mt-4">
-            <Card>
+            <Card
+                className={!props.isExplorePost ? "hover:border-slate-700" : ""}
+            >
                 <CardHeader>
                     <CardTitle>{title}</CardTitle>
                     <CardDescription>{url}</CardDescription>
@@ -62,39 +71,47 @@ const Embed = (props: {
     )
 }
 
+// TODO: fix remote community link
 const PostItem = (props: {
     post: GetPostsResponse["posts"][number]
     instanceURL: string
     isExplorePost?: boolean
 }) => {
-    const post = props.post
+    const { post, instanceURL, isExplorePost } = props
+    const creator = formatUserInfo(post.creator)
+
     return (
-        <Card className="relative transition-all hover:border-slate-700">
-            <Link
-                href={`/${props.instanceURL}/post/${post.post.id}`}
-                className="absolute left-0 top-0 z-10 h-full w-full"
-            >
-                <span className="sr-only">{props.post.post.name}</span>
-            </Link>
+        <Card
+            className={cn(
+                "relative transition-all",
+                isExplorePost && "hover:border-slate-700",
+            )}
+        >
+            {isExplorePost && ( // only make the card clickable on explore pages
+                <Link
+                    href={`/${instanceURL}/post/${post.post.id}`}
+                    className="absolute left-0 top-0 z-10 h-full w-full"
+                >
+                    <span className="sr-only">{post.post.name}</span>
+                </Link>
+            )}
             <CardHeader className="space-y-4">
                 <div className="flex items-center gap-2">
                     <Avatar className="bg-slate-100">
-                        <AvatarImage src={props.post.community.icon} />
+                        <AvatarImage src={post.community.icon} />
                         <AvatarFallback>
                             <Rat />
                         </AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col">
                         <Link
-                            href="#"
+                            href={`/${instanceURL}/c/${post.community.name}`}
                             className="z-10 font-semibold text-purple-700 hover:underline dark:text-purple-300"
                         >
-                            {props.post.community.title}
+                            {post.community.title}
                         </Link>
-                        <Link href="#" className="z-10 text-sm hover:underline">
-                            @{props.post.creator.name}
-                            {!props.post.creator.local &&
-                                `@${props.instanceURL}`}
+                        <Link href={`/${instanceURL}/u/${creator.userName}`} className="z-10 text-sm hover:underline">
+                            {creator.userName}
                         </Link>
                     </div>
                 </div>
@@ -102,10 +119,7 @@ const PostItem = (props: {
             </CardHeader>
             <CardContent>
                 {post.post.body && (
-                    <Mdx
-                        text={post.post.body}
-                        shouldOverflow={props.isExplorePost}
-                    />
+                    <Mdx text={post.post.body} shouldOverflow={isExplorePost} />
                 )}
                 {post.post.thumbnail_url ? (
                     <Image
