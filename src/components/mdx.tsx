@@ -1,13 +1,19 @@
 import { default as MarkdownIt } from "markdown-it"
+import OverflowMask from "./overflow-mask"
 
 const md = new MarkdownIt()
 
-const Mdx = (props: { text: string }) => {
+// TODO: figure out custom markdown render rules
+const Mdx = (props: { text: string; shouldOverflow?: boolean }) => {
+    const { text, shouldOverflow } = props
+
     return (
-        <article
-            className="mask-gradient prose max-h-40 overflow-hidden dark:prose-invert"
-            dangerouslySetInnerHTML={{ __html: md.render(props.text) }}
-        />
+        <OverflowMask shouldOverflow={shouldOverflow}>
+            <article
+                className="prose dark:prose-invert"
+                dangerouslySetInnerHTML={{ __html: md.render(text) }}
+            />
+        </OverflowMask>
     )
 }
 
