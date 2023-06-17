@@ -121,7 +121,7 @@ const PostItem = (props: {
 
             <CardHeader className="ml-10 space-y-4">
                 <div className="flex items-center gap-2">
-                    <Avatar className="bg-slate-100">
+                    <Avatar>
                         <AvatarImage src={post.community.icon} />
                         <AvatarFallback>
                             <Rat />
