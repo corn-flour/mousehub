@@ -13,8 +13,8 @@ const NavBar = async () => {
     }))
 
     return (
-        <header className="fixed p-4 w-full border-b bg-white z-20 top-0">
-            <div className="flex items-center gap-4 lg:max-w-7xl mx-auto">
+        <header className="fixed top-0 z-20 w-full border-b bg-white p-4">
+            <div className="mx-auto flex items-center gap-2 lg:max-w-7xl">
                 <Button asChild variant="ghost">
                     <Link href="/">
                         <Rat className="h-6 w-6" />
@@ -31,7 +31,7 @@ const HomeLayout = ({ children }: { children: ReactNode }) => {
     return (
         <>
             <NavBar />
-            <main className="mx-auto lg:max-w-2xl mt-32">{children}</main>
+            <main className="mx-auto mb-8 mt-28 lg:max-w-2xl">{children}</main>
         </>
     )
 }

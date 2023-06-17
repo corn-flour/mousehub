@@ -28,10 +28,7 @@ const InstanceSelector = ({data} : {
     const pathname = usePathname()
     const router = useRouter()
     const currentInstance = pathname.split('/')[1]
-    if (!currentInstance) {
-        return <></>
-    }
-
+    
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
