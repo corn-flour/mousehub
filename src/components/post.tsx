@@ -1,4 +1,4 @@
-import { ExternalLink, Rat } from "lucide-react"
+import { ChevronDown, ChevronUp, ExternalLink, Rat } from "lucide-react"
 import Link from "next/link"
 import {
     Card,
@@ -14,6 +14,7 @@ import Mdx from "@/components/mdx"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { formatUserInfo } from "@/lib/lemmy"
+import { Button } from "./ui/button"
 
 const isImage = (url: string) => {
     return /\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url)
@@ -83,7 +84,7 @@ const PostItem = (props: {
     return (
         <Card
             className={cn(
-                "relative transition-all",
+                "relative overflow-hidden transition-all",
                 isExplorePost && "hover:border-slate-700",
             )}
         >
@@ -95,7 +96,23 @@ const PostItem = (props: {
                     <span className="sr-only">{post.post.name}</span>
                 </Link>
             )}
-            <CardHeader className="space-y-4">
+
+            {/** 
+             * Up/downvote buttons 
+             * TODO: Implement server actions for these
+             * */}
+            <div className="absolute left-0 top-0 h-full w-10 z-10 py-4">
+                <Button variant="ghost" size='sm'>
+                    <span className="sr-only">Upvote</span>
+                    <ChevronUp />
+                </Button>
+                <Button variant="ghost" size='sm'>
+                    <span className="sr-only">Downvote</span>
+                    <ChevronDown />
+                </Button>
+            </div>
+
+            <CardHeader className="ml-10 space-y-4">
                 <div className="flex items-center gap-2">
                     <Avatar className="bg-slate-100">
                         <AvatarImage src={post.community.icon} />
@@ -110,14 +127,17 @@ const PostItem = (props: {
                         >
                             {post.community.title}
                         </Link>
-                        <Link href={`/${instanceURL}/u/${creator.userName}`} className="z-10 text-sm hover:underline">
+                        <Link
+                            href={`/${instanceURL}/u/${creator.userName}`}
+                            className="z-10 text-sm hover:underline"
+                        >
                             {creator.userName}
                         </Link>
                     </div>
                 </div>
                 <CardTitle>{post.post.name}</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className=" ml-10">
                 {post.post.body && (
                     <Mdx text={post.post.body} shouldOverflow={isExplorePost} />
                 )}

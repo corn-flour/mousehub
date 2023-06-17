@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "@radix-ui/react-avatar": "^1.0.3",
+        "@radix-ui/react-slot": "^1.0.2",
         "@tailwindcss/typography": "^0.5.9",
         "@types/markdown-it": "^12.2.3",
         "@types/node": "20.3.1",
