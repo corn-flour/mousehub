@@ -52,7 +52,7 @@ const Embed = (props: {
             <Link href={url} target="_blank" className="mt-4">
                 <Card
                     className={
-                        !props.isExplorePost ? "hover:border-slate-700" : ""
+                        !props.isExplorePost ? "hover:border-muted-foreground" : ""
                     }
                 >
                     <CardHeader>
@@ -67,7 +67,7 @@ const Embed = (props: {
     return (
         <Link href={url} target="_blank" className="mt-4">
             <Card
-                className={!props.isExplorePost ? "hover:border-slate-700" : ""}
+                className={!props.isExplorePost ? "hover:border-muted-foreground" : ""}
             >
                 <CardHeader>
                     <CardTitle>{title}</CardTitle>
@@ -79,7 +79,6 @@ const Embed = (props: {
     )
 }
 
-// TODO: fix remote community link
 const PostItem = (props: {
     post: GetPostsResponse["posts"][number]
     instanceURL: string
@@ -92,7 +91,7 @@ const PostItem = (props: {
         <Card
             className={cn(
                 "relative overflow-hidden transition-all",
-                isExplorePost && "hover:border-slate-700",
+                isExplorePost && "hover:border-muted-foreground",
             )}
         >
             {isExplorePost && ( // only make the card clickable on explore pages

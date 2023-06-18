@@ -30,7 +30,12 @@ const NavBar = async ({ instanceURL }: { instanceURL: string }) => {
                         <NavLink url={`/${instanceURL}/all`} label="All" />
                     </div>
                 </div>
-                <ThemeSwitch />
+                <div className="flex items-center gap-2">
+                    <ThemeSwitch />
+                    <Button asChild>
+                        <Link href="/login">Login</Link>
+                    </Button>
+                </div>
             </div>
         </header>
     )
