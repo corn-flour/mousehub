@@ -5,8 +5,9 @@ import Link from "next/link"
 import { type ReactNode } from "react"
 import InstanceSelector from "./instance-selector"
 import ThemeSwitch from "./theme-switch"
+import NavLink from "./navlink"
 
-const NavBar = async () => {
+const NavBar = async ({ instanceURL }: { instanceURL: string }) => {
     const instances = await fetchLemmyInstances()
     const data = instances.map(({ name, url }) => ({
         value: url,
@@ -15,27 +16,41 @@ const NavBar = async () => {
 
     return (
         <header className="fixed top-0 z-20 w-full border-b bg-background p-4">
-            <div className="mx-auto flex items-center gap-2 lg:max-w-7xl">
-                <Button asChild variant="ghost">
-                    <Link href="/">
-                        <Rat className="h-6 w-6" />
-                        <span className="sr-only">Home</span>
-                    </Link>
-                </Button>
-                <InstanceSelector data={data} />
+            <div className="mx-auto flex items-center justify-between lg:max-w-7xl">
+                <div className="flex items-center gap-2">
+                    <Button asChild variant="ghost">
+                        <Link href="/">
+                            <Rat className="h-6 w-6" />
+                            <span className="sr-only">Home</span>
+                        </Link>
+                    </Button>
+                    <InstanceSelector data={data} />
+                    <div className="ml-4 flex items-center gap-4">
+                        <NavLink url={`/${instanceURL}`} label="Local" />
+                        <NavLink url={`/${instanceURL}/all`} label="All" />
+                    </div>
+                </div>
                 <ThemeSwitch />
             </div>
         </header>
     )
 }
 
-const HomeLayout = ({ children }: { children: ReactNode }) => {
+const ExploreLayout = ({
+    children,
+    params,
+}: {
+    children: ReactNode
+    params: {
+        instance_url: string
+    }
+}) => {
     return (
         <>
-            <NavBar />
+            <NavBar instanceURL={params.instance_url} />
             <main className="mx-auto mb-8 mt-28 lg:max-w-2xl">{children}</main>
         </>
     )
 }
 
-export default HomeLayout
+export default ExploreLayout

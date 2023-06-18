@@ -1,4 +1,4 @@
-import { type Person } from "lemmy-js-client"
+import { type Community, type Person } from "lemmy-js-client"
 
 const LEMMY_INSTANCES_CSV_URL =
     "https://github.com/maltfield/awesome-lemmy-instances/blob/main/awesome-lemmy-instances.csv"
@@ -14,6 +14,17 @@ export const formatUserInfo = (user: Person) => {
     }
 }
 
+export const formatCommunityInfo = (community: Community) => {
+    const match = /^(?:https?:\/\/)?([^\/\r\n]+)/.exec(community.actor_id)
+    const domain = match ? match[1] : "" // This should never fail considering the domain is taken from the API directly
+    const communityName = community.local
+        ? community.name
+        : `${community.name}@${domain}`
+
+    return {
+        communityName,
+    }
+}
 
 type LemmyInstance = {
     url: string
@@ -26,24 +37,24 @@ export const fetchLemmyInstances = async () => {
     const response = await fetch(LEMMY_INSTANCES_CSV_URL)
     const csvData = await response.text()
     const lines = csvData.split("\n")
-    
+
     const jsonData: LemmyInstance[] = []
 
     // as of writing, the data columns in the csv are
     // instance/NU/NC/Fed/Adult/V/Users/BI/BB/UT/Version
     for (let i = 1; i < lines.length; i++) {
-        const values = lines[i].split(',')
+        const values = lines[i].split(",")
         const instance = values[0]
         const match = instance.match(/\[(.+?)\]\((https?:\/\/.+?)\)/)
         if (match) {
             const name = match[1]
             let url = match[2]
-            if (url.startsWith('https://')){
+            if (url.startsWith("https://")) {
                 url = url.slice(8)
             }
             jsonData.push({
                 url,
-                name
+                name,
             })
         }
     }

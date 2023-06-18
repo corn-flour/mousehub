@@ -18,7 +18,7 @@ import { type GetPostsResponse } from "lemmy-js-client"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Mdx from "@/components/mdx"
 import { cn } from "@/lib/utils"
-import { formatUserInfo } from "@/lib/lemmy"
+import { formatCommunityInfo, formatUserInfo } from "@/lib/lemmy"
 import { Button } from "./ui/button"
 import { PostImage } from "./post-image"
 import { NSFWMask } from "./nsfw-mask"
@@ -87,6 +87,7 @@ const PostItem = (props: {
 }) => {
     const { post, instanceURL, isExplorePost } = props
     const creator = formatUserInfo(post.creator)
+    const community = formatCommunityInfo(post.community)
     return (
         <Card
             className={cn(
@@ -129,7 +130,7 @@ const PostItem = (props: {
                     </Avatar>
                     <div className="flex flex-col">
                         <Link
-                            href={`/${instanceURL}/c/${post.community.name}`}
+                            href={`/${instanceURL}/c/${community.communityName}`}
                             className="z-10 font-semibold text-purple-700 hover:underline dark:text-purple-300"
                         >
                             {post.community.title}
@@ -180,7 +181,9 @@ const PostItem = (props: {
 
             <CardFooter className="ml-10">
                 <Button variant="ghost" size="sm" asChild className="z-10">
-                    <Link href={`/${instanceURL}/post/${post.post.id}#comments`}>
+                    <Link
+                        href={`/${instanceURL}/post/${post.post.id}#comments`}
+                    >
                         <MessageCircle className="mr-2 h-4 w-4" />
                         {post.counts.comments} comments
                     </Link>
