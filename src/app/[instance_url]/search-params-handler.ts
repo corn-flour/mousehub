@@ -2,8 +2,8 @@ import { type SortType } from "lemmy-js-client"
 
 // the items in the search params of any "explore" page
 export type ExploreSearchParams = {
-    sort: SortType
-    page: string
+    sort?: SortType
+    page?: string
 }
 
 // return the search params for changing sort type
@@ -20,17 +20,23 @@ export const setSortType = (
 // return the search params of the previous page
 export const getNextPageParams = (searchParams: ExploreSearchParams) => {
     const pageNum = searchParams.page ? Number(searchParams.page) : 1
-    return new URLSearchParams({
-        ...searchParams,
+    const newSearchParams: ExploreSearchParams = {
         page: String(pageNum + 1),
-    })
+    }
+    if (searchParams.sort) {
+        newSearchParams.sort = searchParams.sort
+    }
+    return new URLSearchParams(newSearchParams)
 }
 
 // return the search params of the next page
 export const getPreviousPageParams = (searchParams: ExploreSearchParams) => {
     const pageNum = searchParams.page ? Number(searchParams.page) : 1
-    return new URLSearchParams({
-        ...searchParams,
+    const newSearchParams: ExploreSearchParams = {
         page: String(pageNum - 1),
-    })
+    }
+    if (searchParams.sort) {
+        newSearchParams.sort = searchParams.sort
+    }
+    return new URLSearchParams(newSearchParams)
 }

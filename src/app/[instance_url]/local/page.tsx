@@ -8,7 +8,7 @@ type PostListProps = {
     searchParams: ExploreSearchParams
 }
 
-const ExploreAllView = ({ params, searchParams }: PostListProps) => {
+const ExploreLocalView = ({ params, searchParams }: PostListProps) => {
     const { sort, page } = searchParams
 
     return (
@@ -16,9 +16,9 @@ const ExploreAllView = ({ params, searchParams }: PostListProps) => {
             instanceURL={params.instance_url}
             sort={sort}
             page={page}
-            type="All"
+            type="Local"
         />
     )
 }
 
-export default ExploreAllView
+export default ExploreLocalView
