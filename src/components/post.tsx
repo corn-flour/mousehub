@@ -52,7 +52,9 @@ const Embed = (props: {
             <Link href={url} target="_blank" className="mt-4">
                 <Card
                     className={
-                        !props.isExplorePost ? "hover:border-muted-foreground" : ""
+                        !props.isExplorePost
+                            ? "hover:border-muted-foreground"
+                            : ""
                     }
                 >
                     <CardHeader>
@@ -67,7 +69,9 @@ const Embed = (props: {
     return (
         <Link href={url} target="_blank" className="mt-4">
             <Card
-                className={!props.isExplorePost ? "hover:border-muted-foreground" : ""}
+                className={
+                    !props.isExplorePost ? "hover:border-muted-foreground" : ""
+                }
             >
                 <CardHeader>
                     <CardTitle>{title}</CardTitle>
@@ -153,18 +157,13 @@ const PostItem = (props: {
                         />
                     )}
                     {post.post.thumbnail_url ? (
-                        <PostImage
-                            imageURL={post.post.thumbnail_url}
-                            alt=""
-                            nsfw={post.post.nsfw}
-                        />
+                        <PostImage imageURL={post.post.thumbnail_url} alt="" />
                     ) : (
                         post.post.url &&
                         isImage(post.post.url) && (
                             <PostImage
                                 imageURL={post.post.url}
                                 alt={post.post.embed_title ?? ""}
-                                nsfw={post.post.nsfw}
                             />
                         )
                     )}
