@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button"
 import { fetchLemmyInstances } from "@/lib/lemmy"
+import { cookies } from "next/headers"
 import { Rat } from "lucide-react"
 import Link from "next/link"
 import { type ReactNode } from "react"
 import InstanceSelector from "./instance-selector"
 import ThemeSwitch from "./theme-switch"
 import NavLink from "./navlink"
+import { SignOutButton } from "./signout-btn"
 
 const NavBar = async ({ instanceURL }: { instanceURL: string }) => {
     const instances = await fetchLemmyInstances()
@@ -13,6 +15,8 @@ const NavBar = async ({ instanceURL }: { instanceURL: string }) => {
         value: url,
         label: name,
     }))
+
+    const jwt = cookies().get("jwt")?.value
 
     return (
         <header className="fixed top-0 z-20 w-full border-b bg-background p-4">
@@ -32,9 +36,13 @@ const NavBar = async ({ instanceURL }: { instanceURL: string }) => {
                 </div>
                 <div className="flex items-center gap-2">
                     <ThemeSwitch />
-                    <Button asChild>
-                        <Link href="/login">Login</Link>
-                    </Button>
+                    {jwt ? (
+                        <SignOutButton instanceURL={instanceURL} />
+                    ) : (
+                        <Button asChild>
+                            <Link href="/login">Login</Link>
+                        </Button>
+                    )}
                 </div>
             </div>
         </header>
