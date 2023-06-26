@@ -1,6 +1,5 @@
 import Comments from "@/components/comments"
 import { PostItem } from "@/components/post"
-import { Separator } from "@/components/ui/ui/separator"
 import { LemmyHttp } from "lemmy-js-client"
 
 type PostViewProps = {
@@ -27,7 +26,6 @@ const PostView = async (props: PostViewProps) => {
                 post={postResponse.post_view}
                 instanceURL={instance_url}
             />
-            <Separator />
             <Comments
                 instanceURL={instance_url}
                 postID={postResponse.post_view.post.id}
