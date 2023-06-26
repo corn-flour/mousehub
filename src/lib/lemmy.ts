@@ -1,4 +1,9 @@
-import { type Community, type Person } from "lemmy-js-client"
+import {
+    type Comment,
+    type CommentView,
+    type Community,
+    type Person,
+} from "lemmy-js-client"
 
 const LEMMY_INSTANCES_CSV_URL =
     "https://github.com/maltfield/awesome-lemmy-instances/blob/main/awesome-lemmy-instances.csv"
@@ -24,6 +29,81 @@ export const formatCommunityInfo = (community: Community) => {
     return {
         communityName,
     }
+}
+
+export type CommentNode = {
+    comment_view: CommentView
+    children: CommentNode[]
+    depth: number
+}
+
+// get the depth of the comment
+const getDepthFromComment = (comment: Comment) => {
+    const length = comment.path.split(".").length
+    return length ? length - 2 : undefined
+}
+
+// get the ID of the parent of a given comment
+const getCommentParentId = (comment?: Comment): number | undefined => {
+    const split = comment?.path.split(".")
+    // remove the 0
+    split?.shift()
+
+    return split && split.length > 1
+        ? Number(split.at(split.length - 2))
+        : undefined
+}
+
+// build a comment tree, copied from lemmy UI
+export const buildCommentTree = (
+    comments: CommentView[],
+    parentComment: boolean,
+) => {
+    const map = new Map<number, CommentNode>()
+    const depthOffset = !parentComment
+        ? 0
+        : getDepthFromComment(comments[0].comment) ?? 0
+
+    for (const comment_view of comments) {
+        const depthI = getDepthFromComment(comment_view.comment) ?? 0
+        const depth = depthI ? depthI - depthOffset : 0
+        const node: CommentNode = {
+            comment_view,
+            children: [],
+            depth,
+        }
+        map.set(comment_view.comment.id, { ...node })
+    }
+
+    const tree: CommentNode[] = []
+
+    // if its a parent comment fetch, then push the first comment to the top node.
+    if (parentComment) {
+        const cNode = map.get(comments[0].comment.id)
+        if (cNode) {
+            tree.push(cNode)
+        }
+    }
+
+    for (const comment_view of comments) {
+        const child = map.get(comment_view.comment.id)
+        if (child) {
+            const parent_id = getCommentParentId(comment_view.comment)
+            if (parent_id) {
+                const parent = map.get(parent_id)
+                // Necessary because blocked comment might not exist
+                if (parent) {
+                    parent.children.push(child)
+                }
+            } else {
+                if (!parentComment) {
+                    tree.push(child)
+                }
+            }
+        }
+    }
+
+    return tree
 }
 
 type LemmyInstance = {
