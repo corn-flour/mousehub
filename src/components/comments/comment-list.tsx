@@ -1,10 +1,13 @@
-import { type CommentNode, buildCommentTree, formatUserInfo } from "@/lib/lemmy"
-import { LemmyHttp, type Person } from "lemmy-js-client"
-import { Suspense } from "react"
-import Mdx from "./mdx"
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
-import { Rat } from "lucide-react"
+"use client"
+
+import { type CommentNode, formatUserInfo } from "@/lib/lemmy"
 import Link from "next/link"
+import { useState } from "react"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { type Person } from "lemmy-js-client"
+import { Rat } from "lucide-react"
+import { useInView } from "react-intersection-observer"
+import Mdx from "../mdx"
 import { DownvoteButton, UpvoteButton } from "./comment-btns"
 
 const CommentAuthor = ({ author }: { author: Person }) => {
@@ -54,50 +57,39 @@ const Comment = ({ comment }: { comment: CommentNode }) => {
     )
 }
 
-const Comments = async ({
-    postID,
-    instanceURL,
+// renders an infinite scrolling list of comments
+const CommentList = ({
+    commentTree,
+    limit,
 }: {
-    postID: number
-    instanceURL: string
+    commentTree: CommentNode[]
+    limit: number
 }) => {
-    const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
-    const comments = await lemmyClient.getComments({
-        post_id: postID,
-        max_depth: 5,
-        limit: 20,
-        type_: "All",
+    const [count, setCount] = useState(limit)
+    const { ref: endContainer } = useInView({
+        onChange: (inView) => {
+            if (inView) {
+                setTimeout(() => {
+                    setCount((count) => count + limit)
+                }, 300)
+            }
+        },
     })
-    const commentTree = buildCommentTree(comments.comments, false)
+    const filteredTree = commentTree.slice(0, count)
 
     return (
-        <div className="space-y-8">
-            {commentTree.map((comment) => (
-                <Comment
-                    comment={comment}
-                    key={comment.comment_view.comment.id}
-                />
-            ))}
+        <div>
+            <div className="space-y-8">
+                {filteredTree.map((comment) => (
+                    <Comment
+                        comment={comment}
+                        key={comment.comment_view.comment.id}
+                    />
+                ))}
+            </div>
+            <div ref={endContainer} />
         </div>
     )
 }
 
-// renders comment will suspense fallback
-const CommentView = ({
-    postID,
-    instanceURL,
-}: {
-    postID: number
-    instanceURL: string
-}) => {
-    return (
-        <section className="space-y-8" id="comments">
-            <h2 className="text-xl">Comments</h2>
-            <Suspense fallback={<div>Loading..</div>}>
-                <Comments postID={postID} instanceURL={instanceURL} />
-            </Suspense>
-        </section>
-    )
-}
-
-export default CommentView
+export default CommentList

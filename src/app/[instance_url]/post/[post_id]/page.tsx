@@ -1,4 +1,4 @@
-import Comments from "@/components/comments"
+import Comments from "@/components/comments/comment-view"
 import { PostItem } from "@/components/post"
 import { LemmyHttp } from "lemmy-js-client"
 

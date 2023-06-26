@@ -1,6 +1,6 @@
 "use client"
 import { ChevronDown, ChevronUp } from "lucide-react"
-import { Button } from "./ui/button"
+import { Button } from "../ui/button"
 
 export const UpvoteButton = ({ count }: { count: number }) => {
     return (
