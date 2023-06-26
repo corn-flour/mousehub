@@ -17,7 +17,7 @@ import {
 import { type GetPostsResponse } from "lemmy-js-client"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Mdx from "@/components/mdx"
-import { cn, formatNumber } from "@/lib/utils"
+import { cn, formatNumber, formatTimeAgo } from "@/lib/utils"
 import { formatCommunityInfo, formatUserInfo } from "@/lib/lemmy"
 import { Button } from "./ui/button"
 import { PostImage } from "./post-image"
@@ -138,12 +138,22 @@ const PostItem = (props: {
                         >
                             {post.community.title}
                         </Link>
-                        <Link
-                            href={`/${instanceURL}/u/${creator.userName}`}
-                            className="z-10 text-sm hover:underline"
-                        >
-                            {creator.userName}
-                        </Link>
+                        <div className="flex items-end gap-1">
+                            <Link
+                                href={`/${instanceURL}/u/${creator.userName}`}
+                                className="z-10 text-sm hover:underline"
+                            >
+                                {creator.userName}
+                            </Link>
+                            <span className="text-sm text-muted-foreground">
+                                •
+                            </span>
+                            <span className="text-sm text-muted-foreground">
+                                {formatTimeAgo(
+                                    new Date(post.post.published + "Z"),
+                                )}
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <CardTitle>{post.post.name}</CardTitle>

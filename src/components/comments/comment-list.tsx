@@ -9,22 +9,45 @@ import { Rat } from "lucide-react"
 import { useInView } from "react-intersection-observer"
 import Mdx from "../mdx"
 import { DownvoteButton, UpvoteButton } from "./comment-btns"
+import { formatTimeAgo } from "@/lib/utils"
 
-const CommentAuthor = ({ author }: { author: Person }) => {
+const CommentHeader = ({
+    author,
+    publishedAt,
+}: {
+    author: Person
+    publishedAt: string
+}) => {
     const creator = formatUserInfo(author)
+    const publishedDate = new Date(publishedAt + "Z")
     return (
-        <Link
-            href={`/u/${author.id}`}
-            className="group flex items-center gap-2"
-        >
-            <Avatar>
-                <AvatarImage src={author.avatar} />
-                <AvatarFallback>
-                    <Rat />
-                </AvatarFallback>
-            </Avatar>
-            <p className="group-hover:underline">{creator.userName}</p>
-        </Link>
+        <div className="flex items-center gap-2">
+            <Link
+                href={`/u/${creator.userName}`}
+                className="hover:underline"
+                aria-hidden
+                tabIndex={-1}
+            >
+                <Avatar>
+                    <AvatarImage src={author.avatar} />
+                    <AvatarFallback>
+                        <Rat />
+                    </AvatarFallback>
+                </Avatar>
+            </Link>
+            <div className="flex items-end gap-1">
+                <Link
+                    href={`/u/${creator.userName}`}
+                    className="hover:underline"
+                >
+                    {creator.userName}
+                </Link>
+                <span className="text-sm text-muted-foreground">•</span>
+                <span className="text-sm text-muted-foreground">
+                    {formatTimeAgo(publishedDate)}
+                </span>
+            </div>
+        </div>
     )
 }
 
@@ -32,7 +55,10 @@ const Comment = ({ comment }: { comment: CommentNode }) => {
     return (
         <div>
             <div className="space-y-2">
-                <CommentAuthor author={comment.comment_view.creator} />
+                <CommentHeader
+                    author={comment.comment_view.creator}
+                    publishedAt={comment.comment_view.comment.published}
+                />
                 <Mdx text={comment.comment_view.comment.content} />
                 <div className="-ml-3 space-x-1">
                     <UpvoteButton count={comment.comment_view.counts.upvotes} />
