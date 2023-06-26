@@ -17,7 +17,7 @@ import {
 import { type GetPostsResponse } from "lemmy-js-client"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Mdx from "@/components/mdx"
-import { cn } from "@/lib/utils"
+import { cn, formatNumber } from "@/lib/utils"
 import { formatCommunityInfo, formatUserInfo } from "@/lib/lemmy"
 import { Button } from "./ui/button"
 import { PostImage } from "./post-image"
@@ -116,7 +116,7 @@ const PostItem = (props: {
                     <span className="sr-only">Upvote</span>
                     <ChevronUp />
                 </Button>
-                <p>{post.counts.score}</p>
+                <p>{formatNumber(post.counts.score)}</p>
                 <Button variant="ghost" className="px-2">
                     <span className="sr-only">Downvote</span>
                     <ChevronDown />
@@ -183,7 +183,7 @@ const PostItem = (props: {
                         href={`/${instanceURL}/post/${post.post.id}#comments`}
                     >
                         <MessageCircle className="mr-2 h-4 w-4" />
-                        {post.counts.comments} comments
+                        {formatNumber(post.counts.comments)} comments
                     </Link>
                 </Button>
             </CardFooter>

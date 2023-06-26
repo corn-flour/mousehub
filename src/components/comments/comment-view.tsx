@@ -17,8 +17,6 @@ const Comments = async ({
         page: 2,
         type_: "All",
     })
-
-    console.log(comments.comments.length)
     const commentTree = buildCommentTree(comments.comments, false)
 
     return <CommentList commentTree={commentTree} limit={20} />

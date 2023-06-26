@@ -1,6 +1,7 @@
 "use client"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import { Button } from "../ui/button"
+import { formatNumber } from "@/lib/utils"
 
 export const UpvoteButton = ({ count }: { count: number }) => {
     return (
@@ -11,7 +12,7 @@ export const UpvoteButton = ({ count }: { count: number }) => {
             type="button"
         >
             <ChevronUp />
-            <span>{count}</span>
+            <span>{formatNumber(count)}</span>
         </Button>
     )
 }
@@ -25,7 +26,7 @@ export const DownvoteButton = ({ count }: { count: number }) => {
             type="button"
         >
             <ChevronDown />
-            <span>{count}</span>
+            <span>{formatNumber(count)}</span>
         </Button>
     )
 }
