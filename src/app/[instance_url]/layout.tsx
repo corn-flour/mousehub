@@ -1,21 +1,13 @@
 import { Button } from "@/components/ui/button"
-import { fetchLemmyInstances } from "@/lib/lemmy"
 import { cookies } from "next/headers"
 import { Rat } from "lucide-react"
 import Link from "next/link"
 import { type ReactNode } from "react"
-import InstanceSelector from "./instance-selector"
 import ThemeSwitch from "./theme-switch"
 import NavLink from "./navlink"
 import { SignOutButton } from "./signout-btn"
 
-const NavBar = async ({ instanceURL }: { instanceURL: string }) => {
-    const instances = await fetchLemmyInstances()
-    const data = instances.map(({ name, url }) => ({
-        value: url,
-        label: name,
-    }))
-
+const NavBar = ({ instanceURL }: { instanceURL: string }) => {
     const jwt = cookies().get("jwt")?.value
 
     return (
@@ -23,12 +15,14 @@ const NavBar = async ({ instanceURL }: { instanceURL: string }) => {
             <div className="mx-auto flex items-center justify-between lg:max-w-7xl">
                 <div className="flex items-center gap-2">
                     <Button asChild variant="ghost">
-                        <Link href="/">
+                        <Link
+                            href={`/${instanceURL}`}
+                            className="flex items-center gap-2"
+                        >
                             <Rat className="h-6 w-6" />
-                            <span className="sr-only">Home</span>
+                            <span className="text-lg">{instanceURL}</span>
                         </Link>
                     </Button>
-                    <InstanceSelector data={data} />
                     <div className="ml-4 flex items-center gap-4">
                         <NavLink url={`/${instanceURL}`} label="Local" />
                         <NavLink url={`/${instanceURL}/all`} label="All" />
@@ -49,7 +43,7 @@ const NavBar = async ({ instanceURL }: { instanceURL: string }) => {
     )
 }
 
-const ExploreLayout = ({
+const InstanceViewLayout = ({
     children,
     params,
 }: {
@@ -61,9 +55,13 @@ const ExploreLayout = ({
     return (
         <>
             <NavBar instanceURL={params.instance_url} />
-            <main className="mx-auto mb-8 mt-28 lg:max-w-2xl">{children}</main>
+            <div className="p-4">
+                <div className="mx-auto mb-8 mt-28 max-w-7xl grid-cols-[minmax(0,1fr),400px] items-start gap-8 lg:grid">
+                    {children}
+                </div>
+            </div>
         </>
     )
 }
 
-export default ExploreLayout
+export default InstanceViewLayout
