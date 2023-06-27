@@ -15,7 +15,6 @@ const PostView = async (props: PostViewProps) => {
     const { instance_url, post_id } = props.params
 
     const lemmyClient = new LemmyHttp(`https://${instance_url}`)
-
     const postResponse = await lemmyClient.getPost({
         id: Number(post_id),
     })
