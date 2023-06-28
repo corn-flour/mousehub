@@ -18,7 +18,7 @@ const NavBar = ({
     localUser?: MyUserInfo
 }) => {
     return (
-        <header className="fixed top-0 z-20 w-full border-b bg-background p-4">
+        <header className="sticky left-0 top-0 z-20 w-full border-b bg-background p-4">
             <div className="mx-auto flex items-center justify-between lg:max-w-7xl">
                 <div className="flex items-center gap-2">
                     <Button asChild variant="ghost">
@@ -83,7 +83,7 @@ const InstanceViewLayout = async ({
                 localUser={session?.localUser}
             />
             <div className="p-4">
-                <div className="mx-auto mb-8 mt-28 max-w-7xl grid-cols-[minmax(0,1fr),400px] items-start gap-8 lg:grid">
+                <div className="mx-auto mb-8 max-w-7xl grid-cols-[minmax(0,1fr),400px] items-start gap-8 lg:grid">
                     {children}
                 </div>
             </div>
