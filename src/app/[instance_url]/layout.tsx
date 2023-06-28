@@ -1,15 +1,22 @@
 import { Button } from "@/components/ui/button"
-import { cookies } from "next/headers"
 import { Rat } from "lucide-react"
 import Link from "next/link"
 import { type ReactNode } from "react"
 import ThemeSwitch from "./theme-switch"
 import NavLink from "./navlink"
-import { SignOutButton } from "./signout-btn"
+import { getServerSession } from "next-auth"
+import { authOptions } from "../api/auth/[...nextauth]/route"
+import { redirect } from "next/navigation"
+import { type MyUserInfo } from "lemmy-js-client"
+import { ProfileButton } from "./profile-button"
 
-const NavBar = ({ instanceURL }: { instanceURL: string }) => {
-    const jwt = cookies().get("jwt")?.value
-
+const NavBar = ({
+    instanceURL,
+    localUser,
+}: {
+    instanceURL: string
+    localUser?: MyUserInfo
+}) => {
     return (
         <header className="fixed top-0 z-20 w-full border-b bg-background p-4">
             <div className="mx-auto flex items-center justify-between lg:max-w-7xl">
@@ -30,12 +37,16 @@ const NavBar = ({ instanceURL }: { instanceURL: string }) => {
                 </div>
                 <div className="flex items-center gap-2">
                     <ThemeSwitch />
-                    {jwt ? (
-                        <SignOutButton instanceURL={instanceURL} />
-                    ) : (
+
+                    {!localUser ? (
                         <Button asChild>
                             <Link href="/login">Login</Link>
                         </Button>
+                    ) : (
+                        <ProfileButton
+                            user={localUser}
+                            instanceURL={instanceURL}
+                        />
                     )}
                 </div>
             </div>
@@ -43,7 +54,7 @@ const NavBar = ({ instanceURL }: { instanceURL: string }) => {
     )
 }
 
-const InstanceViewLayout = ({
+const InstanceViewLayout = async ({
     children,
     params,
 }: {
@@ -52,9 +63,25 @@ const InstanceViewLayout = ({
         instance_url: string
     }
 }) => {
+    const session = await getServerSession(authOptions)
+    if (session && session.instanceURL !== params.instance_url) {
+        // the user is log in but not in the right instance
+        // redirect to the right instance
+        redirect(`/${session.instanceURL}/local`)
+        return null
+    }
+
+    if (!session && params.instance_url !== "lemmy.world") {
+        // user is not logged in, redirect to default instance
+        redirect(`/lemmy.world/local`)
+        return null
+    }
     return (
         <>
-            <NavBar instanceURL={params.instance_url} />
+            <NavBar
+                instanceURL={params.instance_url}
+                localUser={session?.localUser}
+            />
             <div className="p-4">
                 <div className="mx-auto mb-8 mt-28 max-w-7xl grid-cols-[minmax(0,1fr),400px] items-start gap-8 lg:grid">
                     {children}

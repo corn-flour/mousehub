@@ -1,16 +1,15 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { signOut } from "../auth-action"
-import { useRouter } from "next/navigation"
+import { signOut } from "next-auth/react"
 
-export const SignOutButton = ({ instanceURL }: { instanceURL: string }) => {
-    const router = useRouter()
+export const SignOutButton = () => {
     return (
         <Button
             onClick={async () => {
-                await signOut(instanceURL)
-                router.push("/login")
+                await signOut({
+                    callbackUrl: "/lemmy.world/local",
+                })
             }}
         >
             Sign out
