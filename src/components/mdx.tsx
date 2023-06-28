@@ -9,7 +9,7 @@ const Mdx = (props: { text: string; shouldOverflow?: boolean }) => {
     return (
         <OverflowMask shouldOverflow={shouldOverflow}>
             <article
-                className="prose dark:prose-invert"
+                className="prose max-w-none dark:prose-invert"
                 dangerouslySetInnerHTML={{ __html: md.render(text) }}
             />
         </OverflowMask>
