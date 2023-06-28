@@ -1,6 +1,7 @@
 "use client"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -22,16 +23,18 @@ export const ProfileButton = ({
 }) => {
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger>
-                <Avatar>
-                    <AvatarImage src={user.local_user_view.person.avatar} />
-                    <AvatarFallback>
-                        <Rat />
-                    </AvatarFallback>
-                </Avatar>
-                <span className="sr-only">
-                    {user.local_user_view.person.name}
-                </span>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-auto w-auto p-1">
+                    <Avatar>
+                        <AvatarImage src={user.local_user_view.person.avatar} />
+                        <AvatarFallback>
+                            <Rat />
+                        </AvatarFallback>
+                    </Avatar>
+                    <span className="sr-only">
+                        {user.local_user_view.person.name}
+                    </span>
+                </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
                 <DropdownMenuItem asChild>
