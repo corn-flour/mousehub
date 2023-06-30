@@ -11,7 +11,6 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { formatCommunityInfo } from "@/lib/lemmy"
 import { LemmyHttp } from "lemmy-js-client"
 import { Rat } from "lucide-react"
-import { getServerSession } from "next-auth"
 import { Suspense, type ReactNode } from "react"
 
 const CommunityInfo = async ({
