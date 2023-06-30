@@ -9,6 +9,7 @@ import {
 
 type PostListProps = {
     instanceURL: string
+    communityName?: string
     jwt?: string
     type?: ListingType
     sort?: SortType
@@ -32,6 +33,22 @@ const buildURL = (params: Omit<PostListProps, "jwt">) => {
             }).toString()}`,
         }
     }
+    if (params.communityName) {
+        return {
+            prev: `/${params.instanceURL}/c/${
+                params.communityName
+            }?${getPreviousPageParams({
+                sort: params.sort,
+                page: params.page,
+            }).toString()}`,
+            next: `/${params.instanceURL}/c/${
+                params.communityName
+            }?${getNextPageParams({
+                sort: params.sort,
+                page: params.page,
+            }).toString()}`,
+        }
+    }
     return {
         prev: `/${params.instanceURL}?${getPreviousPageParams({
             sort: params.sort,
@@ -47,6 +64,7 @@ const buildURL = (params: Omit<PostListProps, "jwt">) => {
 export const PostList = async ({
     instanceURL,
     jwt,
+    communityName,
     sort,
     type,
     page,
@@ -55,6 +73,7 @@ export const PostList = async ({
 
     const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
     const posts = await lemmyClient.getPosts({
+        community_name: communityName,
         auth: jwt,
         type_: type,
         sort,
@@ -63,6 +82,7 @@ export const PostList = async ({
 
     const { prev, next } = buildURL({
         instanceURL,
+        communityName,
         sort,
         type,
         page,
