@@ -43,7 +43,7 @@ const CommunityHeader = async ({
             <div className="relative h-24 bg-muted px-4">
                 <div className="absolute left-1/2 top-0 mx-auto w-full max-w-7xl -translate-x-1/2 -translate-y-7">
                     <div className="flex items-end gap-4">
-                        <Avatar className="h-24 w-24 border-[5px] border-muted bg-white">
+                        <Avatar className="h-24 w-24 border-[5px] border-muted bg-muted">
                             <AvatarImage
                                 src={community.community_view.community.icon}
                             />

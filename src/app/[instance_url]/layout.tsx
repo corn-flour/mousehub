@@ -31,7 +31,7 @@ const NavBar = ({
                         </Link>
                     </Button>
                     <div className="ml-4 flex items-center gap-4">
-                        <NavLink url={`/${instanceURL}`} label="Local" />
+                        <NavLink url={`/${instanceURL}/local`} label="Local" />
                         <NavLink url={`/${instanceURL}/all`} label="All" />
                     </div>
                 </div>
