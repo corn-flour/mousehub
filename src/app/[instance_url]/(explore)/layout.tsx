@@ -1,3 +1,4 @@
+import { ColumnLayout } from "@/components/column-layout"
 import Mdx from "@/components/mdx"
 import {
     Card,
@@ -67,14 +68,14 @@ const ExploreLayout = ({
     children: ReactNode
 }) => {
     return (
-        <>
+        <ColumnLayout>
             <main className="flex-[2] space-y-4">{children}</main>
             <aside className="sticky hidden flex-1 lg:block">
                 <Suspense fallback={<InstanceInfoSkeletion />}>
                     <InstanceInfo instanceURL={params.instance_url} />
                 </Suspense>
             </aside>
-        </>
+        </ColumnLayout>
     )
 }
 

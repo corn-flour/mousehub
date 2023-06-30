@@ -1,5 +1,7 @@
+import { ColumnLayout } from "@/components/column-layout"
 import Mdx from "@/components/mdx"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import {
     Card,
     CardContent,
@@ -8,10 +10,63 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { formatCommunityInfo } from "@/lib/lemmy"
 import { LemmyHttp } from "lemmy-js-client"
 import { Rat } from "lucide-react"
+import Image from "next/image"
 import { Suspense, type ReactNode } from "react"
+
+const CommunityHeader = async ({
+    communityName,
+    instanceURL,
+}: {
+    communityName: string
+    instanceURL: string
+}) => {
+    const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
+    const community = await lemmyClient.getCommunity({
+        name: decodeURIComponent(communityName),
+    })
+
+    return (
+        <section>
+            <div className="relative h-96 w-full">
+                {community.community_view.community.banner && (
+                    <Image
+                        src={community.community_view.community.banner}
+                        alt=""
+                        fill
+                    />
+                )}
+            </div>
+
+            <div className="relative h-24 bg-muted px-4">
+                <div className="absolute left-1/2 top-0 mx-auto w-full max-w-7xl -translate-x-1/2 -translate-y-7">
+                    <div className="flex items-end gap-4">
+                        <Avatar className="h-24 w-24 border-[5px] border-muted bg-muted">
+                            <AvatarImage
+                                src={community.community_view.community.icon}
+                            />
+                            <AvatarFallback className="bg-white">
+                                <Rat className="h-12 w-12 text-muted" />
+                            </AvatarFallback>
+                        </Avatar>
+                        <div className="flex items-center gap-4">
+                            <div>
+                                <h1 className="text-2xl font-bold">
+                                    {community.community_view.community.name}
+                                </h1>
+                                <p className="text-lg text-muted-foreground">
+                                    {communityName}
+                                </p>
+                            </div>
+                            <Button>Subscribe</Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    )
+}
 
 const CommunityInfo = async ({
     communityName,
@@ -21,34 +76,35 @@ const CommunityInfo = async ({
     instanceURL: string
 }) => {
     const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
-    const post = await lemmyClient.getCommunity({
+    const community = await lemmyClient.getCommunity({
         name: decodeURIComponent(communityName),
     })
 
-    const community = formatCommunityInfo(post.community_view.community)
     return (
         <Card>
             <CardHeader>
                 <div className="flex items-center gap-2">
                     <Avatar>
-                        <AvatarImage src={post.community_view.community.icon} />
+                        <AvatarImage
+                            src={community.community_view.community.icon}
+                        />
                         <AvatarFallback>
                             <Rat />
                         </AvatarFallback>
                     </Avatar>
                     <div>
                         <CardTitle>
-                            {post.community_view.community.name}
+                            {community.community_view.community.name}
                         </CardTitle>
-                        <CardDescription>
-                            {community.communityName}
-                        </CardDescription>
+                        <CardDescription>{communityName}</CardDescription>
                     </div>
                 </div>
             </CardHeader>
             <CardContent className="space-y-4">
-                {!!post.community_view.community.description && (
-                    <Mdx text={post.community_view.community.description} />
+                {!!community.community_view.community.description && (
+                    <Mdx
+                        text={community.community_view.community.description}
+                    />
                 )}
             </CardContent>
         </Card>
@@ -84,15 +140,23 @@ const CommunityLayout = ({
 }) => {
     return (
         <>
-            <main className="flex-[2] space-y-4">{children}</main>
-            <aside className="sticky hidden flex-1 lg:block">
-                <Suspense fallback={<CommunityInfoSkeletion />}>
-                    <CommunityInfo
-                        communityName={params.community_name}
-                        instanceURL={params.instance_url}
-                    />
-                </Suspense>
-            </aside>
+            <Suspense fallback={<div>Loading...</div>}>
+                <CommunityHeader
+                    communityName={params.community_name}
+                    instanceURL={params.instance_url}
+                />
+            </Suspense>
+            <ColumnLayout>
+                <main className="flex-[2] space-y-4">{children}</main>
+                <aside className="sticky hidden flex-1 lg:block">
+                    <Suspense fallback={<CommunityInfoSkeletion />}>
+                        <CommunityInfo
+                            communityName={params.community_name}
+                            instanceURL={params.instance_url}
+                        />
+                    </Suspense>
+                </aside>
+            </ColumnLayout>
         </>
     )
 }

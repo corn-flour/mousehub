@@ -1,3 +1,4 @@
+import { ColumnLayout } from "@/components/column-layout"
 import Mdx from "@/components/mdx"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -83,7 +84,7 @@ const PostLayout = ({
     children: ReactNode
 }) => {
     return (
-        <>
+        <ColumnLayout>
             <main className="flex-[2] space-y-4">{children}</main>
             <aside className="sticky hidden flex-1 lg:block">
                 <Suspense fallback={<CommunityInfoSkeletion />}>
@@ -93,7 +94,7 @@ const PostLayout = ({
                     />
                 </Suspense>
             </aside>
-        </>
+        </ColumnLayout>
     )
 }
 
