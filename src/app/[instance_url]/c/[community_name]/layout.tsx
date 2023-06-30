@@ -34,6 +34,7 @@ const CommunityHeader = async ({
                     <Image
                         src={community.community_view.community.banner}
                         alt=""
+                        className="object-cover"
                         fill
                     />
                 )}
@@ -42,7 +43,7 @@ const CommunityHeader = async ({
             <div className="relative h-24 bg-muted px-4">
                 <div className="absolute left-1/2 top-0 mx-auto w-full max-w-7xl -translate-x-1/2 -translate-y-7">
                     <div className="flex items-end gap-4">
-                        <Avatar className="h-24 w-24 border-[5px] border-muted bg-muted">
+                        <Avatar className="h-24 w-24 border-[5px] border-muted bg-white">
                             <AvatarImage
                                 src={community.community_view.community.icon}
                             />
@@ -56,8 +57,33 @@ const CommunityHeader = async ({
                                     {community.community_view.community.name}
                                 </h1>
                                 <p className="text-lg text-muted-foreground">
-                                    {communityName}
+                                    !{decodeURIComponent(communityName)}
                                 </p>
+                            </div>
+                            <Button>Subscribe</Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    )
+}
+
+const CommunityHeaderSkeleton = () => {
+    return (
+        <section>
+            <div className="h-96 w-full bg-muted-foreground"></div>
+
+            <div className="relative h-24 bg-muted px-4">
+                <div className="absolute left-1/2 top-0 mx-auto w-full max-w-7xl -translate-x-1/2 -translate-y-7">
+                    <div className="flex items-end gap-4">
+                        <div className="h-24 w-24 rounded-full bg-muted">
+                            <Skeleton className="h-24 w-24 rounded-full bg-muted-foreground" />
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <div className="space-y-2">
+                                <Skeleton className="h-3 w-[250px] bg-muted-foreground" />
+                                <Skeleton className="h-3 w-[200px] bg-muted-foreground" />
                             </div>
                             <Button>Subscribe</Button>
                         </div>
@@ -96,7 +122,9 @@ const CommunityInfo = async ({
                         <CardTitle>
                             {community.community_view.community.name}
                         </CardTitle>
-                        <CardDescription>{communityName}</CardDescription>
+                        <CardDescription>
+                            !{decodeURIComponent(communityName)}
+                        </CardDescription>
                     </div>
                 </div>
             </CardHeader>
@@ -140,7 +168,7 @@ const CommunityLayout = ({
 }) => {
     return (
         <>
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<CommunityHeaderSkeleton />}>
                 <CommunityHeader
                     communityName={params.community_name}
                     instanceURL={params.instance_url}
