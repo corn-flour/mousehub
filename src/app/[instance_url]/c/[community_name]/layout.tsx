@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { formatCommunityInfo } from "@/lib/lemmy"
 import { LemmyHttp } from "lemmy-js-client"
 import { Rat } from "lucide-react"
+import { getServerSession } from "next-auth"
 import { Suspense, type ReactNode } from "react"
 
 const CommunityInfo = async ({
@@ -22,7 +23,7 @@ const CommunityInfo = async ({
 }) => {
     const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
     const post = await lemmyClient.getCommunity({
-        name: communityName,
+        name: decodeURIComponent(communityName),
     })
 
     const community = formatCommunityInfo(post.community_view.community)
@@ -82,7 +83,6 @@ const CommunityLayout = ({
     }
     children: ReactNode
 }) => {
-    console.log(params.community_name)
     return (
         <>
             <main className="flex-[2] space-y-4">{children}</main>

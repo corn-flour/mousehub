@@ -22,6 +22,7 @@ const CommunityView = ({
                 <PostList
                     instanceURL={params.instance_url}
                     communityName={params.community_name}
+                    type="All"
                     sort={sort}
                     page={page}
                 />

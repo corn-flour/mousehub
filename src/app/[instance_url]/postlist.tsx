@@ -17,22 +17,8 @@ type PostListProps = {
 }
 
 const buildURL = (params: Omit<PostListProps, "jwt">) => {
-    if (params.type) {
-        return {
-            prev: `/${
-                params.instanceURL
-            }/${params.type.toLowerCase()}?${getPreviousPageParams({
-                sort: params.sort,
-                page: params.page,
-            }).toString()}`,
-            next: `/${
-                params.instanceURL
-            }/${params.type.toLowerCase()}?${getNextPageParams({
-                sort: params.sort,
-                page: params.page,
-            }).toString()}`,
-        }
-    }
+    // post list is in community view
+    // generate /:instance_url/c/:community_name?params paths
     if (params.communityName) {
         return {
             prev: `/${params.instanceURL}/c/${
@@ -49,6 +35,28 @@ const buildURL = (params: Omit<PostListProps, "jwt">) => {
             }).toString()}`,
         }
     }
+
+    // post list is in explore view, and specified a type_
+    // generate /:instance_url/:type?params paths
+    if (params.type) {
+        return {
+            prev: `/${
+                params.instanceURL
+            }/${params.type.toLowerCase()}?${getPreviousPageParams({
+                sort: params.sort,
+                page: params.page,
+            }).toString()}`,
+            next: `/${
+                params.instanceURL
+            }/${params.type.toLowerCase()}?${getNextPageParams({
+                sort: params.sort,
+                page: params.page,
+            }).toString()}`,
+        }
+    }
+
+    // post list is in explore view and is using default type_
+    // generate /:instance_url?params paths
     return {
         prev: `/${params.instanceURL}?${getPreviousPageParams({
             sort: params.sort,
@@ -73,7 +81,7 @@ export const PostList = async ({
 
     const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
     const posts = await lemmyClient.getPosts({
-        community_name: communityName,
+        community_name: communityName && decodeURIComponent(communityName),
         auth: jwt,
         type_: type,
         sort,
