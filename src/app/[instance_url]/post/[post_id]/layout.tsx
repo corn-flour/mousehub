@@ -42,7 +42,7 @@ const CommunityInfo = async ({
                             {post.community_view.community.name}
                         </CardTitle>
                         <CardDescription>
-                            {community.communityName}
+                            !{community.communityName}
                         </CardDescription>
                     </div>
                 </div>
