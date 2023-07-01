@@ -5,6 +5,7 @@ import { LemmyHttp } from "lemmy-js-client"
 import { Rat } from "lucide-react"
 import Image from "next/image"
 import { Suspense, type ReactNode } from "react"
+import { UserNav } from "./user-nav"
 
 const UserHeader = async ({
     userName: rawUserName,
@@ -80,7 +81,7 @@ const UserHeaderSkeleton = () => {
                                 <Skeleton className="h-3 w-[250px] bg-muted-foreground" />
                                 <Skeleton className="h-3 w-[200px] bg-muted-foreground" />
                             </div>
-                            <Button>Subscribe</Button>
+                            <Button>Block</Button>
                         </div>
                     </div>
                 </div>
@@ -109,6 +110,10 @@ const UserLayout = ({
             </Suspense>
             <div className="p-4">
                 <div className="mx-auto max-w-7xl">
+                    <UserNav
+                        instanceURL={params.instance_url}
+                        userName={params.user_name}
+                    />
                     <main className="space-y-4">{children}</main>
                 </div>
             </div>

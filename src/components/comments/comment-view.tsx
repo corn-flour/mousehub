@@ -1,7 +1,7 @@
 import { buildCommentTree } from "@/lib/lemmy"
 import { LemmyHttp } from "lemmy-js-client"
 import { Suspense } from "react"
-import CommentList from "./comment-list"
+import { CommentList } from "./comment-list"
 
 const Comments = async ({
     postID,

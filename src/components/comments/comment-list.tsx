@@ -112,7 +112,7 @@ const Comment = ({
 }
 
 // renders an infinite scrolling list of comments
-const CommentList = ({
+export const CommentList = ({
     commentTree,
     limit,
 }: {
@@ -146,5 +146,3 @@ const CommentList = ({
         </div>
     )
 }
-
-export default CommentList
