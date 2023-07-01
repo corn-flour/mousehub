@@ -10,6 +10,7 @@ import { useInView } from "react-intersection-observer"
 import Mdx from "../mdx"
 import { DownvoteButton, UpvoteButton } from "./comment-btns"
 import { formatTimeAgo } from "@/lib/utils"
+import { useParams } from "next/navigation"
 
 const CommentHeader = ({
     author,
@@ -20,6 +21,10 @@ const CommentHeader = ({
 }) => {
     const creator = formatUserInfo(author)
     const publishedDate = new Date(publishedAt + "Z")
+
+    const params = useParams()
+    const instanceURL = params["instance_url"]
+
     return (
         <div className="flex items-center gap-2">
             <Link
@@ -37,7 +42,7 @@ const CommentHeader = ({
             </Link>
             <div className="flex items-end gap-1">
                 <Link
-                    href={`/u/${creator.userName}`}
+                    href={`/${instanceURL}/u/${creator.userName}`}
                     className="hover:underline"
                 >
                     {creator.userName}

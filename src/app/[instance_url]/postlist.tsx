@@ -16,7 +16,7 @@ type PostListProps = {
     page?: string
 }
 
-const buildURL = (params: Omit<PostListProps, "jwt">) => {
+export const buildURL = (params: Omit<PostListProps, "jwt">) => {
     // post list is in community view
     // generate /:instance_url/c/:community_name?params paths
     if (params.communityName) {

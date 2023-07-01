@@ -67,15 +67,12 @@ const InstanceViewLayout = async ({
     if (session && session.instanceURL !== params.instance_url) {
         // the user is log in but not in the right instance
         // redirect to the right instance
+        //? do we want to handle viewing other instance when the user is signed in?
+        //? the user can then automatically be viewed as guest?
         redirect(`/${session.instanceURL}/local`)
         return null
     }
 
-    if (!session && params.instance_url !== "lemmy.world") {
-        // user is not logged in, redirect to default instance
-        redirect(`/lemmy.world/local`)
-        return null
-    }
     return (
         <>
             <NavBar
