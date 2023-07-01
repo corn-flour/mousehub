@@ -1,9 +1,9 @@
 import { PostItem } from "@/components/post"
 import { Button } from "@/components/ui/button"
-import { LemmyHttp, ListingType, SortType } from "lemmy-js-client"
+import { LemmyHttp, type SortType } from "lemmy-js-client"
 import Link from "next/link"
 import {
-    ExploreSearchParams,
+    type ExploreSearchParams,
     getNextPageParams,
     getPreviousPageParams,
 } from "../../search-params-handler"
