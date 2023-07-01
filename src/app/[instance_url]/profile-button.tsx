@@ -34,7 +34,7 @@ export const ProfileButton = ({
                             <Rat />
                         </AvatarFallback>
                     </Avatar>
-                    <div className="text-left">
+                    <div className="hidden text-left md:block">
                         <p>{user.local_user_view.person.name}</p>
                         <p className="text-sm text-muted-foreground">
                             {instanceURL}
