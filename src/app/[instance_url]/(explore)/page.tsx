@@ -16,7 +16,7 @@ const DefaultExploreView = ({ params, searchParams }: PostListProps) => {
     return (
         <>
             <SortSelector />
-            <Suspense fallback={<PostListSkeleton />}>
+            <Suspense fallback={<PostListSkeleton />} key={JSON.stringify(searchParams)}>
                 <PostList
                     instanceURL={params.instance_url}
                     sort={sort}

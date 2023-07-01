@@ -94,7 +94,10 @@ const UserView = ({
     return (
         <>
             <SortSelector />
-            <Suspense fallback={<PostListSkeleton />}>
+            <Suspense
+                fallback={<PostListSkeleton />}
+                key={JSON.stringify(searchParams)}
+            >
                 <UserComments
                     instanceURL={params.instance_url}
                     userName={params.user_name}

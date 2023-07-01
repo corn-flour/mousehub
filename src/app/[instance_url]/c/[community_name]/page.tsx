@@ -18,7 +18,10 @@ const CommunityView = ({
     return (
         <>
             <SortSelector />
-            <Suspense fallback={<PostListSkeleton />}>
+            <Suspense
+                fallback={<PostListSkeleton />}
+                key={JSON.stringify(searchParams)}
+            >
                 <PostList
                     instanceURL={params.instance_url}
                     communityName={params.community_name}
