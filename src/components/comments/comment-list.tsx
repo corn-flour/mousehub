@@ -9,7 +9,7 @@ import { Rat } from "lucide-react"
 import { useInView } from "react-intersection-observer"
 import Mdx from "../mdx"
 import { DownvoteButton, UpvoteButton } from "./comment-btns"
-import { formatTimeAgo } from "@/lib/utils"
+import { cn, formatTimeAgo } from "@/lib/utils"
 import { useParams } from "next/navigation"
 
 const CommentHeader = ({
@@ -56,7 +56,26 @@ const CommentHeader = ({
     )
 }
 
-const Comment = ({ comment }: { comment: CommentNode }) => {
+const borderColors = [
+    "border-red-400/70",
+    "border-orange-400/70",
+    "border-yellow-400/70",
+    "border-blue-400/70",
+    "border-green-400/70",
+    "border-blue-400/70",
+    "border-indigo-400/70",
+    "border-violet-400/70",
+]
+
+const Comment = ({
+    comment,
+    depth,
+}: {
+    comment: CommentNode
+    depth: number
+}) => {
+    const hasChildren = !!comment.children.length
+
     return (
         <div>
             <div className="space-y-2">
@@ -72,17 +91,21 @@ const Comment = ({ comment }: { comment: CommentNode }) => {
                     />
                 </div>
             </div>
-            {comment.children.length ? (
-                <div className="mt-4 space-y-4 border-l pl-4">
+            {hasChildren && (
+                <div
+                    className={cn(
+                        "mt-4 space-y-4 border-l-4 pl-4",
+                        borderColors[depth],
+                    )}
+                >
                     {comment.children.map((child) => (
                         <Comment
                             comment={child}
                             key={child.comment_view.comment.id}
+                            depth={(depth + 1) % borderColors.length}
                         />
                     ))}
                 </div>
-            ) : (
-                <></>
             )}
         </div>
     )
@@ -115,6 +138,7 @@ const CommentList = ({
                     <Comment
                         comment={comment}
                         key={comment.comment_view.comment.id}
+                        depth={0}
                     />
                 ))}
             </div>

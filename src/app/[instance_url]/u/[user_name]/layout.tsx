@@ -21,7 +21,7 @@ const UserHeader = async ({
 
     return (
         <section>
-            <div className="relative h-96 w-full">
+            <div className="relative h-96 w-full bg-muted-foreground">
                 {userDetails.person_view.person.banner && (
                     <Image
                         src={userDetails.person_view.person.banner}
@@ -39,8 +39,8 @@ const UserHeader = async ({
                             <AvatarImage
                                 src={userDetails.person_view.person.avatar}
                             />
-                            <AvatarFallback className="bg-white">
-                                <Rat className="h-12 w-12 text-muted" />
+                            <AvatarFallback className=" bg-primary-foreground">
+                                <Rat className="h-12 w-12 text-primary" />
                             </AvatarFallback>
                         </Avatar>
                         <div className="flex items-center gap-4">

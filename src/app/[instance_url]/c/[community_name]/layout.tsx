@@ -29,7 +29,7 @@ const CommunityHeader = async ({
 
     return (
         <section>
-            <div className="relative h-96 w-full">
+            <div className="relative h-96 w-full bg-muted-foreground">
                 {community.community_view.community.banner && (
                     <Image
                         src={community.community_view.community.banner}
@@ -47,8 +47,8 @@ const CommunityHeader = async ({
                             <AvatarImage
                                 src={community.community_view.community.icon}
                             />
-                            <AvatarFallback className="bg-white">
-                                <Rat className="h-12 w-12 text-muted" />
+                            <AvatarFallback className="bg-primary-foreground">
+                                <Rat className="h-12 w-12 text-primary" />
                             </AvatarFallback>
                         </Avatar>
                         <div className="flex items-center gap-4">
