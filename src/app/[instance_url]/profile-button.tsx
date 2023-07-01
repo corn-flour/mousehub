@@ -45,7 +45,7 @@ export const ProfileButton = ({
             <DropdownMenuContent className="w-56">
                 <DropdownMenuItem asChild>
                     <Link
-                        href={`/${instanceURL}/u/${user.local_user_view.local_user.id}`}
+                        href={`/${instanceURL}/u/${user.local_user_view.person.name}`}
                         className="flex items-center gap-2"
                     >
                         <User className="h-4 w-4" />
