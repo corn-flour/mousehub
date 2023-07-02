@@ -9,7 +9,7 @@ import Mdx from "../mdx"
 import { DownvoteButton, UpvoteButton } from "../action-buttons"
 import { Button } from "../ui/button"
 import { getPostType } from "./helpers"
-import { PostEmbed, PostImage, PostVideo } from "./post-embed"
+import { PostEmbed, PostImage, PostVideo } from "./post-segments"
 import { PostHeader } from "./post-header"
 
 export const PostLink = (props: { post: PostView; instanceURL: string }) => {

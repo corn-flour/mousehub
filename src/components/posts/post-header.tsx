@@ -1,8 +1,9 @@
-import { Globe, Rat, Shield } from "lucide-react"
+import { Rat } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { CardHeader } from "../ui/card"
 import Link from "next/link"
 import { cn, formatTimeAgo } from "@/lib/utils"
+import { AdminIcon, ModIcon } from "../icons"
 
 export const PostHeader = (props: {
     communityIcon?: string
@@ -40,12 +41,8 @@ export const PostHeader = (props: {
                             >
                                 <span>{props.creatorUserName}</span>
                             </Link>
-                            {props.isUserMod && (
-                                <Shield className="h-4 w-4 text-green-400" />
-                            )}
-                            {props.isUserAdmin && (
-                                <Globe className="h-4 w-4 text-red-400" />
-                            )}
+                            {props.isUserMod && <ModIcon />}
+                            {props.isUserAdmin && <AdminIcon />}
                         </div>
                         <span className="text-sm text-muted-foreground">•</span>
                         <span className="text-sm text-muted-foreground">
