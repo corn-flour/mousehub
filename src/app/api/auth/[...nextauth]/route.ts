@@ -1,5 +1,6 @@
 import { LemmyHttp } from "lemmy-js-client"
-import NextAuth, { type NextAuthOptions } from "next-auth"
+import NextAuth from "next-auth"
+import { type NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 
 export const authOptions: NextAuthOptions = {
@@ -34,6 +35,7 @@ export const authOptions: NextAuthOptions = {
     },
     providers: [
         CredentialsProvider({
+            id: "credentials",
             credentials: {
                 instanceURL: {
                     label: "Instance URL",
@@ -52,6 +54,7 @@ export const authOptions: NextAuthOptions = {
                 },
             },
             authorize: async (credentials) => {
+                console.log("credentials provider called")
                 // function that handles authorizing the login
                 // this will be triggered first when the user submit the login form
                 // and is responsible for calling the Lemmy login endpoint
@@ -66,6 +69,11 @@ export const authOptions: NextAuthOptions = {
                     password: credentials.password,
                 })
 
+                console.log(
+                    "cred: login to remote instance called",
+                    authResponse,
+                )
+
                 // TODO: handle unverified user logins
                 if (!authResponse.jwt) return null
 
@@ -73,6 +81,9 @@ export const authOptions: NextAuthOptions = {
                 const siteData = await lemmyClient.getSite({
                     auth: authResponse.jwt,
                 })
+
+                console.log("cred: getSite called", siteData.my_user)
+
                 if (!siteData.my_user) return null
                 const myUser = siteData.my_user
 
@@ -82,7 +93,51 @@ export const authOptions: NextAuthOptions = {
                     id: `${myUser.local_user_view.local_user.id}`,
                     jwt: authResponse.jwt,
                     instanceURL: credentials.instanceURL,
-                    localUser: myUser,
+                    localUser: {
+                        id: `${siteData.my_user.local_user_view.person.id}`,
+                        userName: myUser.local_user_view.person.name,
+                        avatar: myUser.local_user_view.person.avatar,
+                    },
+                }
+            },
+        }),
+        CredentialsProvider({
+            id: "account-switch",
+            name: "Account Switch",
+            credentials: {
+                instanceURL: {
+                    label: "Instance URL",
+                    type: "text",
+                    required: true,
+                },
+                accessToken: {
+                    type: "text",
+                    required: true,
+                },
+            },
+
+            async authorize(credentials) {
+                console.log("Account switch provider called")
+
+                if (!credentials) throw new Error("Credentials not provided")
+                const lemmyClient = new LemmyHttp(
+                    `https://${credentials.instanceURL}`,
+                )
+
+                const siteData = await lemmyClient.getSite({
+                    auth: credentials.accessToken,
+                })
+
+                if (!siteData.my_user) throw new Error("Invalid access token")
+                return {
+                    id: `${siteData.my_user.local_user_view.person.id}`,
+                    jwt: credentials.accessToken,
+                    instanceURL: credentials.instanceURL,
+                    localUser: {
+                        id: `${siteData.my_user.local_user_view.person.id}`,
+                        userName: siteData.my_user.local_user_view.person.name,
+                        avatar: siteData.my_user.local_user_view.person.avatar,
+                    },
                 }
             },
         }),

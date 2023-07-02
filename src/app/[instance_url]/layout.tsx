@@ -7,7 +7,6 @@ import NavLink from "./navlink"
 import { getServerSession } from "next-auth"
 import { authOptions } from "../api/auth/[...nextauth]/route"
 import { redirect } from "next/navigation"
-import { type MyUserInfo } from "lemmy-js-client"
 import { ProfileButton } from "./profile-button"
 
 const NavBar = ({
@@ -15,7 +14,11 @@ const NavBar = ({
     localUser,
 }: {
     instanceURL: string
-    localUser?: MyUserInfo
+    localUser?: {
+        id: string
+        userName: string
+        avatar?: string
+    }
 }) => {
     return (
         <header className="sticky left-0 top-0 z-20 w-full border-b bg-background p-4">
