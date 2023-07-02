@@ -12,6 +12,7 @@ import { DownvoteButton, UpvoteButton } from "../action-buttons"
 import { cn, formatTimeAgo } from "@/lib/utils"
 import { useParams } from "next/navigation"
 import { AdminIcon, BotIcon, ModIcon, OriginalPosterIcon } from "../icons"
+import { TimeTooltip } from "../time-tooltip"
 
 const CommentHeader = ({
     author,
@@ -29,7 +30,6 @@ const CommentHeader = ({
     isOriginalPoster: boolean
 }) => {
     const creator = formatUserInfo(author)
-    const publishedDate = new Date(publishedAt + "Z")
 
     const params = useParams()
     const instanceURL = params["instance_url"]
@@ -75,9 +75,7 @@ const CommentHeader = ({
                     )}
                 </div>
                 <span className="text-sm text-muted-foreground">•</span>
-                <span className="text-sm text-muted-foreground">
-                    {formatTimeAgo(publishedDate)}
-                </span>
+                <TimeTooltip time={publishedAt} />
             </div>
         </div>
     )

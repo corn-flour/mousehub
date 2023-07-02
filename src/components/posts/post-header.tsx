@@ -4,6 +4,7 @@ import { CardHeader } from "../ui/card"
 import Link from "next/link"
 import { cn, formatTimeAgo } from "@/lib/utils"
 import { AdminIcon, BotIcon, ModIcon } from "../icons"
+import { TimeTooltip } from "../time-tooltip"
 
 export const PostHeader = (props: {
     communityIcon?: string
@@ -47,9 +48,7 @@ export const PostHeader = (props: {
                             {props.isUserAdmin && <AdminIcon />}
                         </div>
                         <span className="text-sm text-muted-foreground">•</span>
-                        <span className="text-sm text-muted-foreground">
-                            {formatTimeAgo(new Date(props.published + "Z"))}
-                        </span>
+                        <TimeTooltip time={props.published} />
                     </div>
                 </div>
             </div>
