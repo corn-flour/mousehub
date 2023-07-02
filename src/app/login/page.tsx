@@ -31,6 +31,7 @@ const loginFormSchema = z.object({
 
 type LoginFormData = z.infer<typeof loginFormSchema>
 
+// TODO: display list of currently logged in accounts
 const LoginPage = () => {
     const form = useForm<LoginFormData>({
         resolver: zodResolver(loginFormSchema),

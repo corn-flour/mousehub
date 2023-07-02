@@ -16,7 +16,9 @@ const getInitialStateFromStorage = () => {
 
 const accountManager = createContext<{
     accounts: User[]
-}>({ accounts: [] })
+    removeAccount: (id: string) => void
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+}>({ accounts: [], removeAccount: () => {} })
 
 export default function AccountManagerProvider({
     children,
@@ -59,6 +61,11 @@ export default function AccountManagerProvider({
         <accountManager.Provider
             value={{
                 accounts,
+                removeAccount: (id) => {
+                    setAccounts((accounts) =>
+                        [...accounts].filter((item) => item.id !== id),
+                    )
+                },
             }}
         >
             {children}

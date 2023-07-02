@@ -29,7 +29,7 @@ export const ProfileButton = ({
     }
     instanceURL: string
 }) => {
-    const { accounts: accountSet } = useAccountManager()
+    const { accounts: accountSet, removeAccount } = useAccountManager()
 
     const accounts = Array.from(accountSet)
 
@@ -117,8 +117,9 @@ export const ProfileButton = ({
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                     onClick={async () => {
+                        removeAccount(user.id)
                         await signOut({
-                            callbackUrl: "/lemmy.world/local",
+                            callbackUrl: "/login",
                         })
                     }}
                     className="flex cursor-pointer items-center gap-2"
