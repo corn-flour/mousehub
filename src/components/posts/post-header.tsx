@@ -2,7 +2,7 @@ import { Rat } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { CardHeader } from "../ui/card"
 import Link from "next/link"
-import { cn, formatTimeAgo } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 import { AdminIcon, BotIcon, ModIcon } from "../icons"
 import { TimeTooltip } from "../time-tooltip"
 
