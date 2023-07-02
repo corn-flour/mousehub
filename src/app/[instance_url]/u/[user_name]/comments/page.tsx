@@ -24,11 +24,13 @@ const buildURL = (params: UserPageParams) => {
     return {
         prev: `/${params.instanceURL}/u/${
             params.userName
-        }?${getPreviousPageParams({
+        }/comments?${getPreviousPageParams({
             sort: params.sort,
             page: params.page,
         }).toString()}`,
-        next: `/${params.instanceURL}/u/${params.userName}?${getNextPageParams({
+        next: `/${params.instanceURL}/u/${
+            params.userName
+        }/comments?${getNextPageParams({
             sort: params.sort,
             page: params.page,
         }).toString()}`,
@@ -47,6 +49,8 @@ const UserComments = async ({
     const pageNum = page ? Number(page) : 1
     const userInfo = await lemmyClient.getPersonDetails({
         username: userName,
+        sort,
+        page: pageNum,
     })
 
     const { prev, next } = buildURL({

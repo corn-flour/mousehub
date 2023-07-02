@@ -4,7 +4,11 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { type CommunityModeratorView, type PostView } from "lemmy-js-client"
 import Mdx from "@/components/mdx"
 import { formatNumber } from "@/lib/utils"
-import { formatCommunityInfo, formatUserInfo } from "@/lib/lemmy"
+import {
+    formatCommunityInfo,
+    formatUserInfo,
+    isUserModerator,
+} from "@/lib/lemmy"
 import { Button } from "../ui/button"
 import { NSFWMask } from "./nsfw-mask"
 import { getPostType } from "./helpers"
@@ -25,12 +29,6 @@ const Post = (props: {
     const postType = getPostType(post)
 
     const isUserAdmin = post.creator.admin
-    const isUserMod =
-        props.moderators
-            ?.map((m) => m.moderator.id)
-            .includes(post.creator.id) ?? false
-
-    console.log("test", postType, post.post)
 
     return (
         <Card className="relative overflow-visible border-none">
@@ -42,7 +40,7 @@ const Post = (props: {
                 published={post.post.published}
                 postTitle={post.post.name}
                 isUserAdmin={isUserAdmin}
-                isUserMod={isUserMod}
+                isUserMod={isUserModerator(post.creator.id, props.moderators)}
                 isBot={post.creator.bot_account}
             />
             <Separator />

@@ -47,6 +47,8 @@ const UserPosts = async ({
     const pageNum = page ? Number(page) : 1
     const userInfo = await lemmyClient.getPersonDetails({
         username: userName,
+        sort,
+        page: pageNum,
     })
 
     const { prev, next } = buildURL({

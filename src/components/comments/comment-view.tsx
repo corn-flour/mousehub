@@ -11,13 +11,25 @@ const Comments = async ({
     instanceURL: string
 }) => {
     const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
-    const comments = await lemmyClient.getComments({
-        post_id: postID,
-        max_depth: 5,
-        page: 2,
-        type_: "All",
-    })
-    const commentTree = buildCommentTree(comments.comments, false)
+
+    const [comments, post] = await Promise.all([
+        lemmyClient.getComments({
+            post_id: postID,
+            max_depth: 5,
+            page: 2,
+            type_: "All",
+        }),
+        lemmyClient.getPost({
+            id: postID,
+        }),
+    ])
+
+    const commentTree = buildCommentTree(
+        comments.comments,
+        false,
+        post.moderators,
+        post.post_view.creator.id,
+    )
 
     return <CommentList commentTree={commentTree} limit={20} />
 }

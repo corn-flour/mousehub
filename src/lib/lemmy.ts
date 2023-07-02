@@ -1,4 +1,5 @@
 import {
+    type CommunityModeratorView,
     type Comment,
     type CommentView,
     type Community,
@@ -33,6 +34,12 @@ export type CommentNode = {
     comment_view: CommentView
     children: CommentNode[]
     depth: number
+    creator: {
+        isModerator: boolean
+        isAdmin: boolean
+        isBot: boolean
+        isOriginalPoster: boolean
+    }
 }
 
 // get the depth of the comment
@@ -56,6 +63,8 @@ const getCommentParentId = (comment?: Comment): number | undefined => {
 export const buildCommentTree = (
     comments: CommentView[],
     parentComment: boolean,
+    moderators: CommunityModeratorView[],
+    originalPosterID: number,
 ) => {
     const map = new Map<number, CommentNode>()
     const depthOffset = !parentComment
@@ -69,6 +78,15 @@ export const buildCommentTree = (
             comment_view,
             children: [],
             depth,
+            creator: {
+                isAdmin: comment_view.creator.admin,
+                isModerator: isUserModerator(
+                    comment_view.creator.id,
+                    moderators,
+                ),
+                isBot: comment_view.creator.bot_account,
+                isOriginalPoster: comment_view.creator.id === originalPosterID,
+            },
         }
         map.set(comment_view.comment.id, { ...node })
     }
@@ -141,3 +159,8 @@ export const fetchLemmyInstances = async () => {
     }
     return jsonData
 }
+
+export const isUserModerator = (
+    userID: number,
+    moderators?: CommunityModeratorView[],
+) => moderators?.map((m) => m.moderator.id).includes(userID) ?? false
