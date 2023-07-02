@@ -1,4 +1,3 @@
-import { PostItem } from "@/components/posts/post"
 import { Button } from "@/components/ui/button"
 import { LemmyHttp, type SortType } from "lemmy-js-client"
 import Link from "next/link"
@@ -10,6 +9,7 @@ import {
 import { Suspense } from "react"
 import { PostListSkeleton } from "../../post-skeleton"
 import SortSelector from "../../(explore)/sort-selector"
+import { PostLink } from "@/components/posts/post-link"
 
 type UserPageParams = {
     instanceURL: string
@@ -60,11 +60,10 @@ const UserPosts = async ({
         <>
             <div className="flex flex-col gap-4">
                 {userInfo.posts.map((post) => (
-                    <PostItem
+                    <PostLink
                         key={post.post.id}
                         post={post}
                         instanceURL={instanceURL}
-                        isExplorePost
                     />
                 ))}
             </div>

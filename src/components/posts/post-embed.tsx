@@ -64,3 +64,16 @@ export const PostEmbed = (props: {
         </Link>
     )
 }
+
+export const PostImage = (props: { url: string; alt: string }) => {
+    const { url: imageURL, alt } = props
+    return (
+        <Image
+            src={imageURL}
+            alt={alt}
+            className="max-h-[600px] w-full rounded-lg object-cover object-top transition-all"
+            width={672}
+            height={672}
+        />
+    )
+}

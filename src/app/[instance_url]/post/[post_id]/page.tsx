@@ -21,7 +21,11 @@ const PostView = async (props: PostViewProps) => {
 
     return (
         <div className="space-y-8">
-            <Post post={postResponse.post_view} instanceURL={instance_url} />
+            <Post
+                post={postResponse.post_view}
+                instanceURL={instance_url}
+                moderators={postResponse.moderators}
+            />
             <Comments
                 instanceURL={instance_url}
                 postID={postResponse.post_view.post.id}
