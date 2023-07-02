@@ -8,7 +8,7 @@ export const PostImage = (props: { imageURL: string; alt: string }) => {
         <Image
             src={imageURL}
             alt={alt}
-            className="max-h-[600px] rounded-lg object-cover object-top transition-all"
+            className="max-h-[600px] w-full rounded-lg object-cover object-top transition-all"
             width={672}
             height={672}
         />

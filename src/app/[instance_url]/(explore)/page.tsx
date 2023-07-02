@@ -1,5 +1,5 @@
 import { Suspense } from "react"
-import { PostList } from "../postlist"
+import { PostList } from "../../../components/posts/postlist"
 import { type ExploreSearchParams } from "../search-params-handler"
 import SortSelector from "./sort-selector"
 import { PostListSkeleton } from "../post-skeleton"
@@ -16,7 +16,10 @@ const DefaultExploreView = ({ params, searchParams }: PostListProps) => {
     return (
         <>
             <SortSelector />
-            <Suspense fallback={<PostListSkeleton />} key={JSON.stringify(searchParams)}>
+            <Suspense
+                fallback={<PostListSkeleton />}
+                key={JSON.stringify(searchParams)}
+            >
                 <PostList
                     instanceURL={params.instance_url}
                     sort={sort}

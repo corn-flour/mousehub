@@ -8,7 +8,7 @@ import { type Person } from "lemmy-js-client"
 import { Rat } from "lucide-react"
 import { useInView } from "react-intersection-observer"
 import Mdx from "../mdx"
-import { DownvoteButton, UpvoteButton } from "./comment-btns"
+import { DownvoteButton, UpvoteButton } from "../action-buttons"
 import { cn, formatTimeAgo } from "@/lib/utils"
 import { useParams } from "next/navigation"
 

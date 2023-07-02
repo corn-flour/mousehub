@@ -5,17 +5,15 @@ import {
     type Person,
 } from "lemmy-js-client"
 
-const LEMMY_INSTANCES_CSV_URL =
-    "https://github.com/maltfield/awesome-lemmy-instances/blob/main/awesome-lemmy-instances.csv"
-
 export const formatUserInfo = (user: Person) => {
     // regex to extract domain name from URL. This is to get the instance domain of the user
     const match = /^(?:https?:\/\/)?([^\/\r\n]+)/.exec(user.actor_id)
     const domain = match ? match[1] : "" // This should never fail considering the domain is taken from the API directly
     const userName = user.local ? user.name : `${user.name}@${domain}`
-
+    const displayName = user.display_name ?? user.name
     return {
         userName,
+        displayName,
     }
 }
 
@@ -113,6 +111,9 @@ type LemmyInstance = {
 
 // fetch all lemmy instances
 // data taken from https://github.com/maltfield/awesome-lemmy-instances
+const LEMMY_INSTANCES_CSV_URL =
+    "https://github.com/maltfield/awesome-lemmy-instances/blob/main/awesome-lemmy-instances.csv"
+
 export const fetchLemmyInstances = async () => {
     const response = await fetch(LEMMY_INSTANCES_CSV_URL)
     const csvData = await response.text()

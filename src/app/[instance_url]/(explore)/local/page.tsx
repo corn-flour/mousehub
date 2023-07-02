@@ -1,5 +1,5 @@
 import { type ExploreSearchParams } from "@/app/[instance_url]/search-params-handler"
-import { PostList } from "../../postlist"
+import { PostList } from "../../../../components/posts/postlist"
 import SortSelector from "../sort-selector"
 import { Suspense } from "react"
 import { PostListSkeleton } from "../../post-skeleton"

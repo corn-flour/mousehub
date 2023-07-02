@@ -1,4 +1,4 @@
-import { PostItem } from "@/components/post"
+import { PostItem } from "@/components/posts/post"
 import { Button } from "@/components/ui/button"
 import { LemmyHttp, type SortType } from "lemmy-js-client"
 import Link from "next/link"

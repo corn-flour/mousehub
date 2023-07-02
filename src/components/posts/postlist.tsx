@@ -1,11 +1,11 @@
-import { PostItem } from "@/components/post"
 import { Button } from "@/components/ui/button"
 import { LemmyHttp, type ListingType, type SortType } from "lemmy-js-client"
 import Link from "next/link"
 import {
     getNextPageParams,
     getPreviousPageParams,
-} from "./search-params-handler"
+} from "../../app/[instance_url]/search-params-handler"
+import { PostLink } from "./post-link"
 
 type PostListProps = {
     instanceURL: string
@@ -96,15 +96,16 @@ export const PostList = async ({
         page,
     })
 
+    console.log(JSON.stringify(posts.posts.map((post) => post.post)))
+
     return (
         <>
             <div className="flex flex-col gap-4">
                 {posts.posts.map((post) => (
-                    <PostItem
+                    <PostLink
                         key={post.post.id}
                         post={post}
                         instanceURL={instanceURL}
-                        isExplorePost
                     />
                 ))}
             </div>

@@ -5,7 +5,7 @@ import Link from "next/link"
 import { formatCommunityInfo, formatUserInfo } from "@/lib/lemmy"
 import { formatTimeAgo } from "@/lib/utils"
 import Mdx from "../mdx"
-import { DownvoteButton, UpvoteButton } from "./comment-btns"
+import { DownvoteButton, UpvoteButton } from "../action-buttons"
 import { Separator } from "../ui/separator"
 
 const CommentLink = ({
