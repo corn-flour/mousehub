@@ -54,6 +54,7 @@ export const PostLink = (props: { post: PostView; instanceURL: string }) => {
                             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                             url={post.post.thumbnail_url ?? post.post.url!}
                             alt={post.post.embed_title ?? ""}
+                            isExplore
                         />
                     ) : postType === "video" ? (
                         <PostVideo

@@ -83,7 +83,7 @@ export const PostImage = (props: {
             src={imageURL}
             alt={alt}
             className={cn(
-                "w-full rounded-lg object-cover object-top",
+                "w-full rounded-lg object-cover",
                 props.isExplore && "max-h-[600px]",
             )}
             width={672}
