@@ -30,6 +30,8 @@ const Post = (props: {
             ?.map((m) => m.moderator.id)
             .includes(post.creator.id) ?? false
 
+    console.log("test", postType, post.post)
+
     return (
         <Card className="relative overflow-visible border-none">
             <PostHeader
@@ -41,6 +43,7 @@ const Post = (props: {
                 postTitle={post.post.name}
                 isUserAdmin={isUserAdmin}
                 isUserMod={isUserMod}
+                isBot={post.creator.bot_account}
             />
             <Separator />
             <CardContent className="px-0 pt-6">

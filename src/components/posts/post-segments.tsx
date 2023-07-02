@@ -10,6 +10,7 @@ import {
 import Image from "next/image"
 import { isVideo } from "./helpers"
 import { ExternalLink } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export const PostVideo = (props: { url: string }) => {
     if (isVideo(props.url))
@@ -29,49 +30,62 @@ export const PostEmbed = (props: {
     description?: string
     thumbnailURL?: string
     videoURL?: string
+    isExplore?: boolean
 }) => {
     const { url, title, description, thumbnailURL, videoURL } = props
     const hasBody = !!description || !!thumbnailURL || !!videoURL
 
     return (
-        <Link href={url} target="_blank" className="group relative z-10 mt-4">
-            <Card className="border-transparent bg-muted transition group-hover:bg-muted/60">
-                <CardHeader>
-                    {!!title && <CardTitle>{title}</CardTitle>}
-                    <CardDescription className="flex items-center gap-2">
-                        <ExternalLink className="h-4 w-4" />
-                        <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
-                            {url}
-                        </span>
-                    </CardDescription>
-                </CardHeader>
-                {!!hasBody && (
-                    <CardContent className="space-y-4">
-                        <p>{description}</p>
-                        {!!thumbnailURL && (
-                            <Image
-                                src={thumbnailURL}
-                                alt={title ?? ""}
-                                width={700}
-                                height={400}
-                                className="w-full"
-                            />
-                        )}
-                        {!!videoURL && <PostVideo url={videoURL} />}
-                    </CardContent>
-                )}
-            </Card>
-        </Link>
+        <Card className="relative z-10 border-transparent bg-muted/60 transition hover:bg-muted">
+            <Link href={url} target="_blank" className="absolute inset-0 mt-4">
+                <span className="sr-only">Open link in next tab</span>
+            </Link>
+            <CardHeader>
+                {!!title && <CardTitle>{title}</CardTitle>}
+                <CardDescription className="flex items-center gap-2">
+                    <ExternalLink className="h-4 w-4" />
+                    <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
+                        {url}
+                    </span>
+                </CardDescription>
+            </CardHeader>
+            {!!hasBody && (
+                <CardContent className="space-y-4">
+                    <p>{description}</p>
+                    {!!videoURL && <PostVideo url={videoURL} />}
+
+                    {!videoURL && !!thumbnailURL && (
+                        <Image
+                            src={thumbnailURL}
+                            alt={title ?? ""}
+                            width={700}
+                            height={400}
+                            className={cn(
+                                "w-full object-cover",
+                                props.isExplore && "max-h-[600px]",
+                            )}
+                        />
+                    )}
+                </CardContent>
+            )}
+        </Card>
     )
 }
 
-export const PostImage = (props: { url: string; alt: string }) => {
+export const PostImage = (props: {
+    url: string
+    alt: string
+    isExplore?: boolean
+}) => {
     const { url: imageURL, alt } = props
     return (
         <Image
             src={imageURL}
             alt={alt}
-            className="max-h-[600px] w-full rounded-lg object-cover object-top transition-all"
+            className={cn(
+                "w-full rounded-lg object-cover object-top",
+                props.isExplore && "max-h-[600px]",
+            )}
             width={672}
             height={672}
         />

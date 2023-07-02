@@ -34,6 +34,7 @@ export const PostLink = (props: { post: PostView; instanceURL: string }) => {
                 creatorUserName={creator.userName}
                 published={post.post.published}
                 postTitle={post.post.name}
+                isBot={post.creator.bot_account}
                 isExplore
             />
             <CardContent>
@@ -46,6 +47,7 @@ export const PostLink = (props: { post: PostView; instanceURL: string }) => {
                             description={post.post.embed_description}
                             thumbnailURL={post.post.thumbnail_url}
                             videoURL={post.post.embed_video_url}
+                            isExplore
                         />
                     ) : postType === "image" ? (
                         <PostImage

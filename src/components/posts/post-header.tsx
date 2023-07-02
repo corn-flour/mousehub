@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { CardHeader } from "../ui/card"
 import Link from "next/link"
 import { cn, formatTimeAgo } from "@/lib/utils"
-import { AdminIcon, ModIcon } from "../icons"
+import { AdminIcon, BotIcon, ModIcon } from "../icons"
 
 export const PostHeader = (props: {
     communityIcon?: string
@@ -16,6 +16,7 @@ export const PostHeader = (props: {
     isExplore?: boolean
     isUserAdmin?: boolean
     isUserMod?: boolean
+    isBot?: boolean
 }) => {
     return (
         <CardHeader className={cn("space-y-4", !props.isExplore && "px-0")}>
@@ -41,6 +42,7 @@ export const PostHeader = (props: {
                             >
                                 <span>{props.creatorUserName}</span>
                             </Link>
+                            {props.isBot && <BotIcon />}
                             {props.isUserMod && <ModIcon />}
                             {props.isUserAdmin && <AdminIcon />}
                         </div>

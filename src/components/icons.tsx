@@ -1,4 +1,4 @@
-import { Globe, Shield } from "lucide-react"
+import { Bot, Globe, Shield } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
 
 export const ModIcon = () => {
@@ -32,6 +32,21 @@ export const AdminIcon = () => {
             </TooltipTrigger>
             <TooltipContent>
                 <p>This user is an administrator of this Lemmy instance.</p>
+            </TooltipContent>
+        </Tooltip>
+    )
+}
+
+export const BotIcon = () => {
+    return (
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <button>
+                    <Bot className="h-4 w-4" aria-label="Bot icon" />
+                </button>
+            </TooltipTrigger>
+            <TooltipContent>
+                <p>This user is a bot account.</p>
             </TooltipContent>
         </Tooltip>
     )
