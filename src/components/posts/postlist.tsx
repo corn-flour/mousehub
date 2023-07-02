@@ -96,8 +96,6 @@ export const PostList = async ({
         page,
     })
 
-    console.log(JSON.stringify(posts.posts.map((post) => post.post)))
-
     return (
         <>
             <div className="flex flex-col gap-4">
