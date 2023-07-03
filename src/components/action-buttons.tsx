@@ -1,49 +1,47 @@
 "use client"
-import { ChevronDown, ChevronUp } from "lucide-react"
-import { Button } from "./ui/button"
-import { cn, formatNumber } from "@/lib/utils"
+import { ArrowDown, ArrowUp } from "lucide-react"
+import { formatNumber } from "@/lib/utils"
 import { voteComment, votePost } from "@/app/actions/votes"
 import { experimental_useOptimistic as useOptimistic } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { Toggle } from "./ui/toggle"
 import { useSession } from "next-auth/react"
 
-// this renders when the user is not logged in
-// or when JS isn't ready and session isn't fetched yet
-const NoAuthVotingButtons = ({
-    upvotes,
-    downvotes,
-    myVote,
-}: {
+const UpvoteButton = (props: {
     upvotes: number
-    downvotes: number
-    myVote: number
+    isPressed: boolean
+    onPress?: () => void
 }) => {
     return (
-        <div className="flex items-center gap-1">
-            <Button
-                size="sm"
-                className={cn(
-                    "relative z-10 h-auto gap-1 py-1 pl-2 pr-3",
-                    myVote === 1 && "bg-blue-300 dark:bg-blue-600",
-                )}
-                aria-label="Upvote"
-            >
-                <ChevronUp />
-                <span>{formatNumber(upvotes)}</span>
-            </Button>
-            <Button
-                size="sm"
-                className={cn(
-                    "relative z-10 h-auto gap-1 py-1 pl-2 pr-3",
-                    myVote === -1 && "bg-red-300 dark:bg-red-600",
-                )}
-                aria-label="Downvote"
-            >
-                <ChevronDown />
-                <span>{formatNumber(downvotes)}</span>
-            </Button>
-        </div>
+        <Toggle
+            size="sm"
+            className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-blue-300 dark:data-[state=on]:bg-blue-600"
+            aria-label="Upvote"
+            onPressedChange={props.onPress}
+            pressed={props.isPressed}
+        >
+            <ArrowUp />
+            <span>{formatNumber(props.upvotes)}</span>
+        </Toggle>
+    )
+}
+
+const DownvoteButton = (props: {
+    downvotes: number
+    isPressed: boolean
+    onPress?: () => void
+}) => {
+    return (
+        <Toggle
+            size="sm"
+            className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-red-300 dark:data-[state=on]:bg-red-600"
+            aria-label="Upvote"
+            onPressedChange={props.onPress}
+            pressed={props.isPressed}
+        >
+            <ArrowDown />
+            <span>{formatNumber(props.downvotes)}</span>
+        </Toggle>
     )
 }
 
@@ -74,12 +72,20 @@ export const VotingButtons = (props: {
     const router = useRouter()
 
     if (!session) {
+        // this renders the toggles without event handler
+        // either when the user is not logged in
+        // or when JS isn't ready and session isn't fetched yet
         return (
-            <NoAuthVotingButtons
-                upvotes={props.upvotes}
-                downvotes={props.downvotes}
-                myVote={props.myVote}
-            />
+            <div className="flex items-center gap-1">
+                <UpvoteButton
+                    upvotes={props.upvotes}
+                    isPressed={props.myVote === 1}
+                />
+                <DownvoteButton
+                    downvotes={props.downvotes}
+                    isPressed={props.myVote === -1}
+                />
+            </div>
         )
     }
 
@@ -164,26 +170,16 @@ export const VotingButtons = (props: {
 
     return (
         <div className="flex items-center gap-1">
-            <Toggle
-                size="sm"
-                className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-blue-300 dark:data-[state=on]:bg-blue-600"
-                aria-label="Upvote"
-                onPressedChange={handleUpvote}
-                pressed={optimisticMyVote === 1}
-            >
-                <ChevronUp />
-                <span>{formatNumber(optimisticUpvotes)}</span>
-            </Toggle>
-            <Toggle
-                size="sm"
-                className="relative z-10 h-auto gap-1 py-1 pl-1 pr-2 data-[state=on]:bg-red-300 dark:data-[state=on]:bg-red-600 "
-                aria-label="Downvote"
-                onPressedChange={handleDownvote}
-                pressed={optimisticMyVote === -1}
-            >
-                <ChevronDown />
-                <span>{formatNumber(optimisticDownvotes)}</span>
-            </Toggle>
+            <UpvoteButton
+                upvotes={optimisticUpvotes}
+                isPressed={optimisticMyVote === 1}
+                onPress={() => handleUpvote()}
+            />
+            <DownvoteButton
+                downvotes={optimisticDownvotes}
+                isPressed={optimisticMyVote === -1}
+                onPress={() => handleDownvote()}
+            />
         </div>
     )
 }
