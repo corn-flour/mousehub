@@ -30,8 +30,6 @@ const Post = (props: {
 
     const isUserAdmin = post.creator.admin
 
-    console.log("ts", post.post.body)
-
     return (
         <Card className="relative overflow-visible border-none">
             <PostHeader
