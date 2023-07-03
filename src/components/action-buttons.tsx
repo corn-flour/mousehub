@@ -1,7 +1,7 @@
 "use client"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import { Button } from "./ui/button"
-import { formatNumber } from "@/lib/utils"
+import { cn, formatNumber } from "@/lib/utils"
 import { votePost } from "@/app/actions/votes"
 import { experimental_useOptimistic as useOptimistic } from "react"
 import { useParams, useRouter } from "next/navigation"
@@ -38,18 +38,25 @@ export const DownvoteButton = ({ count }: { count: number }) => {
     )
 }
 
+// this renders when the user is not logged in
+// or when JS isn't ready and session isn't fetched yet
 const NoAuthVotingButtons = ({
     upvotes,
     downvotes,
+    myVote,
 }: {
     upvotes: number
     downvotes: number
+    myVote: number
 }) => {
     return (
         <div className="flex items-center gap-1">
             <Button
                 size="sm"
-                className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3"
+                className={cn(
+                    "relative z-10 h-auto gap-1 py-1 pl-2 pr-3",
+                    myVote === 1 && "bg-blue-300 dark:bg-blue-600",
+                )}
                 aria-label="Upvote"
             >
                 <ChevronUp />
@@ -57,7 +64,10 @@ const NoAuthVotingButtons = ({
             </Button>
             <Button
                 size="sm"
-                className="relative z-10 h-auto gap-1 py-1 pl-1 pr-2"
+                className={cn(
+                    "relative z-10 h-auto gap-1 py-1 pl-2 pr-3",
+                    myVote === -1 && "bg-red-300 dark:bg-red-600",
+                )}
                 aria-label="Downvote"
             >
                 <ChevronDown />
@@ -97,6 +107,7 @@ export const PostVotingButtons = (props: {
             <NoAuthVotingButtons
                 upvotes={props.upvotes}
                 downvotes={props.downvotes}
+                myVote={props.myVote}
             />
         )
     }
@@ -104,8 +115,6 @@ export const PostVotingButtons = (props: {
     const handleUpvote = async () => {
         // if the user already upvoted, new score will be neutral, otherwise upvote the post
         const myNewVote = optimisticMyVote === 1 ? 0 : 1
-
-        console.log("debug", optimisticMyVote, myNewVote)
 
         // if the user is upvoting the post then increase upvote count by 1
         // otherwise decrease it by one (since user no longer upvotes it)
@@ -168,7 +177,7 @@ export const PostVotingButtons = (props: {
         <div className="flex items-center gap-1">
             <Toggle
                 size="sm"
-                className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3"
+                className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-blue-300 dark:data-[state=on]:bg-blue-600"
                 aria-label="Upvote"
                 onPressedChange={handleUpvote}
                 pressed={optimisticMyVote === 1}
@@ -178,7 +187,7 @@ export const PostVotingButtons = (props: {
             </Toggle>
             <Toggle
                 size="sm"
-                className="relative z-10 h-auto gap-1 py-1 pl-1 pr-2"
+                className="relative z-10 h-auto gap-1 py-1 pl-1 pr-2 data-[state=on]:bg-red-300 dark:data-[state=on]:bg-red-600 "
                 aria-label="Downvote"
                 onPressedChange={handleDownvote}
                 pressed={optimisticMyVote === -1}

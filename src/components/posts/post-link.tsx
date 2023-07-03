@@ -6,7 +6,7 @@ import { MessageCircle } from "lucide-react"
 import { formatNumber } from "@/lib/utils"
 import { NSFWMask } from "./nsfw-mask"
 import Mdx from "../mdx"
-import { DownvoteButton, UpvoteButton } from "../action-buttons"
+import { PostVotingButtons } from "../action-buttons"
 import { Button } from "../ui/button"
 import { getPostType } from "./helpers"
 import { PostEmbed, PostImage, PostVideo } from "./post-segments"
@@ -68,8 +68,12 @@ export const PostLink = (props: { post: PostView; instanceURL: string }) => {
             </CardContent>
 
             <CardFooter className="gap-1">
-                <UpvoteButton count={post.counts.upvotes} />
-                <DownvoteButton count={post.counts.downvotes} />
+                <PostVotingButtons
+                    upvotes={post.counts.upvotes}
+                    downvotes={post.counts.downvotes}
+                    myVote={post.my_vote ?? 0}
+                    id={post.post.id}
+                />
                 <Button variant="ghost" size="sm" asChild className="z-10">
                     <Link
                         href={`/${instanceURL}/post/${post.post.id}#comments`}

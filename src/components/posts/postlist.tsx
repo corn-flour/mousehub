@@ -6,6 +6,8 @@ import {
     getPreviousPageParams,
 } from "../../app/[instance_url]/search-params-handler"
 import { PostLink } from "./post-link"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
 type PostListProps = {
     instanceURL: string
@@ -71,18 +73,19 @@ export const buildURL = (params: Omit<PostListProps, "jwt">) => {
 
 export const PostList = async ({
     instanceURL,
-    jwt,
     communityName,
     sort,
     type,
     page,
 }: PostListProps) => {
+    const session = await getServerSession(authOptions)
+
     const pageNum = page ? Number(page) : 1
 
     const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
     const posts = await lemmyClient.getPosts({
         community_name: communityName && decodeURIComponent(communityName),
-        auth: jwt,
+        auth: session?.accessToken,
         type_: type,
         sort,
         page: pageNum,
