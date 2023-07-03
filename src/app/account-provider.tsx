@@ -27,13 +27,22 @@ export default function AccountManagerProvider({
 }) {
     const { data: session } = useSession()
 
-    const [accounts, setAccounts] = useState<User[]>(
-        getInitialStateFromStorage(),
-    )
+    const [accounts, setAccounts] = useState<User[]>([])
+
+    useEffect(() => {
+        if (typeof window !== undefined) {
+            setAccounts(getInitialStateFromStorage())
+        }
+    }, [])
 
     // sync account with localstorage
     useEffect(() => {
-        localStorage.setItem("accounts", JSON.stringify(Array.from(accounts)))
+        if (typeof window !== undefined) {
+            localStorage.setItem(
+                "accounts",
+                JSON.stringify(Array.from(accounts)),
+            )
+        }
     }, [accounts])
 
     // sync session with account list
