@@ -22,6 +22,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { signIn } from "next-auth/react"
 import { z } from "zod"
+import { useState } from "react"
+import { Loader } from "lucide-react"
 
 const loginFormSchema = z.object({
     instance_url: z.string(),
@@ -37,8 +39,11 @@ const LoginPage = () => {
         resolver: zodResolver(loginFormSchema),
     })
 
+    const [loading, setLoading] = useState(false)
+
     const onSubmit: SubmitHandler<LoginFormData> = (data) => {
         const { instance_url, username, password } = data
+        setLoading(true)
         void signIn("credentials", {
             instanceURL: instance_url,
             username,
@@ -105,7 +110,16 @@ const LoginPage = () => {
                         />
                     </CardContent>
                     <CardFooter>
-                        <Button type="submit">Sign In</Button>
+                        <Button
+                            type="submit"
+                            disabled={loading}
+                            className="gap-2"
+                        >
+                            {loading && (
+                                <Loader className="h-4 w-4 animate-spin" />
+                            )}
+                            Sign In
+                        </Button>
                     </CardFooter>
                 </form>
             </Card>
