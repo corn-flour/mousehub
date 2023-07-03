@@ -4,7 +4,6 @@ import { Suspense } from "react"
 import { CommentList } from "./comment-list"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { getServerSession } from "next-auth"
-import { PostListSkeleton } from "@/app/[instance_url]/post-skeleton"
 import { CommentLoader } from "./skeletons"
 
 const Comments = async ({
