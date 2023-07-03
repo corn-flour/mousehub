@@ -4,6 +4,8 @@ import { Suspense } from "react"
 import { CommentList } from "./comment-list"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { getServerSession } from "next-auth"
+import { PostListSkeleton } from "@/app/[instance_url]/post-skeleton"
+import { CommentLoader } from "./skeletons"
 
 const Comments = async ({
     postID,
@@ -36,7 +38,12 @@ const Comments = async ({
         post.post_view.creator.id,
     )
 
-    return <CommentList commentTree={commentTree} limit={20} />
+    return (
+        <>
+            <h2 className="text-xl">Comments</h2>
+            <CommentList commentTree={commentTree} limit={20} />
+        </>
+    )
 }
 
 // renders comment will suspense fallback
@@ -49,8 +56,7 @@ const CommentView = ({
 }) => {
     return (
         <section className="space-y-8" id="comments">
-            <h2 className="text-xl">Comments</h2>
-            <Suspense fallback={<div>Loading..</div>}>
+            <Suspense fallback={<CommentLoader />}>
                 <Comments postID={postID} instanceURL={instanceURL} />
             </Suspense>
         </section>

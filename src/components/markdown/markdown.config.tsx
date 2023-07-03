@@ -11,7 +11,7 @@ export const components: Partial<
     h1: ({ className, node, ...props }) => (
         <h1
             className={cn(
-                "mt-2 scroll-m-20 text-4xl font-bold tracking-tight",
+                "mt-2 scroll-m-20 text-2xl font-bold tracking-tight",
                 className,
             )}
             {...props}
@@ -20,7 +20,7 @@ export const components: Partial<
     h2: ({ className, node, ...props }) => (
         <h2
             className={cn(
-                "mt-10 scroll-m-20 border-b pb-1 text-3xl font-semibold tracking-tight first:mt-0",
+                "mt-10 scroll-m-20 border-b pb-1 text-xl font-semibold tracking-tight first:mt-0",
                 className,
             )}
             {...props}
@@ -29,7 +29,7 @@ export const components: Partial<
     h3: ({ className, ...props }) => (
         <h3
             className={cn(
-                "mt-8 scroll-m-20 text-2xl font-semibold tracking-tight",
+                "mt-8 scroll-m-20 text-lg font-semibold tracking-tight",
                 className,
             )}
             {...props}
@@ -38,7 +38,7 @@ export const components: Partial<
     h4: ({ className, node, ...props }) => (
         <h4
             className={cn(
-                "mt-8 scroll-m-20 text-xl font-semibold tracking-tight",
+                "mt-8 scroll-m-20 text-base font-semibold tracking-tight",
                 className,
             )}
             {...props}
@@ -47,7 +47,7 @@ export const components: Partial<
     h5: ({ className, node, ...props }) => (
         <h5
             className={cn(
-                "mt-8 scroll-m-20 text-lg font-semibold tracking-tight",
+                "mt-8 scroll-m-20 text-base font-semibold tracking-tight",
                 className,
             )}
             {...props}
@@ -84,7 +84,7 @@ export const components: Partial<
     ul: ({ className, node, ...props }) => (
         <ul className={cn("my-6 ml-6 list-disc", className)} {...props} />
     ),
-    ol: ({ className, node, ...props }) => (
+    ol: ({ className, ordered, node, ...props }) => (
         <ol className={cn("my-6 ml-6 list-decimal", className)} {...props} />
     ),
     li: ({ className, ordered, node, ...props }) => {
@@ -113,13 +113,13 @@ export const components: Partial<
             <table className={cn("w-full", className)} {...props} />
         </div>
     ),
-    tr: ({ className, node, ...props }) => (
+    tr: ({ className, isHeader, node, ...props }) => (
         <tr
             className={cn("m-0 border-t p-0 even:bg-muted", className)}
             {...props}
         />
     ),
-    th: ({ className, node, ...props }) => (
+    th: ({ className, isHeader, node, ...props }) => (
         <th
             className={cn(
                 "border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right",
@@ -128,7 +128,7 @@ export const components: Partial<
             {...props}
         />
     ),
-    td: ({ className, node, ...props }) => (
+    td: ({ className, isHeader, node, ...props }) => (
         <td
             className={cn(
                 "border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right",
