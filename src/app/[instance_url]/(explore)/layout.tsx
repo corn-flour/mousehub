@@ -1,5 +1,5 @@
 import { ColumnLayout } from "@/components/column-layout"
-import Mdx from "@/components/mdx"
+import Mdx from "@/components/markdown/mdx"
 import {
     Card,
     CardContent,

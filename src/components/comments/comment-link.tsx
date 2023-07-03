@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import Link from "next/link"
 import { formatCommunityInfo, formatUserInfo } from "@/lib/lemmy"
 import { formatTimeAgo } from "@/lib/utils"
-import Mdx from "../mdx"
+import Mdx from "../markdown/mdx"
 import { Separator } from "../ui/separator"
 import { VotingButtons } from "../action-buttons"
 

@@ -2,7 +2,7 @@ import { MessageCircle } from "lucide-react"
 import Link from "next/link"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { type CommunityModeratorView, type PostView } from "lemmy-js-client"
-import Mdx from "@/components/mdx"
+import Mdx from "@/components/markdown/mdx"
 import { formatNumber } from "@/lib/utils"
 import {
     formatCommunityInfo,
@@ -29,6 +29,8 @@ const Post = (props: {
     const postType = getPostType(post)
 
     const isUserAdmin = post.creator.admin
+
+    console.log("ts", post.post.body)
 
     return (
         <Card className="relative overflow-visible border-none">
