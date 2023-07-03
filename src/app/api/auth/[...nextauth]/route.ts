@@ -54,7 +54,6 @@ export const authOptions: NextAuthOptions = {
                 },
             },
             authorize: async (credentials) => {
-                console.log("credentials provider called")
                 // function that handles authorizing the login
                 // this will be triggered first when the user submit the login form
                 // and is responsible for calling the Lemmy login endpoint
@@ -69,11 +68,6 @@ export const authOptions: NextAuthOptions = {
                     password: credentials.password,
                 })
 
-                console.log(
-                    "cred: login to remote instance called",
-                    authResponse,
-                )
-
                 // TODO: handle unverified user logins
                 if (!authResponse.jwt) return null
 
@@ -81,8 +75,6 @@ export const authOptions: NextAuthOptions = {
                 const siteData = await lemmyClient.getSite({
                     auth: authResponse.jwt,
                 })
-
-                console.log("cred: getSite called", siteData.my_user)
 
                 if (!siteData.my_user) return null
                 const myUser = siteData.my_user
@@ -117,8 +109,6 @@ export const authOptions: NextAuthOptions = {
             },
 
             async authorize(credentials) {
-                console.log("Account switch provider called")
-
                 if (!credentials) throw new Error("Credentials not provided")
                 const lemmyClient = new LemmyHttp(
                     `https://${credentials.instanceURL}`,
