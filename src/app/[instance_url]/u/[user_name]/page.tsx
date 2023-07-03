@@ -10,6 +10,8 @@ import { Suspense } from "react"
 import { PostListSkeleton } from "../../post-skeleton"
 import SortSelector from "../../(explore)/sort-selector"
 import { PostLink } from "@/components/posts/post-link"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
 type UserPageParams = {
     instanceURL: string
@@ -41,14 +43,15 @@ const UserPosts = async ({
     sort,
     page,
 }: UserPageParams) => {
+    const session = await getServerSession(authOptions)
     const userName = decodeURIComponent(rawUserName)
-
     const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
     const pageNum = page ? Number(page) : 1
     const userInfo = await lemmyClient.getPersonDetails({
         username: userName,
         sort,
         page: pageNum,
+        auth: session?.accessToken,
     })
 
     const { prev, next } = buildURL({

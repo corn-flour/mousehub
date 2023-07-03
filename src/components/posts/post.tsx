@@ -13,7 +13,7 @@ import { Button } from "../ui/button"
 import { NSFWMask } from "./nsfw-mask"
 import { getPostType } from "./helpers"
 import { PostEmbed, PostImage, PostVideo } from "./post-segments"
-import { PostVotingButtons } from "../action-buttons"
+import { VotingButtons } from "../action-buttons"
 import { PostHeader } from "./post-header"
 import { Separator } from "../ui/separator"
 
@@ -74,11 +74,12 @@ const Post = (props: {
             </CardContent>
 
             <CardFooter className="-ml-4 gap-1 px-0">
-                <PostVotingButtons
+                <VotingButtons
                     upvotes={post.counts.upvotes}
                     downvotes={post.counts.downvotes}
                     myVote={post.my_vote ?? 0}
                     id={post.post.id}
+                    type="post"
                 />
                 <Button variant="ghost" size="sm" asChild className="z-10">
                     <Link

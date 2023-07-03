@@ -2,6 +2,8 @@ import { buildCommentTree } from "@/lib/lemmy"
 import { LemmyHttp } from "lemmy-js-client"
 import { Suspense } from "react"
 import { CommentList } from "./comment-list"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { getServerSession } from "next-auth"
 
 const Comments = async ({
     postID,
@@ -12,12 +14,15 @@ const Comments = async ({
 }) => {
     const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
 
+    const session = await getServerSession(authOptions)
+
     const [comments, post] = await Promise.all([
         lemmyClient.getComments({
             post_id: postID,
             max_depth: 5,
             page: 2,
             type_: "All",
+            auth: session?.accessToken,
         }),
         lemmyClient.getPost({
             id: postID,

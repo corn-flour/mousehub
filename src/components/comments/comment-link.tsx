@@ -5,8 +5,8 @@ import Link from "next/link"
 import { formatCommunityInfo, formatUserInfo } from "@/lib/lemmy"
 import { formatTimeAgo } from "@/lib/utils"
 import Mdx from "../mdx"
-import { DownvoteButton, UpvoteButton } from "../action-buttons"
 import { Separator } from "../ui/separator"
+import { VotingButtons } from "../action-buttons"
 
 const CommentLink = ({
     comment,
@@ -64,8 +64,13 @@ const CommentLink = ({
                 </Link>
                 <Mdx text={comment.comment.content} />
                 <div className="-ml-3 space-x-1">
-                    <UpvoteButton count={comment.counts.upvotes} />
-                    <DownvoteButton count={comment.counts.downvotes} />
+                    <VotingButtons
+                        type="comment"
+                        id={comment.comment.id}
+                        upvotes={comment.counts.upvotes}
+                        downvotes={comment.counts.downvotes}
+                        myVote={comment.my_vote ?? 0}
+                    />
                 </div>
             </CardContent>
         </Card>

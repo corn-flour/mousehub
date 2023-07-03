@@ -8,7 +8,7 @@ import { type Person } from "lemmy-js-client"
 import { Rat } from "lucide-react"
 import { useInView } from "react-intersection-observer"
 import Mdx from "../mdx"
-import { DownvoteButton, UpvoteButton } from "../action-buttons"
+import { VotingButtons } from "../action-buttons"
 import { cn } from "@/lib/utils"
 import { useParams } from "next/navigation"
 import { AdminIcon, BotIcon, ModIcon, OriginalPosterIcon } from "../icons"
@@ -114,9 +114,12 @@ const Comment = ({
                 />
                 <Mdx text={comment.comment_view.comment.content} />
                 <div className="-ml-3 space-x-1">
-                    <UpvoteButton count={comment.comment_view.counts.upvotes} />
-                    <DownvoteButton
-                        count={comment.comment_view.counts.downvotes}
+                    <VotingButtons
+                        type="comment"
+                        id={comment.comment_view.comment.id}
+                        upvotes={comment.comment_view.counts.upvotes}
+                        downvotes={comment.comment_view.counts.downvotes}
+                        myVote={comment.comment_view.my_vote ?? 0}
                     />
                 </div>
             </div>

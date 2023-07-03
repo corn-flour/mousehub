@@ -2,41 +2,11 @@
 import { ChevronDown, ChevronUp } from "lucide-react"
 import { Button } from "./ui/button"
 import { cn, formatNumber } from "@/lib/utils"
-import { votePost } from "@/app/actions/votes"
+import { voteComment, votePost } from "@/app/actions/votes"
 import { experimental_useOptimistic as useOptimistic } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { Toggle } from "./ui/toggle"
 import { useSession } from "next-auth/react"
-
-export const UpvoteButton = ({ count }: { count: number }) => {
-    return (
-        <Button
-            variant="ghost"
-            size="sm"
-            className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3"
-            type="button"
-            aria-label="Upvote"
-        >
-            <ChevronUp />
-            <span>{formatNumber(count)}</span>
-        </Button>
-    )
-}
-
-export const DownvoteButton = ({ count }: { count: number }) => {
-    return (
-        <Button
-            variant="ghost"
-            size="sm"
-            className="relative z-10 h-auto gap-1 py-1 pl-1 pr-2"
-            type="button"
-            aria-label="Downvote"
-        >
-            <ChevronDown />
-            <span>{formatNumber(count)}</span>
-        </Button>
-    )
-}
 
 // this renders when the user is not logged in
 // or when JS isn't ready and session isn't fetched yet
@@ -77,11 +47,12 @@ const NoAuthVotingButtons = ({
     )
 }
 
-export const PostVotingButtons = (props: {
+export const VotingButtons = (props: {
     upvotes: number
     downvotes: number
     myVote: number
     id: number
+    type: "post" | "comment"
 }) => {
     const [optimisticUpvotes, setOptimisticUpvotes] = useOptimistic<
         number,
@@ -134,12 +105,21 @@ export const PostVotingButtons = (props: {
         setOptimisticMyvote(myNewVote)
 
         // call serverAction
-        await votePost({
-            instanceURL: params["instance_url"],
-            accessToken: session?.accessToken,
-            score: myNewVote,
-            id: props.id,
-        })
+        if (props.type === "post") {
+            await votePost({
+                instanceURL: params["instance_url"],
+                accessToken: session?.accessToken,
+                score: myNewVote,
+                id: props.id,
+            })
+        } else {
+            await voteComment({
+                instanceURL: params["instance_url"],
+                accessToken: session?.accessToken,
+                score: myNewVote,
+                id: props.id,
+            })
+        }
         router.refresh()
     }
 
@@ -164,12 +144,21 @@ export const PostVotingButtons = (props: {
         setOptimisticMyvote(myNewVote)
 
         // call server action
-        await votePost({
-            instanceURL: params["instance_url"],
-            accessToken: session?.accessToken,
-            score: myNewVote,
-            id: props.id,
-        })
+        if (props.type === "post") {
+            await votePost({
+                instanceURL: params["instance_url"],
+                accessToken: session?.accessToken,
+                score: myNewVote,
+                id: props.id,
+            })
+        } else {
+            await voteComment({
+                instanceURL: params["instance_url"],
+                accessToken: session?.accessToken,
+                score: myNewVote,
+                id: props.id,
+            })
+        }
         router.refresh()
     }
 
