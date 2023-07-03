@@ -5,6 +5,7 @@ import { CommentList } from "./comment-list"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { getServerSession } from "next-auth"
 import { CommentLoader } from "./skeletons"
+import { PostCommentButton } from "./comment-form"
 
 const Comments = async ({
     postID,
@@ -39,7 +40,7 @@ const Comments = async ({
 
     return (
         <>
-            <h2 className="text-xl">Comments</h2>
+            <PostCommentButton postID={postID} />
             <CommentList commentTree={commentTree} limit={20} />
         </>
     )

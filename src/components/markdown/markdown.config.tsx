@@ -81,7 +81,7 @@ export const components: Partial<
             {...props}
         />
     ),
-    ul: ({ className, node, ...props }) => (
+    ul: ({ className, ordered, node, ...props }) => (
         <ul className={cn("my-6 ml-6 list-disc", className)} {...props} />
     ),
     ol: ({ className, ordered, node, ...props }) => (

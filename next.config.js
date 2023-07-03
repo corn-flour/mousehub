@@ -5,6 +5,7 @@ const nextConfig = {
     },
     experimental: {
         serverActions: true,
+        esmExternals: "loose",
     },
     modularizeImports: {
         // apparently this might help with dev server perf?
