@@ -146,7 +146,7 @@ export const components: Partial<
             {...props}
         />
     ),
-    code: ({ className, node, ...props }) => (
+    code: ({ className, node, inline, ...props }) => (
         <code
             className={cn(
                 "relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm",
