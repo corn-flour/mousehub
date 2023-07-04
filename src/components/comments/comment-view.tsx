@@ -5,7 +5,7 @@ import { CommentList } from "./comment-list"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { getServerSession } from "next-auth"
 import { CommentLoader } from "./skeletons"
-import { PostCommentButton } from "./comment-form"
+import { PostCommentButton } from "./post-comment-button"
 
 const Comments = async ({
     postID,

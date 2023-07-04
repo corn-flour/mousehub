@@ -1,5 +1,3 @@
-"use client"
-
 import { useForm } from "react-hook-form"
 import MDEditor from "@uiw/react-md-editor"
 
@@ -7,11 +5,9 @@ import { Form, FormField, FormItem, FormMessage } from "../ui/form"
 import { Button } from "../ui/button"
 import { Loader, Send } from "lucide-react"
 import rehypeSanitize from "rehype-sanitize"
-import { useSession } from "next-auth/react"
 import { useParams } from "next/navigation"
 import { useState } from "react"
 import { createComment } from "@/app/actions/comments"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -20,13 +16,17 @@ const commentFormSchema = z.object({
     text: z.string().min(1),
 })
 
-const CommentForm = ({
+//! This component MUST be imported from a client component
+//! since it is taking in a onCancel() function prop
+export const CommentForm = ({
     postID,
     accessToken,
+    parentCommentID,
     onCancel,
 }: {
     postID: number
     accessToken: string
+    parentCommentID?: number
     onCancel: () => void
 }) => {
     const params = useParams()
@@ -47,10 +47,11 @@ const CommentForm = ({
             instanceURL: params["instance_url"],
             postID,
             accessToken,
+            parentCommentID,
             content: data.text,
         })
         setLoading(false)
-        form.reset()
+        onCancel()
         router.refresh()
     }
 
@@ -90,33 +91,5 @@ const CommentForm = ({
                 </div>
             </form>
         </Form>
-    )
-}
-
-export const PostCommentButton = (props: { postID: number }) => {
-    const { data: session } = useSession()
-    const [commentFormOpen, setCommentFormOpen] = useState(false)
-
-    if (!session) {
-        return (
-            <Button asChild>
-                <Link href="/login">Sign in to add comment</Link>
-            </Button>
-        )
-    }
-    return (
-        <>
-            {commentFormOpen ? (
-                <CommentForm
-                    postID={props.postID}
-                    accessToken={session.accessToken}
-                    onCancel={() => setCommentFormOpen(false)}
-                />
-            ) : (
-                <Button onClick={() => setCommentFormOpen(true)}>
-                    Add Comment
-                </Button>
-            )}
-        </>
     )
 }

@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useState } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { type Person } from "lemmy-js-client"
-import { Rat } from "lucide-react"
+import { Rat, Reply } from "lucide-react"
 import { useInView } from "react-intersection-observer"
 import Mdx from "../markdown/mdx"
 import { VotingButtons } from "../action-buttons"
@@ -13,6 +13,9 @@ import { cn } from "@/lib/utils"
 import { useParams } from "next/navigation"
 import { AdminIcon, BotIcon, ModIcon, OriginalPosterIcon } from "../icons"
 import { TimeTooltip } from "../time-tooltip"
+import { Toggle } from "../ui/toggle"
+import { CommentForm } from "./comment-form"
+import { useSession } from "next-auth/react"
 
 const CommentHeader = ({
     author,
@@ -95,11 +98,14 @@ const borderColors = [
 const Comment = ({
     comment,
     depth,
+    accessToken,
 }: {
     comment: CommentNode
     depth: number
+    accessToken?: string
 }) => {
     const hasChildren = !!comment.children.length
+    const [replyformOpen, setReplyFormOpen] = useState(false)
 
     return (
         <div>
@@ -113,7 +119,7 @@ const Comment = ({
                     isBot={comment.creator.isBot}
                 />
                 <Mdx text={comment.comment_view.comment.content} />
-                <div className="-ml-3 space-x-1">
+                <div className="-ml-3 flex gap-2 space-x-1">
                     <VotingButtons
                         type="comment"
                         id={comment.comment_view.comment.id}
@@ -121,7 +127,29 @@ const Comment = ({
                         downvotes={comment.comment_view.counts.downvotes}
                         myVote={comment.comment_view.my_vote ?? 0}
                     />
+                    <Toggle
+                        className="gap-2"
+                        size="sm"
+                        pressed={replyformOpen}
+                        onPressedChange={setReplyFormOpen}
+                    >
+                        <Reply className="h-4 w-4" />
+                        Reply
+                    </Toggle>
                 </div>
+            </div>
+            <div className="mt-4">
+                {replyformOpen &&
+                    (accessToken ? (
+                        <CommentForm
+                            accessToken={accessToken}
+                            postID={comment.comment_view.post.id}
+                            parentCommentID={comment.comment_view.comment.id}
+                            onCancel={() => setReplyFormOpen(false)}
+                        />
+                    ) : (
+                        <div>You must sign in to reply to comments</div>
+                    ))}
             </div>
             {hasChildren && (
                 <div
@@ -135,6 +163,7 @@ const Comment = ({
                             comment={child}
                             key={child.comment_view.comment.id}
                             depth={(depth + 1) % borderColors.length}
+                            accessToken={accessToken}
                         />
                     ))}
                 </div>
@@ -162,6 +191,7 @@ export const CommentList = ({
         },
     })
     const filteredTree = commentTree.slice(0, count)
+    const { data: session } = useSession()
 
     return (
         <div>
@@ -171,6 +201,7 @@ export const CommentList = ({
                         comment={comment}
                         key={comment.comment_view.comment.id}
                         depth={0}
+                        accessToken={session?.accessToken}
                     />
                 ))}
             </div>
