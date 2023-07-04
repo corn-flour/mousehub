@@ -77,6 +77,22 @@
     }
 }
 
+.w-md-editor {
+    @apply border border-muted-foreground !bg-muted !text-foreground !shadow-none;
+}
+
+.w-md-editor-toolbar {
+    @apply !border-b-muted-foreground !bg-muted;
+}
+
+.w-md-editor-toolbar button {
+    @apply !h-auto !p-2 !text-foreground;
+}
+
+.wmde-markdown {
+    @apply !bg-muted;
+}
+
 @layer utilities {
     .mask-gradient {
         -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent);
