@@ -4,7 +4,6 @@ import remarkGfm from "remark-gfm"
 
 import { components } from "./markdown.config"
 
-// TODO: figure out custom markdown render rules
 const Mdx = (props: { text: string; shouldOverflow?: boolean }) => {
     const { text, shouldOverflow } = props
 
