@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { LemmyHttp, type SortType } from "lemmy-js-client"
+import { type SortType } from "lemmy-js-client"
 import Link from "next/link"
 import {
     type ExploreSearchParams,
@@ -12,6 +12,7 @@ import SortSelector from "../../(explore)/sort-selector"
 import { PostLink } from "@/components/posts/post-link"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { createLemmyClient } from "@/lib/lemmy"
 
 type UserPageParams = {
     instanceURL: string
@@ -45,7 +46,7 @@ const UserPosts = async ({
 }: UserPageParams) => {
     const session = await getServerSession(authOptions)
     const userName = decodeURIComponent(rawUserName)
-    const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
+    const lemmyClient = createLemmyClient(instanceURL)
     const pageNum = page ? Number(page) : 1
     const userInfo = await lemmyClient.getPersonDetails({
         username: userName,

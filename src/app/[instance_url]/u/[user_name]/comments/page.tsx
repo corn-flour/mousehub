@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { LemmyHttp, type SortType } from "lemmy-js-client"
+import { type SortType } from "lemmy-js-client"
 import Link from "next/link"
 import {
     type ExploreSearchParams,
@@ -10,6 +10,7 @@ import { Suspense } from "react"
 import { PostListSkeleton } from "../../../post-skeleton"
 import SortSelector from "../../../(explore)/sort-selector"
 import CommentLink from "@/components/comments/comment-link"
+import { createLemmyClient } from "@/lib/lemmy"
 
 type UserPageParams = {
     instanceURL: string
@@ -45,7 +46,7 @@ const UserComments = async ({
 }: UserPageParams) => {
     const userName = decodeURIComponent(rawUserName)
 
-    const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
+    const lemmyClient = createLemmyClient(instanceURL)
     const pageNum = page ? Number(page) : 1
     const userInfo = await lemmyClient.getPersonDetails({
         username: userName,

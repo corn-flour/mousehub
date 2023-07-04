@@ -9,8 +9,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { formatCommunityInfo } from "@/lib/lemmy"
-import { LemmyHttp } from "lemmy-js-client"
+import { createLemmyClient, formatCommunityInfo } from "@/lib/lemmy"
 import { Rat } from "lucide-react"
 import { Suspense, type ReactNode } from "react"
 
@@ -21,7 +20,7 @@ const CommunityInfo = async ({
     commentID: string
     instanceURL: string
 }) => {
-    const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
+    const lemmyClient = createLemmyClient(instanceURL)
     const comment = await lemmyClient.getComment({
         id: Number(commentID),
     })

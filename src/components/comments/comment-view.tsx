@@ -1,5 +1,5 @@
-import { buildCommentTree } from "@/lib/lemmy"
-import { LemmyHttp } from "lemmy-js-client"
+import { buildCommentTree, createLemmyClient } from "@/lib/lemmy"
+
 import { Suspense } from "react"
 import { CommentList } from "./comment-list"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
@@ -18,7 +18,7 @@ const Comments = async ({
     instanceURL: string
     commentID?: number
 }) => {
-    const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
+    const lemmyClient = createLemmyClient(instanceURL)
 
     const session = await getServerSession(authOptions)
 

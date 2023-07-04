@@ -1,5 +1,5 @@
 "use server"
-import { LemmyHttp } from "lemmy-js-client"
+import { createLemmyClient } from "@/lib/lemmy"
 
 export type VoteActionProps = {
     instanceURL: string
@@ -9,7 +9,7 @@ export type VoteActionProps = {
 }
 
 export const votePost = async (props: VoteActionProps) => {
-    const lemmyClient = new LemmyHttp(`https://${props.instanceURL}`)
+    const lemmyClient = createLemmyClient(props.instanceURL)
     const upvoteResponse = await lemmyClient.likePost({
         auth: props.accessToken,
         post_id: props.id,
@@ -19,7 +19,7 @@ export const votePost = async (props: VoteActionProps) => {
 }
 
 export const voteComment = async (props: VoteActionProps) => {
-    const lemmyClient = new LemmyHttp(`https://${props.instanceURL}`)
+    const lemmyClient = createLemmyClient(props.instanceURL)
     const upvoteResponse = await lemmyClient.likeComment({
         auth: props.accessToken,
         comment_id: props.id,

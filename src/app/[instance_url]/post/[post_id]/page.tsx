@@ -1,7 +1,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import Comments from "@/components/comments/comment-view"
 import { Post } from "@/components/posts/post"
-import { LemmyHttp } from "lemmy-js-client"
+import { createLemmyClient } from "@/lib/lemmy"
 import { getServerSession } from "next-auth"
 
 type PostViewProps = {
@@ -16,7 +16,7 @@ const PostView = async (props: PostViewProps) => {
     const session = await getServerSession(authOptions)
     const accessToken = session?.accessToken
 
-    const lemmyClient = new LemmyHttp(`https://${instance_url}`)
+    const lemmyClient = createLemmyClient(instance_url)
     const postResponse = await lemmyClient.getPost({
         id: Number(post_id),
         auth: accessToken,

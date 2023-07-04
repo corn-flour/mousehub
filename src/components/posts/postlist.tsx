@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { LemmyHttp, type ListingType, type SortType } from "lemmy-js-client"
+import { type ListingType, type SortType } from "lemmy-js-client"
 import Link from "next/link"
 import {
     getNextPageParams,
@@ -8,6 +8,7 @@ import {
 import { PostLink } from "./post-link"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { createLemmyClient } from "@/lib/lemmy"
 
 type PostListProps = {
     instanceURL: string
@@ -82,7 +83,7 @@ export const PostList = async ({
 
     const pageNum = page ? Number(page) : 1
 
-    const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
+    const lemmyClient = createLemmyClient(instanceURL)
     const posts = await lemmyClient.getPosts({
         community_name: communityName && decodeURIComponent(communityName),
         auth: session?.accessToken,

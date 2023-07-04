@@ -1,6 +1,6 @@
 "use server"
 
-import { LemmyHttp } from "lemmy-js-client"
+import { createLemmyClient } from "@/lib/lemmy"
 
 export const createComment = async (props: {
     instanceURL: string
@@ -9,7 +9,7 @@ export const createComment = async (props: {
     postID: number
     parentCommentID?: number
 }) => {
-    const lemmyClient = new LemmyHttp(`https://${props.instanceURL}`)
+    const lemmyClient = createLemmyClient(props.instanceURL)
     const commentResponse = await lemmyClient.createComment({
         auth: props.accessToken,
         content: props.content,

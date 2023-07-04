@@ -10,7 +10,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { LemmyHttp } from "lemmy-js-client"
+import { createLemmyClient } from "@/lib/lemmy"
 import { Rat } from "lucide-react"
 import Image from "next/image"
 import { Suspense, type ReactNode } from "react"
@@ -22,7 +22,7 @@ const CommunityHeader = async ({
     communityName: string
     instanceURL: string
 }) => {
-    const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
+    const lemmyClient = createLemmyClient(instanceURL)
     const community = await lemmyClient.getCommunity({
         name: decodeURIComponent(communityName),
     })
@@ -101,7 +101,7 @@ const CommunityInfo = async ({
     communityName: string
     instanceURL: string
 }) => {
-    const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
+    const lemmyClient = createLemmyClient(instanceURL)
     const community = await lemmyClient.getCommunity({
         name: decodeURIComponent(communityName),
     })

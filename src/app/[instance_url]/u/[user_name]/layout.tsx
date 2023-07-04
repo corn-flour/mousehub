@@ -1,11 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { LemmyHttp } from "lemmy-js-client"
 import { Rat } from "lucide-react"
 import Image from "next/image"
 import { Suspense, type ReactNode } from "react"
 import { UserNav } from "./user-nav"
+import { createLemmyClient } from "@/lib/lemmy"
 
 const UserHeader = async ({
     userName: rawUserName,
@@ -15,7 +15,7 @@ const UserHeader = async ({
     instanceURL: string
 }) => {
     const userName = decodeURIComponent(rawUserName)
-    const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
+    const lemmyClient = createLemmyClient(instanceURL)
     const userDetails = await lemmyClient.getPersonDetails({
         username: userName,
     })

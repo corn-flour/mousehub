@@ -8,12 +8,12 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { LemmyHttp } from "lemmy-js-client"
+import { createLemmyClient } from "@/lib/lemmy"
 import Image from "next/image"
 import { Suspense, type ReactNode } from "react"
 
 const InstanceInfo = async ({ instanceURL }: { instanceURL: string }) => {
-    const lemmyClient = new LemmyHttp(`https://${instanceURL}`)
+    const lemmyClient = createLemmyClient(instanceURL)
     const site = await lemmyClient.getSite({})
 
     return (

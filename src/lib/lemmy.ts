@@ -4,7 +4,22 @@ import {
     type CommentView,
     type Community,
     type Person,
+    LemmyHttp,
 } from "lemmy-js-client"
+
+export const createLemmyClient = (instanceURL: string) => {
+    // passing the fetch function that next.js overrides so that we can actually use the cache feature
+    // revalidate cache every 60 seconds
+    return new LemmyHttp(`https://${instanceURL}`, {
+        fetchFunction: (input, init) =>
+            fetch(input, {
+                ...init,
+                next: {
+                    revalidate: 60,
+                },
+            }),
+    })
+}
 
 export const formatUserInfo = (user: Person) => {
     // regex to extract domain name from URL. This is to get the instance domain of the user
