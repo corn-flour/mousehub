@@ -142,7 +142,6 @@ const Comment = ({
                 {replyformOpen &&
                     (accessToken ? (
                         <CommentForm
-                            accessToken={accessToken}
                             postID={comment.comment_view.post.id}
                             parentCommentID={comment.comment_view.comment.id}
                             onCancel={() => setReplyFormOpen(false)}

@@ -34,7 +34,11 @@ export const formatTimeAgo = (date: Date) => {
 
     for (let i = 0; i < DIVISIONS.length; i++) {
         const division = DIVISIONS[i]
+
         if (Math.abs(duration) < division.amount) {
+            if (duration < 60 && division.name === "seconds") {
+                return "<1 minute"
+            }
             return formatter.format(Math.round(duration), division.name)
         }
         duration /= division.amount

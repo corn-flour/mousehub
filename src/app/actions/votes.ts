@@ -1,17 +1,22 @@
 "use server"
 import { createLemmyClient } from "@/lib/lemmy"
+import { getServerSession } from "next-auth"
+import { authOptions } from "../api/auth/[...nextauth]/route"
 
 export type VoteActionProps = {
     instanceURL: string
-    accessToken: string
     score: number
     id: number
 }
 
 export const votePost = async (props: VoteActionProps) => {
+    const session = await getServerSession(authOptions)
+    if (!session?.accessToken) {
+        throw new Error("user is not signed in")
+    }
     const lemmyClient = createLemmyClient(props.instanceURL)
     const upvoteResponse = await lemmyClient.likePost({
-        auth: props.accessToken,
+        auth: session.accessToken,
         post_id: props.id,
         score: props.score,
     })
@@ -19,9 +24,13 @@ export const votePost = async (props: VoteActionProps) => {
 }
 
 export const voteComment = async (props: VoteActionProps) => {
+    const session = await getServerSession(authOptions)
+    if (!session?.accessToken) {
+        throw new Error("user is not signed in")
+    }
     const lemmyClient = createLemmyClient(props.instanceURL)
     const upvoteResponse = await lemmyClient.likeComment({
-        auth: props.accessToken,
+        auth: session.accessToken,
         comment_id: props.id,
         score: props.score,
     })

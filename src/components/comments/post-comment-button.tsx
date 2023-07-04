@@ -22,7 +22,6 @@ export const PostCommentButton = (props: { postID: number }) => {
             {commentFormOpen ? (
                 <CommentForm
                     postID={props.postID}
-                    accessToken={session.accessToken}
                     onCancel={() => setCommentFormOpen(false)}
                 />
             ) : (

@@ -114,14 +114,12 @@ export const VotingButtons = (props: {
         if (props.type === "post") {
             await votePost({
                 instanceURL: params["instance_url"],
-                accessToken: session?.accessToken,
                 score: myNewVote,
                 id: props.id,
             })
         } else {
             await voteComment({
                 instanceURL: params["instance_url"],
-                accessToken: session?.accessToken,
                 score: myNewVote,
                 id: props.id,
             })
@@ -153,14 +151,12 @@ export const VotingButtons = (props: {
         if (props.type === "post") {
             await votePost({
                 instanceURL: params["instance_url"],
-                accessToken: session?.accessToken,
                 score: myNewVote,
                 id: props.id,
             })
         } else {
             await voteComment({
                 instanceURL: params["instance_url"],
-                accessToken: session?.accessToken,
                 score: myNewVote,
                 id: props.id,
             })

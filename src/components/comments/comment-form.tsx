@@ -20,12 +20,10 @@ const commentFormSchema = z.object({
 //! since it is taking in a onCancel() function prop
 export const CommentForm = ({
     postID,
-    accessToken,
     parentCommentID,
     onCancel,
 }: {
     postID: number
-    accessToken: string
     parentCommentID?: number
     onCancel: () => void
 }) => {
@@ -46,7 +44,7 @@ export const CommentForm = ({
         await createComment({
             instanceURL: params["instance_url"],
             postID,
-            accessToken,
+
             parentCommentID,
             content: data.text,
         })

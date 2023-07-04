@@ -8,15 +8,13 @@ import {
 } from "lemmy-js-client"
 
 export const createLemmyClient = (instanceURL: string) => {
-    // passing the fetch function that next.js overrides so that we can actually use the cache feature
-    // revalidate cache every 60 seconds
+    // passing the fetch function that next.js overrides so that we might actually use the cache feature
+    // currently doesn't cache anything because revalidating is rough D:
     return new LemmyHttp(`https://${instanceURL}`, {
         fetchFunction: (input, init) =>
             fetch(input, {
                 ...init,
-                next: {
-                    revalidate: 60,
-                },
+                cache: "no-store",
             }),
     })
 }
