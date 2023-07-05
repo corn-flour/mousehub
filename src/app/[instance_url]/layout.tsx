@@ -3,7 +3,6 @@ import { ExternalLink, Globe, Rat, Users } from "lucide-react"
 import Link from "next/link"
 import { type ReactNode } from "react"
 import ThemeSwitch from "./theme-switch"
-import NavLink from "./navlink"
 import { getServerSession } from "next-auth"
 import { authOptions } from "../api/auth/[...nextauth]/route"
 import { redirect } from "next/navigation"
@@ -40,10 +39,6 @@ const NavBar = ({
                             <span className="text-lg">{instanceURL}</span>
                         </Link>
                     </Button>
-                    <div className="ml-4 flex items-center gap-4">
-                        <NavLink url={`/${instanceURL}/local`} label="Local" />
-                        <NavLink url={`/${instanceURL}/all`} label="All" />
-                    </div>
                 </div>
                 <div className="flex items-center gap-2">
                     <ThemeSwitch />
