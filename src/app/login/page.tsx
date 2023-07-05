@@ -49,6 +49,10 @@ const LoginPage = () => {
             username,
             password,
             callbackUrl: `/${instance_url}`,
+        }).catch((e) => {
+            // TODO: handle error
+            alert("error")
+            console.error(e)
         })
     }
 

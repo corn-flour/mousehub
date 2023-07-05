@@ -81,6 +81,10 @@ export const ProfileButton = ({
                                                 instanceURL:
                                                     account.instanceURL,
                                                 accessToken: account.jwt,
+                                            }).catch((e) => {
+                                                // TODO: handle error
+                                                alert("error")
+                                                console.error(e)
                                             })
                                         }
                                     >

@@ -15,7 +15,7 @@ const UpvoteButton = (props: {
     return (
         <Toggle
             size="sm"
-            className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-blue-300 dark:data-[state=on]:bg-blue-600"
+            className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-transparent data-[state=on]:text-blue-600 data-[state=on]:hover:bg-muted dark:data-[state=on]:text-blue-400"
             aria-label="Upvote"
             onPressedChange={props.onPress}
             pressed={props.isPressed}
@@ -34,8 +34,8 @@ const DownvoteButton = (props: {
     return (
         <Toggle
             size="sm"
-            className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-red-300 dark:data-[state=on]:bg-red-600"
-            aria-label="Upvote"
+            className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-transparent data-[state=on]:text-red-600 data-[state=on]:hover:bg-muted dark:data-[state=on]:text-red-400"
+            aria-label="Downvote"
             onPressedChange={props.onPress}
             pressed={props.isPressed}
         >
