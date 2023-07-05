@@ -15,7 +15,7 @@ export const SidebarLink = forwardRef<
             ref={ref}
             href={href ?? ""}
             className={cn(
-                "itemcs-center flex gap-4 rounded px-4 py-2.5 transition hover:bg-accent",
+                "itemcs-center flex gap-4 rounded px-4 py-1.5 transition hover:bg-accent",
                 pathname === href && "bg-accent text-accent-foreground",
                 className,
             )}
