@@ -1,5 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-import { ColumnLayout } from "@/components/column-layout"
+import { RightColumnLayout } from "@/components/right-column-layout"
 import Mdx from "@/components/markdown/mdx"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -87,9 +87,9 @@ const PostLayout = ({
     children: ReactNode
 }) => {
     return (
-        <ColumnLayout>
+        <RightColumnLayout>
             <main className="flex-[2] space-y-4">{children}</main>
-            <aside className="sticky hidden flex-1 lg:block">
+            <aside className="sticky top-[117px] hidden flex-1 lg:block">
                 <Suspense fallback={<CommunityInfoSkeletion />}>
                     <CommunityInfo
                         postID={params.post_id}
@@ -97,7 +97,7 @@ const PostLayout = ({
                     />
                 </Suspense>
             </aside>
-        </ColumnLayout>
+        </RightColumnLayout>
     )
 }
 

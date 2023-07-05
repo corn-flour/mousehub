@@ -101,7 +101,7 @@ const UserLayout = ({
     children: ReactNode
 }) => {
     return (
-        <>
+        <div>
             <Suspense fallback={<UserHeaderSkeleton />}>
                 <UserHeader
                     instanceURL={params.instance_url}
@@ -117,7 +117,7 @@ const UserLayout = ({
                     <main className="space-y-4">{children}</main>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

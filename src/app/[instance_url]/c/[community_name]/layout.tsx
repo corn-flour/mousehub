@@ -1,4 +1,4 @@
-import { ColumnLayout } from "@/components/column-layout"
+import { RightColumnLayout } from "@/components/right-column-layout"
 import Mdx from "@/components/markdown/mdx"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -167,16 +167,16 @@ const CommunityLayout = ({
     children: ReactNode
 }) => {
     return (
-        <>
+        <div>
             <Suspense fallback={<CommunityHeaderSkeleton />}>
                 <CommunityHeader
                     communityName={params.community_name}
                     instanceURL={params.instance_url}
                 />
             </Suspense>
-            <ColumnLayout>
+            <RightColumnLayout>
                 <main className="flex-[2] space-y-4">{children}</main>
-                <aside className="sticky hidden flex-1 lg:block">
+                <aside className="sticky top-[117px] hidden flex-1 lg:block">
                     <Suspense fallback={<CommunityInfoSkeletion />}>
                         <CommunityInfo
                             communityName={params.community_name}
@@ -184,8 +184,8 @@ const CommunityLayout = ({
                         />
                     </Suspense>
                 </aside>
-            </ColumnLayout>
-        </>
+            </RightColumnLayout>
+        </div>
     )
 }
 
