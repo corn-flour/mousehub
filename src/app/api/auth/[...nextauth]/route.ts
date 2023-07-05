@@ -57,7 +57,7 @@ export const authOptions: NextAuthOptions = {
                 // function that handles authorizing the login
                 // this will be triggered first when the user submit the login form
                 // and is responsible for calling the Lemmy login endpoint
-                if (!credentials) return null
+                if (!credentials) throw new Error("Missing credentials")
 
                 // calls to login endpoint in lemmy server
                 const lemmyClient = new LemmyHttp(
@@ -69,14 +69,15 @@ export const authOptions: NextAuthOptions = {
                 })
 
                 // TODO: handle unverified user logins
-                if (!authResponse.jwt) return null
+                if (!authResponse.jwt)
+                    throw new Error("auth failed/user not verified")
 
                 // user is successfully logged in, trying to get user's info...
                 const siteData = await lemmyClient.getSite({
                     auth: authResponse.jwt,
                 })
 
-                if (!siteData.my_user) return null
+                if (!siteData.my_user) throw new Error("cannot get my user")
                 const myUser = siteData.my_user
 
                 // the return type here matches the User type from next-auth

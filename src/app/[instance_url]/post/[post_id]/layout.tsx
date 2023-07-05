@@ -1,3 +1,4 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { ColumnLayout } from "@/components/column-layout"
 import Mdx from "@/components/markdown/mdx"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -11,6 +12,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { createLemmyClient, formatCommunityInfo } from "@/lib/lemmy"
 import { Rat } from "lucide-react"
+import { getServerSession } from "next-auth"
 import { Suspense, type ReactNode } from "react"
 
 const CommunityInfo = async ({
@@ -20,9 +22,11 @@ const CommunityInfo = async ({
     postID: string
     instanceURL: string
 }) => {
+    const session = await getServerSession(authOptions)
     const lemmyClient = createLemmyClient(instanceURL)
     const post = await lemmyClient.getPost({
         id: Number(postID),
+        auth: session?.accessToken,
     })
 
     const community = formatCommunityInfo(post.community_view.community)

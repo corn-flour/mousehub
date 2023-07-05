@@ -33,6 +33,7 @@ const Comments = async ({
         }),
         lemmyClient.getPost({
             id: postID,
+            auth: session?.accessToken,
         }),
     ])
 

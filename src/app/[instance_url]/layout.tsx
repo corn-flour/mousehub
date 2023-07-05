@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "../api/auth/[...nextauth]/route"
 import { redirect } from "next/navigation"
 import { ProfileButton } from "./profile-button"
+import { LeftAsideLayout } from "@/components/three-column-layout"
 
 const NavBar = ({
     instanceURL,
@@ -22,7 +23,7 @@ const NavBar = ({
 }) => {
     return (
         <header className="sticky left-0 top-0 z-20 w-full border-b bg-background p-4">
-            <div className="mx-auto flex items-center justify-between lg:max-w-7xl">
+            <div className="mx-auto flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <Button asChild variant="ghost">
                         <Link
