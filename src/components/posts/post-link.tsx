@@ -23,7 +23,7 @@ export const PostLink = (props: { post: PostView; instanceURL: string }) => {
         <Card className="relative overflow-hidden transition-all hover:border-muted-foreground">
             <Link
                 href={`/${instanceURL}/post/${post.post.id}`}
-                className="absolute left-0 top-0 z-10 h-full w-full"
+                className="absolute inset-0 z-10"
             >
                 <span className="sr-only">{post.post.name}</span>
             </Link>

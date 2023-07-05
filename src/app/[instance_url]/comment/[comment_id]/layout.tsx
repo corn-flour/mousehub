@@ -87,7 +87,7 @@ const PostLayout = ({
     return (
         <RightColumnLayout>
             <main className="flex-[2] space-y-4">{children}</main>
-            <aside className="sticky hidden flex-1 lg:block">
+            <aside className="sticky hidden flex-1 xl:block">
                 <Suspense fallback={<CommunityInfoSkeletion />}>
                     <CommunityInfo
                         commentID={params.comment_id}

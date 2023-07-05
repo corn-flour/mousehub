@@ -108,7 +108,7 @@ export const components: Partial<
         />
     ),
     hr: ({ node, ...props }) => <hr className="my-4 md:my-8" {...props} />,
-    table: ({ className, ...props }) => (
+    table: ({ className, node, ...props }) => (
         <div className="my-6 w-full overflow-y-auto">
             <table className={cn("w-full", className)} {...props} />
         </div>
