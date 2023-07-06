@@ -1,7 +1,6 @@
 import { RightColumnLayout } from "@/components/right-column-layout"
 import Mdx from "@/components/markdown/mdx"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
 import {
     Card,
     CardContent,
@@ -97,7 +96,6 @@ const CommunityHeaderSkeleton = () => {
                                 <Skeleton className="h-3 w-[250px] bg-muted-foreground" />
                                 <Skeleton className="h-3 w-[200px] bg-muted-foreground" />
                             </div>
-                            <Button>Subscribe</Button>
                         </div>
                     </div>
                 </div>
