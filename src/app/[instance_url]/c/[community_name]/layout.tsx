@@ -14,6 +14,9 @@ import { createLemmyClient } from "@/lib/lemmy"
 import { Rat } from "lucide-react"
 import Image from "next/image"
 import { Suspense, type ReactNode } from "react"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { ServerSubscriptionButton } from "./server-subscription-button"
 
 const CommunityHeader = async ({
     communityName,
@@ -22,9 +25,11 @@ const CommunityHeader = async ({
     communityName: string
     instanceURL: string
 }) => {
+    const session = await getServerSession(authOptions)
     const lemmyClient = createLemmyClient(instanceURL)
     const community = await lemmyClient.getCommunity({
         name: decodeURIComponent(communityName),
+        auth: session?.accessToken,
     })
 
     return (
@@ -60,7 +65,14 @@ const CommunityHeader = async ({
                                     !{decodeURIComponent(communityName)}
                                 </p>
                             </div>
-                            <Button>Subscribe</Button>
+                            <ServerSubscriptionButton
+                                communityID={
+                                    community.community_view.community.id
+                                }
+                                userSubscription={
+                                    community.community_view.subscribed
+                                }
+                            />
                         </div>
                     </div>
                 </div>
