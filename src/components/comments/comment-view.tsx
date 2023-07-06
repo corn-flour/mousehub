@@ -1,13 +1,15 @@
 import { buildCommentTree, createLemmyClient } from "@/lib/lemmy"
 
 import { Suspense } from "react"
-import { CommentList } from "./comment-list"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { getServerSession } from "next-auth"
 import { CommentLoader } from "./skeletons"
 import { PostCommentButton } from "./post-comment-button"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import dynamic from "next/dynamic"
+
+const CommentList = dynamic(() => import("./comment-list"))
 
 const Comments = async ({
     postID,

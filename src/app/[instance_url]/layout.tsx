@@ -111,7 +111,7 @@ const InstanceViewLayout = async ({
         // redirect to the right instance
         //? do we want to handle viewing other instance when the user is signed in?
         //? the user can then automatically be viewed as guest?
-        redirect(`/${session.instanceURL}/local`)
+        redirect(`/${session.instanceURL}`)
         return null
     }
 
@@ -129,10 +129,14 @@ const InstanceViewLayout = async ({
                                 <h3 className="text-sm uppercase text-muted-foreground">
                                     Feeds
                                 </h3>
-                                <SidebarLink href={`/${params.instance_url}`}>
-                                    <Home className="h-5 w-5" />
-                                    Home
-                                </SidebarLink>
+                                {session && (
+                                    <SidebarLink
+                                        href={`/${params.instance_url}`}
+                                    >
+                                        <Home className="h-5 w-5" />
+                                        Home
+                                    </SidebarLink>
+                                )}
                                 <SidebarLink
                                     href={`/${params.instance_url}/local`}
                                 >
