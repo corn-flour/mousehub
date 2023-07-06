@@ -19,7 +19,7 @@ export default function Error({ error }: { error: Error }) {
     const hasSearchParams = !!searchParams.toString().length
 
     return (
-        <div className="fixed inset-0 flex flex-col items-center justify-center gap-8 p-4">
+        <div className="flex flex-col items-center justify-center gap-8 p-4">
             <h1 className="text-2xl md:text-4xl">Something went wrong 😢</h1>
             <p className="max-w-[80ch] text-center text-muted-foreground [text-wrap:balance]">
                 An error has occurred while trying to open this page. Sometimes,
