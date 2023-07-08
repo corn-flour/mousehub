@@ -70,8 +70,8 @@ export const SearchBar = () => {
     }, [])
 
     const foundSomething = !!data
-    const hasUsers = !!data?.users.length
-    const hasCommunities = !!data?.communities.length
+    const hasUsers = !!data?.users?.length
+    const hasCommunities = !!data?.communities?.length
 
     return (
         <>

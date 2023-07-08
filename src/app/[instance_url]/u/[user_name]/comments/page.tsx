@@ -8,7 +8,7 @@ import {
 } from "../../../search-params-handler"
 import { Suspense } from "react"
 import { PostListSkeleton } from "../../../post-skeleton"
-import SortSelector from "../../../(explore)/sort-selector"
+import SortSelector from "@/components/sort-selector"
 import CommentLink from "@/components/comments/comment-link"
 import { createLemmyClient } from "@/lib/lemmy"
 

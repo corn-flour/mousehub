@@ -8,7 +8,7 @@ import {
 } from "../../search-params-handler"
 import { Suspense } from "react"
 import { PostListSkeleton } from "../../post-skeleton"
-import SortSelector from "../../(explore)/sort-selector"
+import SortSelector from "@/components/sort-selector"
 import { PostLink } from "@/components/posts/post-link"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"

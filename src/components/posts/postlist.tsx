@@ -9,7 +9,7 @@ import { PostLink } from "./post-link"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { createLemmyClient } from "@/lib/lemmy"
-import SortSelector from "@/app/[instance_url]/(explore)/sort-selector"
+import SortSelector from "@/components/sort-selector"
 
 type PostListProps = {
     instanceURL: string

@@ -108,46 +108,49 @@ export const CommunitySelector = (props: {
                         <div className="flex items-center justify-center py-2">
                             <Loader className="animate-spin" />
                         </div>
-                    ) : !data.length ? (
+                    ) : !data?.length ? (
                         <div className="px-4 py-2 text-sm">
                             No community found
                         </div>
                     ) : (
-                        <CommandGroup>
-                            {data.map((communityView) => {
-                                const community = formatCommunityInfo(
-                                    communityView.community,
-                                )
-                                return (
-                                    <CommandItem
-                                        key={communityView.community.id}
-                                        onSelect={() => {
-                                            props.onChange({
-                                                id: community.id,
-                                                name: community.displayName,
-                                                icon: community.icon,
-                                            })
-                                            setOpen(false)
-                                        }}
-                                    >
-                                        <Check
-                                            className={cn(
-                                                "mr-2 h-4 w-4",
-                                                props.value.id === community.id
-                                                    ? "opacity-100"
-                                                    : "opacity-0",
-                                            )}
-                                        />
-                                        <div className="flex flex-col">
-                                            <p>{community.displayName}</p>
-                                            <p className="text-sm text-muted-foreground">
-                                                {community.domain}
-                                            </p>
-                                        </div>
-                                    </CommandItem>
-                                )
-                            })}
-                        </CommandGroup>
+                        !!data && (
+                            <CommandGroup>
+                                {data.map((communityView) => {
+                                    const community = formatCommunityInfo(
+                                        communityView.community,
+                                    )
+                                    return (
+                                        <CommandItem
+                                            key={communityView.community.id}
+                                            onSelect={() => {
+                                                props.onChange({
+                                                    id: community.id,
+                                                    name: community.displayName,
+                                                    icon: community.icon,
+                                                })
+                                                setOpen(false)
+                                            }}
+                                        >
+                                            <Check
+                                                className={cn(
+                                                    "mr-2 h-4 w-4",
+                                                    props.value.id ===
+                                                        community.id
+                                                        ? "opacity-100"
+                                                        : "opacity-0",
+                                                )}
+                                            />
+                                            <div className="flex flex-col">
+                                                <p>{community.displayName}</p>
+                                                <p className="text-sm text-muted-foreground">
+                                                    {community.domain}
+                                                </p>
+                                            </div>
+                                        </CommandItem>
+                                    )
+                                })}
+                            </CommandGroup>
+                        )
                     )}
                 </Command>
             </PopoverContent>

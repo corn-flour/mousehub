@@ -11,14 +11,15 @@ const searchRouteSchema = z.object({
 
 export const GET = async (request: Request) => {
     const { searchParams } = new URL(request.url)
+
     const validatedRequests = searchRouteSchema.parse(
         Object.fromEntries(searchParams),
     )
 
-    // no query passed, return []
+    // no query passed, return null
     if (!validatedRequests.query)
-        return new Response(JSON.stringify([]), {
-            status: 200,
+        return new Response(JSON.stringify(null), {
+            status: 404,
         })
 
     const lemmyClient = createLemmyClient(validatedRequests.instanceURL)
