@@ -13,7 +13,7 @@ import {
     DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { ArrowLeftRight, LogOut, PlusCircle, Rat, User } from "lucide-react"
+import { ArrowLeftRight, LogOut, PlusCircle, Rat } from "lucide-react"
 import { signIn, signOut } from "next-auth/react"
 import Link from "next/link"
 import { useAccountManager } from "../account-provider"

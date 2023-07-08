@@ -24,7 +24,7 @@ export const formatUserInfo = (user: Person) => {
     const match = /^(?:https?:\/\/)?([^\/\r\n]+)/.exec(user.actor_id)
     const domain = match ? match[1] : "" // This should never fail considering the domain is taken from the API directly
     const userName = user.local ? user.name : `${user.name}@${domain}`
-    const displayName = user.display_name ?? user.name
+    const displayName = user.display_name || user.name
     return {
         userName,
         displayName,

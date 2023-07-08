@@ -14,6 +14,7 @@ import { Home } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { createLemmyClient, formatCommunityInfo } from "@/lib/lemmy"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { SearchBar } from "@/components/search-bar"
 
 const NavBar = ({
     instanceURL,
@@ -41,6 +42,7 @@ const NavBar = ({
                     </Button>
                 </div>
                 <div className="flex items-center gap-2">
+                    <SearchBar />
                     <ThemeSwitch />
 
                     {!localUser ? (
