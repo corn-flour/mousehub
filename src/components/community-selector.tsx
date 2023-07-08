@@ -6,7 +6,7 @@ import { Button } from "./ui/button"
 import { Check, ChevronsUpDown, Loader } from "lucide-react"
 import { Command, CommandGroup, CommandInput, CommandItem } from "./ui/command"
 import { cn } from "@/lib/utils"
-import { type CommunityView } from "lemmy-js-client"
+import { type SearchResponse } from "lemmy-js-client"
 
 import { useDebounce } from "use-debounce"
 import { FormControl } from "./ui/form"
@@ -33,18 +33,28 @@ export const CommunitySelector = (props: {
 
     const { data, status } = useQuery({
         queryFn: async ({ queryKey }) => {
+            // user doesn't pass in any queryKey, just return
+            if (!queryKey[1]) return []
+
+            const queryParams = new URLSearchParams({
+                query: queryKey[1],
+                instanceURL: instanceURL,
+                type: "Communities",
+                limit: "10",
+            })
+
             // this fetch doesn't always need to be the most up to date
             // cache for 1 hour before revalidating
             const response = await fetch(
-                `/api/search?query=${queryKey[1]}&instanceURL=${instanceURL}`,
+                `/api/search?${queryParams.toString()}`,
                 {
                     next: {
                         revalidate: 3600,
                     },
                 },
             )
-            const communities = (await response.json()) as CommunityView[]
-            return communities
+            const searchResponse = (await response.json()) as SearchResponse
+            return searchResponse.communities
         },
         queryKey: ["search", debouncedQuery],
     })

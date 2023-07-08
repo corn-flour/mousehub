@@ -36,32 +36,33 @@ export const ProfileButton = ({
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button
-                    variant="ghost"
-                    className="flex h-auto w-auto cursor-pointer items-center gap-2 px-2 py-1.5"
-                >
+                <button className="flex h-auto w-auto cursor-pointer items-center gap-2 rounded-full p-1 hover:bg-transparent">
                     <Avatar>
                         <AvatarImage src={user.avatar} />
                         <AvatarFallback>
                             <Rat />
                         </AvatarFallback>
                     </Avatar>
-                    <div className="hidden text-left md:block">
-                        <p>{user.userName}</p>
-                        <p className="text-sm text-muted-foreground">
-                            {instanceURL}
-                        </p>
-                    </div>
-                </Button>
+                </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
+            <DropdownMenuContent className="w-56 space-y-1">
                 <DropdownMenuItem asChild>
                     <Link
                         href={`/${instanceURL}/u/${user.userName}`}
-                        className="flex items-center gap-2"
+                        className="flex cursor-pointer items-center gap-2"
                     >
-                        <User className="h-4 w-4" />
-                        View Profile
+                        <Avatar>
+                            <AvatarImage src={user.avatar} />
+                            <AvatarFallback>
+                                <Rat />
+                            </AvatarFallback>
+                        </Avatar>
+                        <div className="hidden text-left md:block">
+                            <p>{user.userName}</p>
+                            <p className="text-sm text-muted-foreground">
+                                {instanceURL}
+                            </p>
+                        </div>
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSub>
