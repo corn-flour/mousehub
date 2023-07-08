@@ -13,11 +13,11 @@ import SortSelector from "@/app/[instance_url]/(explore)/sort-selector"
 
 type PostListProps = {
     instanceURL: string
-    communityName?: string
     jwt?: string
     type?: ListingType
     sort?: SortType
     page?: string
+    communityName?: string
 }
 
 export const buildURL = (params: Omit<PostListProps, "jwt">) => {
@@ -75,23 +75,84 @@ export const buildURL = (params: Omit<PostListProps, "jwt">) => {
 
 export const PostList = async ({
     instanceURL,
-    communityName,
     sort,
     type,
     page,
-}: PostListProps) => {
+}: Omit<PostListProps, "communityName">) => {
     const session = await getServerSession(authOptions)
 
     const pageNum = page ? Number(page) : 1
 
     const lemmyClient = createLemmyClient(instanceURL)
     const posts = await lemmyClient.getPosts({
-        community_name: communityName && decodeURIComponent(communityName),
         auth: session?.accessToken,
         type_: type,
         sort,
         page: pageNum,
     })
+
+    const { prev, next } = buildURL({
+        instanceURL,
+        sort,
+        type,
+        page,
+    })
+
+    return (
+        <>
+            <div>
+                <SortSelector />
+            </div>
+            <div className="flex flex-col gap-4">
+                {posts.posts.map((post) => (
+                    <PostLink
+                        key={post.post.id}
+                        post={post}
+                        instanceURL={instanceURL}
+                    />
+                ))}
+            </div>
+            <div className="mt-4 flex items-center justify-center gap-4">
+                {pageNum > 1 && (
+                    <Button asChild variant="outline">
+                        <Link href={prev}>Last page</Link>
+                    </Button>
+                )}
+                <Button asChild variant="outline">
+                    <Link href={next}>Next page</Link>
+                </Button>
+            </div>
+        </>
+    )
+}
+
+export const CommunityPostList = async ({
+    instanceURL,
+    communityName,
+    sort,
+    type,
+    page,
+}: PostListProps & {
+    communityName: string
+}) => {
+    const session = await getServerSession(authOptions)
+
+    const pageNum = page ? Number(page) : 1
+
+    const lemmyClient = createLemmyClient(instanceURL)
+    const [posts, communityResponse] = await Promise.all([
+        lemmyClient.getPosts({
+            community_name: decodeURIComponent(communityName),
+            auth: session?.accessToken,
+            type_: type,
+            sort,
+            page: pageNum,
+        }),
+        lemmyClient.getCommunity({
+            auth: session?.accessToken,
+            name: decodeURIComponent(communityName),
+        }),
+    ])
 
     const { prev, next } = buildURL({
         instanceURL,
@@ -107,7 +168,7 @@ export const PostList = async ({
                 {communityName && (
                     <Button asChild>
                         <Link
-                            href={`/${instanceURL}/post/new?communityID=${posts.posts[0].community.id}`}
+                            href={`/${instanceURL}/post/new?communityID=${communityResponse.community_view.community.id}`}
                         >
                             Create post
                         </Link>

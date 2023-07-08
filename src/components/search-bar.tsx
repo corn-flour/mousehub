@@ -16,6 +16,7 @@ import {
 } from "./ui/command"
 import { formatCommunityInfo, formatUserInfo } from "@/lib/lemmy"
 import { useRouter } from "next/navigation"
+import { Separator } from "./ui/separator"
 
 export const SearchBar = () => {
     const params = useParams()
@@ -151,6 +152,7 @@ export const SearchBar = () => {
                                     })}
                                 </CommandGroup>
                             )}
+                            {hasUsers && hasCommunities && <Separator />}
                             {hasCommunities && (
                                 <CommandGroup>
                                     <h3 className="my-2 text-sm uppercase text-muted-foreground">

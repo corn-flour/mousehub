@@ -1,6 +1,6 @@
 import { Suspense } from "react"
 import { PostListSkeleton } from "../../post-skeleton"
-import { PostList } from "../../../../components/posts/postlist"
+import { CommunityPostList } from "@/components/posts/postlist"
 import { type ExploreSearchParams } from "../../search-params-handler"
 
 const CommunityView = ({
@@ -20,7 +20,7 @@ const CommunityView = ({
                 fallback={<PostListSkeleton />}
                 key={JSON.stringify(searchParams)}
             >
-                <PostList
+                <CommunityPostList
                     instanceURL={params.instance_url}
                     communityName={params.community_name}
                     type="All"
