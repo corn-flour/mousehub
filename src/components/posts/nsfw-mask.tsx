@@ -17,9 +17,14 @@ export const NSFWMask = ({
     const [open, setOpen] = useState(false)
     if (nsfw) {
         return (
-            <Collapsible open={open} onOpenChange={setOpen}>
+            <Collapsible
+                open={open}
+                onOpenChange={setOpen}
+                className="relative z-10"
+            >
                 <CollapsibleTrigger asChild>
-                    <button className="flex w-full items-center justify-center gap-2 rounded-md px-2 py-1 text-sm transition hover:bg-muted/50 hover:text-red-500">
+                    <button className="flex w-full items-center justify-center gap-2 rounded-md px-2 py-1 text-sm transition hover:text-red-500">
+                        <div className="flex-1 border-b-2 border-dotted" />
                         {open ? (
                             <>
                                 <Eye className="h-6 w-6" />
@@ -31,6 +36,7 @@ export const NSFWMask = ({
                                 <span>Show NSFW Content</span>
                             </>
                         )}
+                        <div className="flex-1 border-b-2 border-dotted" />
                     </button>
                 </CollapsibleTrigger>
 

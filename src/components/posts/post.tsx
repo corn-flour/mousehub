@@ -43,7 +43,6 @@ const Post = (props: {
                 isUserMod={isUserModerator(post.creator.id, props.moderators)}
                 isBot={post.creator.bot_account}
             />
-            <Separator />
             <CardContent className="px-0 pt-6">
                 <NSFWMask nsfw={post.post.nsfw}>
                     <div className="space-y-4">
