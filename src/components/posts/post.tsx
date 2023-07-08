@@ -15,7 +15,6 @@ import { getPostType } from "./helpers"
 import { PostEmbed, PostImage, PostVideo } from "./post-segments"
 import { VotingButtons } from "../action-buttons"
 import { PostHeader } from "./post-header"
-import { Separator } from "../ui/separator"
 
 const Post = (props: {
     post: PostView
