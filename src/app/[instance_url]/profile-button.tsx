@@ -57,7 +57,7 @@ export const ProfileButton = ({
                                 <Rat />
                             </AvatarFallback>
                         </Avatar>
-                        <div className="hidden text-left md:block">
+                        <div className="text-left">
                             <p>{user.userName}</p>
                             <p className="text-sm text-muted-foreground">
                                 {instanceURL}
