@@ -1,8 +1,11 @@
 "use client"
-
-import { cn } from "@/lib/utils"
-import { Eye } from "lucide-react"
 import { useState, type ReactNode } from "react"
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from "../ui/collapsible"
+import { Eye, EyeOff } from "lucide-react"
 
 export const NSFWMask = ({
     children,
@@ -11,33 +14,30 @@ export const NSFWMask = ({
     children: ReactNode
     nsfw?: boolean
 }) => {
-    const [isBlurred, setIsBlurred] = useState(true)
-
+    const [open, setOpen] = useState(false)
     if (nsfw) {
         return (
-            <div className="relative">
-                <button
-                    onClick={() => setIsBlurred(false)}
-                    type="button"
-                    className={cn(
-                        "group absolute inset-0 z-10 rounded-md",
-                        isBlurred && "bg-red-200/80 backdrop-blur-xl",
-                    )}
-                >
-                    <div
-                        className={cn(
-                            "rounded-sm bg-red-400/50 px-4 py-2 group-hover:bg-red-500/50",
-                            isBlurred
-                                ? "inline-flex items-center justify-center gap-2"
-                                : "hidden",
+            <Collapsible open={open} onOpenChange={setOpen}>
+                <CollapsibleTrigger asChild>
+                    <button className="flex w-full items-center justify-center gap-2 rounded-md px-2 py-1 text-sm transition hover:bg-muted/50 hover:text-red-500">
+                        {open ? (
+                            <>
+                                <Eye className="h-6 w-6" />
+                                <span>Hide NSFW Content</span>
+                            </>
+                        ) : (
+                            <>
+                                <EyeOff className="h-6 w-6" />
+                                <span>Show NSFW Content</span>
+                            </>
                         )}
-                    >
-                        <Eye className="h-6 w-6" />
-                        <span>Unblur</span>
-                    </div>
-                </button>
-                {children}
-            </div>
+                    </button>
+                </CollapsibleTrigger>
+
+                <CollapsibleContent className="mt-2">
+                    {children}
+                </CollapsibleContent>
+            </Collapsible>
         )
     }
 
