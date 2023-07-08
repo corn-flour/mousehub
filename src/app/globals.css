@@ -78,11 +78,11 @@
 }
 
 .w-md-editor {
-    @apply border border-muted-foreground !bg-muted !text-foreground !shadow-none;
+    @apply border !bg-background !text-foreground !shadow-none;
 }
 
 .w-md-editor-toolbar {
-    @apply !border-b-muted-foreground !bg-muted;
+    @apply !border-b-border !bg-muted;
 }
 
 .w-md-editor-toolbar button {
@@ -90,7 +90,7 @@
 }
 
 .wmde-markdown {
-    @apply !bg-muted;
+    @apply !bg-muted !text-foreground;
 }
 
 @layer utilities {

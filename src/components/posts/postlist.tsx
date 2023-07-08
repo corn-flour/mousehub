@@ -102,6 +102,13 @@ export const PostList = async ({
 
     return (
         <>
+            <Button asChild>
+                <Link
+                    href={`/${instanceURL}/post/new?communityID=${posts.posts[0].community.id}`}
+                >
+                    Create post
+                </Link>
+            </Button>
             <div className="flex flex-col gap-4">
                 {posts.posts.map((post) => (
                     <PostLink
