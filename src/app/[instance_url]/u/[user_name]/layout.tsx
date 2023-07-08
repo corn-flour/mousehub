@@ -5,7 +5,9 @@ import { Rat } from "lucide-react"
 import Image from "next/image"
 import { Suspense, type ReactNode } from "react"
 import { UserNav } from "./user-nav"
-import { createLemmyClient } from "@/lib/lemmy"
+import { createLemmyClient, formatUserInfo } from "@/lib/lemmy"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
 const UserHeader = async ({
     userName: rawUserName,
@@ -14,11 +16,15 @@ const UserHeader = async ({
     userName: string
     instanceURL: string
 }) => {
+    const session = await getServerSession(authOptions)
     const userName = decodeURIComponent(rawUserName)
     const lemmyClient = createLemmyClient(instanceURL)
     const userDetails = await lemmyClient.getPersonDetails({
         username: userName,
+        auth: session?.accessToken,
     })
+
+    const user = formatUserInfo(userDetails.person_view.person)
 
     return (
         <section>
@@ -47,16 +53,12 @@ const UserHeader = async ({
                         <div className="flex items-center gap-4">
                             <div>
                                 <h1 className="text-2xl font-bold">
-                                    {userDetails.person_view.person.display_name
-                                        ? userDetails.person_view.person
-                                              .display_name
-                                        : userName}
+                                    {user.displayName}
                                 </h1>
                                 <p className="text-lg text-muted-foreground">
-                                    @{decodeURIComponent(userName)}
+                                    @{user.userName}
                                 </p>
                             </div>
-                            <Button variant="destructive">Block</Button>
                         </div>
                     </div>
                 </div>

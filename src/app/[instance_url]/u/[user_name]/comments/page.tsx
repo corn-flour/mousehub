@@ -50,7 +50,7 @@ const UserComments = async ({
     const pageNum = page ? Number(page) : 1
     const userInfo = await lemmyClient.getPersonDetails({
         username: userName,
-        sort,
+        sort: sort ?? "New",
         page: pageNum,
     })
 

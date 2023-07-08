@@ -23,7 +23,7 @@ export const FormMarkdownEditor = (props: {
             }}
             value={props.value}
             onChange={(v) => props.onChange(v ?? "")}
-            preview="live"
+            preview="edit"
             previewOptions={{
                 rehypePlugins: [[rehypeSanitize]],
             }}

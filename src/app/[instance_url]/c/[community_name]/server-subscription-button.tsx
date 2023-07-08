@@ -38,7 +38,7 @@ export const ServerSubscriptionButton = (props: {
             type="button"
             className={cn(
                 "group w-32 gap-2 bg-primary/10 text-primary",
-                userSubscription === "NotSubscribed" && "",
+                userSubscription === "NotSubscribed" && "hover:bg-primary/20",
                 userSubscription === "Pending" &&
                     "bg-yellow-600 text-white hover:bg-destructive hover:text-destructive-foreground",
                 userSubscription === "Subscribed" &&
