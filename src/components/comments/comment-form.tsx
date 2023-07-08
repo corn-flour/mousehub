@@ -1,16 +1,15 @@
 import { useForm } from "react-hook-form"
-import MDEditor from "@uiw/react-md-editor"
 
 import { Form, FormField, FormItem, FormMessage } from "../ui/form"
 import { Button } from "../ui/button"
 import { Loader, Send } from "lucide-react"
-import rehypeSanitize from "rehype-sanitize"
 import { useParams } from "next/navigation"
 import { useState } from "react"
 import { createComment } from "@/app/actions/comments"
 import { useRouter } from "next/navigation"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { FormMarkdownEditor } from "../markdown/markdown-editor"
 
 const commentFormSchema = z.object({
     text: z.string().min(1),
@@ -61,13 +60,9 @@ export const CommentForm = ({
                     name="text"
                     render={({ field }) => (
                         <FormItem>
-                            <MDEditor
+                            <FormMarkdownEditor
                                 value={field.value}
-                                onChange={(v) => field.onChange(v ?? "")}
-                                preview="edit"
-                                previewOptions={{
-                                    rehypePlugins: [[rehypeSanitize]],
-                                }}
+                                onChange={field.onChange}
                             />
                             <FormMessage />
                         </FormItem>

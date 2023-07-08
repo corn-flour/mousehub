@@ -1,20 +1,31 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { PostForm } from "@/components/posts/postform"
+import { createLemmyClient } from "@/lib/lemmy"
+import { getServerSession } from "next-auth"
 
-const CreatePostPage = ({
+const CreatePostPage = async ({
+    params,
     searchParams,
 }: {
+    params: {
+        instance_url: string
+    }
     searchParams: {
         communityID?: string
     }
 }) => {
+    const session = getServerSession(authOptions)
+    const lemmyClient = createLemmyClient(params.instance_url)
+
+    const communityID = searchParams.communityID
+    const communityResponse = await lemmyClient.getCommunity({
+        id: communityID ? Number(communityID) : undefined,
+    })
+
     return (
         <div>
             <PostForm
-                initialCommunityID={
-                    searchParams.communityID
-                        ? Number(searchParams.communityID)
-                        : undefined
-                }
+                initialCommunity={communityResponse.community_view.community}
             />
         </div>
     )

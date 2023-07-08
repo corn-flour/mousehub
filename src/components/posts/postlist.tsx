@@ -9,6 +9,7 @@ import { PostLink } from "./post-link"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { createLemmyClient } from "@/lib/lemmy"
+import SortSelector from "@/app/[instance_url]/(explore)/sort-selector"
 
 type PostListProps = {
     instanceURL: string
@@ -102,13 +103,18 @@ export const PostList = async ({
 
     return (
         <>
-            <Button asChild>
-                <Link
-                    href={`/${instanceURL}/post/new?communityID=${posts.posts[0].community.id}`}
-                >
-                    Create post
-                </Link>
-            </Button>
+            <div className="flex items-center justify-between">
+                {communityName && (
+                    <Button asChild>
+                        <Link
+                            href={`/${instanceURL}/post/new?communityID=${posts.posts[0].community.id}`}
+                        >
+                            Create post
+                        </Link>
+                    </Button>
+                )}
+                <SortSelector />
+            </div>
             <div className="flex flex-col gap-4">
                 {posts.posts.map((post) => (
                     <PostLink

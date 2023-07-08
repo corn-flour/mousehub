@@ -1,6 +1,5 @@
 import { type ExploreSearchParams } from "@/app/[instance_url]/search-params-handler"
 import { PostList } from "../../../../components/posts/postlist"
-import SortSelector from "../sort-selector"
 import { Suspense } from "react"
 import { PostListSkeleton } from "../../post-skeleton"
 
@@ -16,7 +15,6 @@ const ExploreLocalView = ({ params, searchParams }: PostListProps) => {
 
     return (
         <>
-            <SortSelector />
             <Suspense
                 fallback={<PostListSkeleton />}
                 key={JSON.stringify(searchParams)}

@@ -1,7 +1,6 @@
 import { Suspense } from "react"
 import { PostList } from "../../../components/posts/postlist"
 import { type ExploreSearchParams } from "../search-params-handler"
-import SortSelector from "./sort-selector"
 import { PostListSkeleton } from "../post-skeleton"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
@@ -25,7 +24,6 @@ const DefaultExploreView = async ({ params, searchParams }: PostListProps) => {
     const { sort, page } = searchParams
     return (
         <>
-            <SortSelector />
             <Suspense
                 fallback={<PostListSkeleton />}
                 key={JSON.stringify(searchParams)}

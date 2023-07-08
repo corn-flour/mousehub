@@ -26,10 +26,15 @@ import { Button } from "../ui/button"
 import { createPost } from "@/app/actions/posts"
 import { useParams, useRouter } from "next/navigation"
 import { Loader, Send } from "lucide-react"
+import { type Community } from "lemmy-js-client"
 
 const postFormSchema = z.object({
     // The community the post will go to
-    communityID: z.number(),
+    community: z.object({
+        id: z.number(),
+        name: z.string(),
+        icon: z.string().optional(),
+    }),
 
     // the title of the post
     name: z.string(),
@@ -47,27 +52,30 @@ const postFormSchema = z.object({
 type PostFormData = z.infer<typeof postFormSchema>
 
 export const PostForm = ({
-    initialCommunityID,
+    initialCommunity,
 }: {
-    initialCommunityID?: number
+    initialCommunity?: Community
 }) => {
-    console.log("initial community ID", initialCommunityID)
     const params = useParams()
     const router = useRouter()
     const form = useForm<PostFormData>({
         resolver: zodResolver(postFormSchema),
         defaultValues: {
-            communityID: initialCommunityID,
+            community: {
+                id: initialCommunity?.id,
+                name: initialCommunity?.name,
+                icon: initialCommunity?.icon,
+            },
             nsfw: false,
         },
     })
 
     const onSubmit: SubmitHandler<PostFormData> = async (data) => {
-        const { communityID, ...rest } = data
+        const { community, ...rest } = data
         const postFormResponse = await createPost({
             instanceURL: params["instance_url"],
             body: {
-                community_id: communityID,
+                community_id: community.id,
                 ...rest,
             },
         })
@@ -87,7 +95,7 @@ export const PostForm = ({
                     <CardContent className="space-y-4">
                         <FormField
                             control={form.control}
-                            name="communityID"
+                            name="community"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
                                     <FormLabel>Community</FormLabel>

@@ -10,20 +10,24 @@ import { type CommunityView } from "lemmy-js-client"
 
 import { useDebounce } from "use-debounce"
 import { FormControl } from "./ui/form"
+import { formatCommunityInfo } from "@/lib/lemmy"
+
+type CommunitySelectorValue = {
+    id: number
+    name: string
+    icon?: string
+}
 
 //! This can ONLY be called by a client component, since it needs an onChange event handler
 export const CommunitySelector = (props: {
-    value: number
-    onChange: (v: number) => void
+    value: CommunitySelectorValue
+    onChange: (v: CommunitySelectorValue) => void
     isInForm?: boolean
 }) => {
     const params = useParams()
     const [searchQuery, setSearchQuery] = useState("")
 
     const [debouncedQuery] = useDebounce(searchQuery, 300)
-
-    const [selectedCommunity, setSelectedCommunity] =
-        useState<CommunityView | null>(null)
 
     const instanceURL = params["instance_url"]
 
@@ -58,8 +62,8 @@ export const CommunitySelector = (props: {
                             aria-expanded={open}
                             className="w-[200px] justify-between"
                         >
-                            {selectedCommunity
-                                ? selectedCommunity.community.name
+                            {props.value
+                                ? props.value.name
                                 : "Select Community"}
                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -73,9 +77,7 @@ export const CommunitySelector = (props: {
                         aria-expanded={open}
                         className="w-[200px] justify-between"
                     >
-                        {selectedCommunity
-                            ? selectedCommunity.community.name
-                            : "Select Community"}
+                        {props.value ? props.value.name : "Select Community"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>
@@ -102,29 +104,39 @@ export const CommunitySelector = (props: {
                         </div>
                     ) : (
                         <CommandGroup>
-                            {data.map((communityView) => (
-                                <CommandItem
-                                    key={communityView.community.id}
-                                    onSelect={() => {
-                                        setSelectedCommunity(communityView)
-                                        props.onChange(
-                                            communityView.community.id,
-                                        )
-                                        setOpen(false)
-                                    }}
-                                >
-                                    <Check
-                                        className={cn(
-                                            "mr-2 h-4 w-4",
-                                            props.value ===
-                                                communityView.community.id
-                                                ? "opacity-100"
-                                                : "opacity-0",
-                                        )}
-                                    />
-                                    {communityView.community.name}
-                                </CommandItem>
-                            ))}
+                            {data.map((communityView) => {
+                                const community = formatCommunityInfo(
+                                    communityView.community,
+                                )
+                                return (
+                                    <CommandItem
+                                        key={communityView.community.id}
+                                        onSelect={() => {
+                                            props.onChange({
+                                                id: community.id,
+                                                name: community.displayName,
+                                                icon: community.icon,
+                                            })
+                                            setOpen(false)
+                                        }}
+                                    >
+                                        <Check
+                                            className={cn(
+                                                "mr-2 h-4 w-4",
+                                                props.value.id === community.id
+                                                    ? "opacity-100"
+                                                    : "opacity-0",
+                                            )}
+                                        />
+                                        <div className="flex flex-col">
+                                            <p>{community.displayName}</p>
+                                            <p className="text-sm text-muted-foreground">
+                                                {community.domain}
+                                            </p>
+                                        </div>
+                                    </CommandItem>
+                                )
+                            })}
                         </CommandGroup>
                     )}
                 </Command>

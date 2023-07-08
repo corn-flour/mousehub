@@ -28,6 +28,7 @@ export const formatUserInfo = (user: Person) => {
     return {
         userName,
         displayName,
+        domain,
     }
 }
 
@@ -38,8 +39,15 @@ export const formatCommunityInfo = (community: Community) => {
         ? community.name
         : `${community.name}@${domain}`
 
+    const displayName = community.title
+    const icon = community.icon
+
     return {
+        id: community.id,
+        displayName,
         communityName,
+        domain,
+        icon,
     }
 }
 
