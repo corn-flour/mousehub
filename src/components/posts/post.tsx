@@ -38,6 +38,7 @@ const Post = (props: {
                 creatorUserName={creator.userName}
                 published={post.post.published}
                 postTitle={post.post.name}
+                communityIcon={community.icon}
                 isUserAdmin={isUserAdmin}
                 isUserMod={isUserModerator(post.creator.id, props.moderators)}
                 isBot={post.creator.bot_account}

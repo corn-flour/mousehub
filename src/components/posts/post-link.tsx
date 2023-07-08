@@ -35,6 +35,7 @@ export const PostLink = (props: { post: PostView; instanceURL: string }) => {
                 published={post.post.published}
                 postTitle={post.post.name}
                 isBot={post.creator.bot_account}
+                communityIcon={community.icon}
                 isExplore
             />
             <CardContent>
