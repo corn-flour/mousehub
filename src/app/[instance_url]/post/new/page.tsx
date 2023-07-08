@@ -14,12 +14,13 @@ const CreatePostPage = async ({
         communityID?: string
     }
 }) => {
-    const session = getServerSession(authOptions)
+    const session = await getServerSession(authOptions)
     const lemmyClient = createLemmyClient(params.instance_url)
 
     const communityID = searchParams.communityID
     const communityResponse = await lemmyClient.getCommunity({
         id: communityID ? Number(communityID) : undefined,
+        auth: session?.accessToken,
     })
 
     return (
