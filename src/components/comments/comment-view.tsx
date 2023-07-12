@@ -1,13 +1,12 @@
-import { buildCommentTree, createLemmyClient } from "@/lib/lemmy"
+import { buildCommentTree } from "@/lib/lemmy"
 
 import { Suspense } from "react"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-import { getServerSession } from "next-auth"
 import { CommentLoader } from "./skeletons"
 import { PostCommentButton } from "./post-comment-button"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import dynamic from "next/dynamic"
+import { getComments, getPost } from "@/services/lemmy"
 
 const CommentList = dynamic(() => import("./comment-list"))
 
@@ -20,24 +19,26 @@ const Comments = async ({
     instanceURL: string
     commentID?: number
 }) => {
-    const lemmyClient = createLemmyClient(instanceURL)
-
-    const session = await getServerSession(authOptions)
-
-    const [comments, post] = await Promise.all([
-        lemmyClient.getComments({
-            post_id: postID,
-            max_depth: 8,
-            page: 2,
-            type_: "All",
-            parent_id: commentID,
-            auth: session?.accessToken,
+    const [commentResponse, postResponse] = await Promise.all([
+        getComments({
+            instanceURL,
+            input: {
+                post_id: postID,
+                max_depth: 8,
+                type_: "All",
+                parent_id: commentID,
+            },
         }),
-        lemmyClient.getPost({
-            id: postID,
-            auth: session?.accessToken,
+        getPost({
+            instanceURL,
+            input: {
+                id: postID,
+            },
         }),
     ])
+
+    const comments = commentResponse.data
+    const post = postResponse.data
 
     const commentTree = buildCommentTree(
         comments.comments,

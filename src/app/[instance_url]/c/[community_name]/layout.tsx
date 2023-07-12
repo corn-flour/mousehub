@@ -9,13 +9,11 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { createLemmyClient } from "@/lib/lemmy"
 import { Rat } from "lucide-react"
 import Image from "next/image"
 import { Suspense, type ReactNode } from "react"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { ServerSubscriptionButton } from "./server-subscription-button"
+import { getCommunity } from "@/services/lemmy"
 
 const CommunityHeader = async ({
     communityName,
@@ -24,11 +22,11 @@ const CommunityHeader = async ({
     communityName: string
     instanceURL: string
 }) => {
-    const session = await getServerSession(authOptions)
-    const lemmyClient = createLemmyClient(instanceURL)
-    const community = await lemmyClient.getCommunity({
-        name: decodeURIComponent(communityName),
-        auth: session?.accessToken,
+    const { data: community } = await getCommunity({
+        instanceURL,
+        input: {
+            name: decodeURIComponent(communityName),
+        },
     })
 
     return (
@@ -111,9 +109,11 @@ const CommunityInfo = async ({
     communityName: string
     instanceURL: string
 }) => {
-    const lemmyClient = createLemmyClient(instanceURL)
-    const community = await lemmyClient.getCommunity({
-        name: decodeURIComponent(communityName),
+    const { data: community } = await getCommunity({
+        instanceURL,
+        input: {
+            name: decodeURIComponent(communityName),
+        },
     })
 
     return (

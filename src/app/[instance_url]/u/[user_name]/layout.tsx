@@ -5,9 +5,8 @@ import { Rat } from "lucide-react"
 import Image from "next/image"
 import { Suspense, type ReactNode } from "react"
 import { UserNav } from "./user-nav"
-import { createLemmyClient, formatUserInfo } from "@/lib/lemmy"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { formatUserInfo } from "@/lib/lemmy"
+import { getUser } from "@/services/lemmy"
 
 const UserHeader = async ({
     userName: rawUserName,
@@ -16,12 +15,13 @@ const UserHeader = async ({
     userName: string
     instanceURL: string
 }) => {
-    const session = await getServerSession(authOptions)
     const userName = decodeURIComponent(rawUserName)
-    const lemmyClient = createLemmyClient(instanceURL)
-    const userDetails = await lemmyClient.getPersonDetails({
-        username: userName,
-        auth: session?.accessToken,
+
+    const { data: userDetails } = await getUser({
+        instanceURL,
+        input: {
+            username: userName,
+        },
     })
 
     const user = formatUserInfo(userDetails.person_view.person)

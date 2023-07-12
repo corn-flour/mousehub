@@ -10,8 +10,8 @@ import { Suspense } from "react"
 import { PostListSkeleton } from "../../../post-skeleton"
 import SortSelector from "@/components/sort-selector"
 import CommentLink from "@/components/comments/comment-link"
-import { createLemmyClient } from "@/lib/lemmy"
 import { ITEM_LIST_SIZE } from "@/config/consts"
+import { getUser } from "@/services/lemmy"
 
 type UserPageParams = {
     instanceURL: string
@@ -46,14 +46,16 @@ const UserComments = async ({
     page,
 }: UserPageParams) => {
     const userName = decodeURIComponent(rawUserName)
-
-    const lemmyClient = createLemmyClient(instanceURL)
     const pageNum = page ? Number(page) : 1
-    const userInfo = await lemmyClient.getPersonDetails({
-        username: userName,
-        sort: sort ?? "New",
-        page: pageNum,
-        limit: ITEM_LIST_SIZE,
+
+    const { data: userInfo } = await getUser({
+        instanceURL,
+        input: {
+            username: userName,
+            sort: sort ?? "New",
+            page: pageNum,
+            limit: ITEM_LIST_SIZE,
+        },
     })
 
     const { prev, next } = buildURL({

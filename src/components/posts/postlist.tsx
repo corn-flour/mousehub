@@ -6,11 +6,9 @@ import {
     getPreviousPageParams,
 } from "../../app/[instance_url]/search-params-handler"
 import { PostLink } from "./post-link"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-import { createLemmyClient } from "@/lib/lemmy"
 import SortSelector from "@/components/sort-selector"
 import { ITEM_LIST_SIZE } from "@/config/consts"
+import { getCommunity, getPosts } from "@/services/lemmy"
 
 type PostListProps = {
     instanceURL: string
@@ -80,16 +78,16 @@ export const PostList = async ({
     type,
     page,
 }: Omit<PostListProps, "communityName">) => {
-    const session = await getServerSession(authOptions)
-
     const pageNum = page ? Number(page) : 1
 
-    const lemmyClient = createLemmyClient(instanceURL)
-    const posts = await lemmyClient.getPosts({
-        auth: session?.accessToken,
-        type_: type,
-        sort,
-        page: pageNum,
+    const { data: posts } = await getPosts({
+        instanceURL,
+        input: {
+            type_: type,
+            sort,
+            page: pageNum,
+            limit: ITEM_LIST_SIZE,
+        },
     })
 
     const { prev, next } = buildURL({
@@ -119,9 +117,16 @@ export const PostList = async ({
                         <Link href={prev}>Last page</Link>
                     </Button>
                 )}
-                <Button asChild variant="outline">
-                    <Link href={next}>Next page</Link>
-                </Button>
+
+                {/** This doesn't fully fix the button issue, there's a small chance the post list has exactly 20 posts left
+                 * in which case it will still display the next page button even though there's nothing there
+                 * this will be removed when we move to infinite scrolling
+                 */}
+                {posts.posts.length === ITEM_LIST_SIZE && (
+                    <Button asChild variant="outline">
+                        <Link href={next}>Next page</Link>
+                    </Button>
+                )}
             </div>
         </>
     )
@@ -136,25 +141,29 @@ export const CommunityPostList = async ({
 }: PostListProps & {
     communityName: string
 }) => {
-    const session = await getServerSession(authOptions)
-
     const pageNum = page ? Number(page) : 1
 
-    const lemmyClient = createLemmyClient(instanceURL)
-    const [posts, communityResponse] = await Promise.all([
-        lemmyClient.getPosts({
-            community_name: decodeURIComponent(communityName),
-            auth: session?.accessToken,
-            type_: type,
-            sort,
-            page: pageNum,
-            limit: ITEM_LIST_SIZE,
+    const [postsResponse, communityResponse] = await Promise.all([
+        getPosts({
+            instanceURL,
+            input: {
+                community_name: decodeURIComponent(communityName),
+                type_: type,
+                sort,
+                page: pageNum,
+                limit: ITEM_LIST_SIZE,
+            },
         }),
-        lemmyClient.getCommunity({
-            auth: session?.accessToken,
-            name: decodeURIComponent(communityName),
+        getCommunity({
+            instanceURL,
+            input: {
+                name: decodeURIComponent(communityName),
+            },
         }),
     ])
+
+    const community = communityResponse.data
+    const posts = postsResponse.data
 
     const { prev, next } = buildURL({
         instanceURL,
@@ -170,7 +179,7 @@ export const CommunityPostList = async ({
                 {communityName && (
                     <Button asChild>
                         <Link
-                            href={`/${instanceURL}/post/new?communityID=${communityResponse.community_view.community.id}`}
+                            href={`/${instanceURL}/post/new?communityID=${community.community_view.community.id}`}
                         >
                             Create post
                         </Link>
