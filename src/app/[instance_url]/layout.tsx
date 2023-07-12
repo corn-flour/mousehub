@@ -67,6 +67,11 @@ const NavBar = ({
 const SubscriptionList = async ({ instanceURL }: { instanceURL: string }) => {
     const { data: siteData } = await getSite({
         instanceURL,
+        opt: {
+            next: {
+                revalidate: 0,
+            },
+        },
     })
 
     return (

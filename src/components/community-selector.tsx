@@ -70,11 +70,13 @@ export const CommunitySelector = (props: {
                             variant="outline"
                             role="combobox"
                             aria-expanded={open}
-                            className="w-[200px] justify-between"
+                            className="w-[250px] justify-between overflow-hidden"
                         >
-                            {props.value
-                                ? props.value.name
-                                : "Select Community"}
+                            <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-left">
+                                {props.value.name
+                                    ? props.value.name
+                                    : "Select Community"}
+                            </span>
                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                     </PopoverTrigger>
@@ -85,14 +87,14 @@ export const CommunitySelector = (props: {
                         variant="outline"
                         role="combobox"
                         aria-expanded={open}
-                        className="w-[200px] justify-between"
+                        className="w-[250px] justify-between"
                     >
                         {props.value ? props.value.name : "Select Community"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>
             )}
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="w-[250px] p-0">
                 <Command shouldFilter={false}>
                     <CommandInput
                         placeholder="Search community..."
@@ -125,7 +127,7 @@ export const CommunitySelector = (props: {
                                             onSelect={() => {
                                                 props.onChange({
                                                     id: community.id,
-                                                    name: `${community.displayName}@${community.domain}`,
+                                                    name: community.displayName,
                                                     icon: community.icon,
                                                 })
                                                 setOpen(false)
@@ -140,8 +142,10 @@ export const CommunitySelector = (props: {
                                                         : "opacity-0",
                                                 )}
                                             />
-                                            <div className="flex flex-col">
-                                                <p>{community.displayName}</p>
+                                            <div className="flex flex-col overflow-hidden">
+                                                <p className="overflow-hidden text-ellipsis whitespace-nowrap">
+                                                    {community.displayName}
+                                                </p>
                                                 <p className="text-sm text-muted-foreground">
                                                     {community.domain}
                                                 </p>

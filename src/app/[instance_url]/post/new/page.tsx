@@ -14,6 +14,14 @@ const CreatePostPage = async ({
 }) => {
     const communityID = searchParams.communityID
 
+    if (!communityID) {
+        return (
+            <div>
+                <PostForm />
+            </div>
+        )
+    }
+
     const { data: communityResponse } = await getCommunity({
         instanceURL: params.instance_url,
         input: {
