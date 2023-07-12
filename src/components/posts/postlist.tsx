@@ -7,8 +7,8 @@ import {
 } from "../../app/[instance_url]/search-params-handler"
 import { PostLink } from "./post-link"
 import SortSelector from "@/components/sort-selector"
-import { ITEM_LIST_SIZE } from "@/config/consts"
-import { getCommunity, getPosts } from "@/services/lemmy"
+import { DEFAULT_SORT_TYPE, ITEM_LIST_SIZE } from "@/config/consts"
+import { getCommunity, getPosts, getSite } from "@/services/lemmy"
 
 type PostListProps = {
     instanceURL: string
@@ -80,11 +80,19 @@ export const PostList = async ({
 }: Omit<PostListProps, "communityName">) => {
     const pageNum = page ? Number(page) : 1
 
+    const siteResponse = await getSite({
+        instanceURL,
+    })
+
+    const defaultSort =
+        siteResponse.data.my_user?.local_user_view.local_user
+            .default_sort_type ?? DEFAULT_SORT_TYPE
+
     const { data: posts } = await getPosts({
         instanceURL,
         input: {
             type_: type,
-            sort,
+            sort: sort ?? defaultSort,
             page: pageNum,
             limit: ITEM_LIST_SIZE,
         },
@@ -100,7 +108,7 @@ export const PostList = async ({
     return (
         <>
             <div>
-                <SortSelector />
+                <SortSelector initialValue={defaultSort} />
             </div>
             <div className="flex flex-col gap-4">
                 {posts.posts.map((post) => (
@@ -143,13 +151,21 @@ export const CommunityPostList = async ({
 }) => {
     const pageNum = page ? Number(page) : 1
 
+    const siteResponse = await getSite({
+        instanceURL,
+    })
+
+    const defaultSort =
+        siteResponse.data.my_user?.local_user_view.local_user
+            .default_sort_type ?? DEFAULT_SORT_TYPE
+
     const [postsResponse, communityResponse] = await Promise.all([
         getPosts({
             instanceURL,
             input: {
                 community_name: decodeURIComponent(communityName),
                 type_: type,
-                sort,
+                sort: sort ?? defaultSort,
                 page: pageNum,
                 limit: ITEM_LIST_SIZE,
             },
@@ -185,7 +201,7 @@ export const CommunityPostList = async ({
                         </Link>
                     </Button>
                 )}
-                <SortSelector />
+                <SortSelector initialValue={defaultSort} />
             </div>
             <div className="flex flex-col gap-4">
                 {posts.posts.map((post) => (

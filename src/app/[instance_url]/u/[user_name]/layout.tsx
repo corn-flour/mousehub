@@ -83,7 +83,6 @@ const UserHeaderSkeleton = () => {
                                 <Skeleton className="h-3 w-[250px] bg-muted-foreground" />
                                 <Skeleton className="h-3 w-[200px] bg-muted-foreground" />
                             </div>
-                            <Button>Block</Button>
                         </div>
                     </div>
                 </div>
@@ -111,7 +110,7 @@ const UserLayout = ({
                 />
             </Suspense>
             <div className="p-4">
-                <div className="mx-auto max-w-7xl">
+                <div className="mx-auto max-w-7xl space-y-4">
                     <UserNav
                         instanceURL={params.instance_url}
                         userName={params.user_name}

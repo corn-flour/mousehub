@@ -65,6 +65,7 @@ const UserPosts = async ({
 
     return (
         <>
+            <SortSelector initialValue="New" />
             <div className="flex flex-col gap-4">
                 {userInfo.posts.map((post) => (
                     <PostLink
@@ -106,20 +107,17 @@ const UserView = ({
     searchParams: ExploreSearchParams
 }) => {
     return (
-        <>
-            <SortSelector />
-            <Suspense
-                fallback={<PostListSkeleton />}
-                key={JSON.stringify(searchParams)}
-            >
-                <UserPosts
-                    instanceURL={params.instance_url}
-                    userName={params.user_name}
-                    sort={searchParams.sort}
-                    page={searchParams.page}
-                />
-            </Suspense>
-        </>
+        <Suspense
+            fallback={<PostListSkeleton />}
+            key={JSON.stringify(searchParams)}
+        >
+            <UserPosts
+                instanceURL={params.instance_url}
+                userName={params.user_name}
+                sort={searchParams.sort}
+                page={searchParams.page}
+            />
+        </Suspense>
     )
 }
 

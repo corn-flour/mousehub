@@ -67,6 +67,7 @@ const UserComments = async ({
 
     return (
         <>
+            <SortSelector initialValue="New" />
             <div className="flex flex-col gap-4">
                 {userInfo.comments.map((comment) => (
                     <CommentLink
@@ -108,20 +109,17 @@ const UserView = ({
     searchParams: ExploreSearchParams
 }) => {
     return (
-        <>
-            <SortSelector />
-            <Suspense
-                fallback={<PostListSkeleton />}
-                key={JSON.stringify(searchParams)}
-            >
-                <UserComments
-                    instanceURL={params.instance_url}
-                    userName={params.user_name}
-                    sort={searchParams.sort}
-                    page={searchParams.page}
-                />
-            </Suspense>
-        </>
+        <Suspense
+            fallback={<PostListSkeleton />}
+            key={JSON.stringify(searchParams)}
+        >
+            <UserComments
+                instanceURL={params.instance_url}
+                userName={params.user_name}
+                sort={searchParams.sort}
+                page={searchParams.page}
+            />
+        </Suspense>
     )
 }
 
