@@ -125,7 +125,7 @@ export const CommunitySelector = (props: {
                                             onSelect={() => {
                                                 props.onChange({
                                                     id: community.id,
-                                                    name: community.displayName,
+                                                    name: `${community.displayName}@${community.domain}`,
                                                     icon: community.icon,
                                                 })
                                                 setOpen(false)

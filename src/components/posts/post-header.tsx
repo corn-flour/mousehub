@@ -5,14 +5,13 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { AdminIcon, BotIcon, ModIcon } from "../icons"
 import { TimeTooltip } from "../time-tooltip"
-import { type Person } from "lemmy-js-client"
-import { formatUserInfo } from "@/lib/lemmy"
+import { type Community, type Person } from "lemmy-js-client"
+import { formatCommunityInfo, formatUserInfo } from "@/lib/lemmy"
 
 export const PostHeader = (props: {
-    communityIcon?: string
+    community: Community
+
     instanceURL: string
-    communityName: string
-    communityTitle: string
     creator: Person
     published: string
     postTitle: string
@@ -22,22 +21,23 @@ export const PostHeader = (props: {
     isBot?: boolean
 }) => {
     const { userName, domain } = formatUserInfo(props.creator)
+    const community = formatCommunityInfo(props.community)
 
     return (
         <CardHeader className={cn("space-y-4", !props.isExplore && "px-0")}>
             <div className="flex items-center gap-2">
                 <Avatar>
-                    <AvatarImage src={props.communityIcon} />
+                    <AvatarImage src={community.icon} />
                     <AvatarFallback>
                         <Rat />
                     </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
                     <Link
-                        href={`/${props.instanceURL}/c/${props.communityName}`}
+                        href={`/${props.instanceURL}/c/${community.communityName}@${community.domain}`}
                         className="z-10 font-semibold text-purple-700 hover:underline dark:text-purple-300"
                     >
-                        {props.communityTitle}
+                        {community.displayName}
                     </Link>
                     <div className="flex flex-wrap items-end gap-1">
                         <div className="flex flex-wrap items-center gap-1">

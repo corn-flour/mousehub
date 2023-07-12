@@ -8,6 +8,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { type SortType } from "lemmy-js-client"
 import { useSearchParams } from "next/navigation"
 import { useRef } from "react"
 
@@ -42,9 +43,9 @@ const sortOptions = [
     },
 ]
 
-const SortSelector = () => {
+const SortSelector = ({ initialValue }: { initialValue: SortType }) => {
     const searchParams = useSearchParams()
-    const sortOption = searchParams.get("sort") ?? undefined
+    const sortOption = searchParams.get("sort") ?? initialValue
     const formRef = useRef<HTMLFormElement>(null)
 
     return (

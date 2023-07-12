@@ -9,9 +9,10 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { createLemmyClient, formatCommunityInfo } from "@/lib/lemmy"
+import { formatCommunityInfo } from "@/lib/lemmy"
 import { Rat } from "lucide-react"
 import { Suspense, type ReactNode } from "react"
+import { getComment } from "@/services/lemmy"
 
 const CommunityInfo = async ({
     commentID,
@@ -20,9 +21,11 @@ const CommunityInfo = async ({
     commentID: string
     instanceURL: string
 }) => {
-    const lemmyClient = createLemmyClient(instanceURL)
-    const comment = await lemmyClient.getComment({
-        id: Number(commentID),
+    const { data: comment } = await getComment({
+        instanceURL,
+        input: {
+            id: Number(commentID),
+        },
     })
 
     const community = formatCommunityInfo(comment.comment_view.community)

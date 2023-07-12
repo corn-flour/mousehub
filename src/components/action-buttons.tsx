@@ -7,6 +7,7 @@ import { useParams, useRouter } from "next/navigation"
 import { Toggle } from "./ui/toggle"
 import { useSession } from "next-auth/react"
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
+import { useToast } from "./ui/use-toast"
 
 const UpvoteButton = (props: {
     upvotes: number
@@ -15,18 +16,19 @@ const UpvoteButton = (props: {
 }) => {
     return (
         <Tooltip>
-            <TooltipTrigger asChild>
-                <Toggle
-                    size="sm"
-                    className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-transparent data-[state=on]:text-blue-600 data-[state=on]:hover:bg-muted dark:data-[state=on]:text-blue-400"
-                    aria-label="Upvote"
-                    onPressedChange={props.onPress}
-                    pressed={props.isPressed}
-                >
+            <Toggle
+                size="sm"
+                className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-transparent data-[state=on]:text-blue-600 data-[state=on]:hover:bg-muted dark:data-[state=on]:text-blue-400"
+                aria-label="Upvote"
+                onPressedChange={props.onPress}
+                pressed={props.isPressed}
+                asChild
+            >
+                <TooltipTrigger>
                     <ArrowUp />
                     <span>{formatNumber(props.upvotes)}</span>
-                </Toggle>
-            </TooltipTrigger>
+                </TooltipTrigger>
+            </Toggle>
             <TooltipContent>
                 <p>
                     {props.onPress ? "Upvote" : "You need to sign in to upvote"}
@@ -43,18 +45,19 @@ const DownvoteButton = (props: {
 }) => {
     return (
         <Tooltip>
-            <TooltipTrigger asChild>
-                <Toggle
-                    size="sm"
-                    className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-transparent data-[state=on]:text-red-600 data-[state=on]:hover:bg-muted dark:data-[state=on]:text-red-400"
-                    aria-label="Downvote"
-                    onPressedChange={props.onPress}
-                    pressed={props.isPressed}
-                >
+            <Toggle
+                size="sm"
+                className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-transparent data-[state=on]:text-red-600 data-[state=on]:hover:bg-muted dark:data-[state=on]:text-red-400"
+                aria-label="Downvote"
+                onPressedChange={props.onPress}
+                pressed={props.isPressed}
+                asChild
+            >
+                <TooltipTrigger>
                     <ArrowDown />
                     <span>{formatNumber(props.downvotes)}</span>
-                </Toggle>
-            </TooltipTrigger>
+                </TooltipTrigger>
+            </Toggle>
             <TooltipContent>
                 <p>
                     {props.onPress
@@ -91,6 +94,7 @@ export const VotingButtons = (props: {
     const params = useParams()
     const { data: session } = useSession()
     const router = useRouter()
+    const { toast } = useToast()
 
     if (!session) {
         // this renders the toggles without event handler
@@ -133,19 +137,42 @@ export const VotingButtons = (props: {
 
         // call serverAction
         if (props.type === "post") {
-            await votePost({
+            const response = await votePost({
                 instanceURL: params["instance_url"],
                 score: myNewVote,
                 id: props.id,
+            })
+
+            if (response.status === "success") {
+                router.refresh()
+                return
+            }
+            toast({
+                description:
+                    myNewVote === 1
+                        ? "Failed to upvote post."
+                        : "Failed to downvote post.",
+                variant: "destructive",
             })
         } else {
-            await voteComment({
+            const response = await voteComment({
                 instanceURL: params["instance_url"],
                 score: myNewVote,
                 id: props.id,
             })
+
+            if (response.status === "success") {
+                router.refresh()
+                return
+            }
+            toast({
+                description:
+                    myNewVote === 1
+                        ? "Failed to upvote comment."
+                        : "Failed to downvote comment.",
+                variant: "destructive",
+            })
         }
-        router.refresh()
     }
 
     const handleDownvote = async () => {

@@ -41,7 +41,7 @@ const CommentLink = ({
                     <span className="font-semibold">{comment.post.name}</span>
                     <span className="text-muted-foreground"> • </span>
                     <Link
-                        href={`/${instanceURL}/c/${community.communityName}`}
+                        href={`/${instanceURL}/c/${community.communityName}@${community.domain}`}
                         className="relative z-10 inline-flex items-center gap-2 font-semibold hover:underline"
                         aria-hidden
                         tabIndex={-1}

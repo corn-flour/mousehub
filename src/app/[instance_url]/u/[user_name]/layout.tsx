@@ -1,13 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Rat } from "lucide-react"
 import Image from "next/image"
 import { Suspense, type ReactNode } from "react"
 import { UserNav } from "./user-nav"
-import { createLemmyClient, formatUserInfo } from "@/lib/lemmy"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { formatUserInfo } from "@/lib/lemmy"
+import { getUser } from "@/services/lemmy"
 
 const UserHeader = async ({
     userName: rawUserName,
@@ -16,12 +14,13 @@ const UserHeader = async ({
     userName: string
     instanceURL: string
 }) => {
-    const session = await getServerSession(authOptions)
     const userName = decodeURIComponent(rawUserName)
-    const lemmyClient = createLemmyClient(instanceURL)
-    const userDetails = await lemmyClient.getPersonDetails({
-        username: userName,
-        auth: session?.accessToken,
+
+    const { data: userDetails } = await getUser({
+        instanceURL,
+        input: {
+            username: userName,
+        },
     })
 
     const user = formatUserInfo(userDetails.person_view.person)
@@ -50,14 +49,15 @@ const UserHeader = async ({
                                 <Rat className="h-12 w-12 text-primary" />
                             </AvatarFallback>
                         </Avatar>
-                        <div className="flex items-center gap-4">
-                            <div>
-                                <h1 className="text-2xl font-bold">
-                                    {user.displayName}
-                                </h1>
-                                <p className="text-lg text-muted-foreground">
-                                    @{user.userName}
-                                </p>
+                        <div className="flex flex-col gap-1">
+                            <h1 className="text-2xl font-bold">
+                                {user.displayName}
+                            </h1>
+                            <div className="flex items-center gap-1">
+                                <p className="text-lg">@{user.userName}</p>
+                                <span className="rounded-lg bg-black/40 px-2 py-1.5 text-sm leading-none tracking-wider text-muted-foreground">
+                                    @{user.domain}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -83,7 +83,6 @@ const UserHeaderSkeleton = () => {
                                 <Skeleton className="h-3 w-[250px] bg-muted-foreground" />
                                 <Skeleton className="h-3 w-[200px] bg-muted-foreground" />
                             </div>
-                            <Button>Block</Button>
                         </div>
                     </div>
                 </div>
@@ -111,7 +110,7 @@ const UserLayout = ({
                 />
             </Suspense>
             <div className="p-4">
-                <div className="mx-auto max-w-7xl">
+                <div className="mx-auto max-w-7xl space-y-4">
                     <UserNav
                         instanceURL={params.instance_url}
                         userName={params.user_name}

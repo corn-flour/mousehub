@@ -1,4 +1,4 @@
-import { createLemmyClient } from "@/lib/lemmy"
+import { search } from "@/services/lemmy"
 import { z } from "zod"
 
 // TODO: extend for other search
@@ -22,12 +22,13 @@ export const GET = async (request: Request) => {
             status: 404,
         })
 
-    const lemmyClient = createLemmyClient(validatedRequests.instanceURL)
-
-    const searchResults = await lemmyClient.search({
-        q: validatedRequests.query,
-        type_: validatedRequests.type,
-        limit: validatedRequests.limit,
+    const { data: searchResults } = await search({
+        instanceURL: validatedRequests.instanceURL,
+        input: {
+            q: validatedRequests.query,
+            type_: validatedRequests.type,
+            limit: validatedRequests.limit,
+        },
     })
 
     return new Response(JSON.stringify(searchResults), {

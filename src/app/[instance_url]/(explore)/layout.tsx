@@ -8,17 +8,13 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { createLemmyClient } from "@/lib/lemmy"
 import Image from "next/image"
 import { Suspense, type ReactNode } from "react"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { getSite } from "@/services/lemmy"
 
 const InstanceInfo = async ({ instanceURL }: { instanceURL: string }) => {
-    const session = await getServerSession(authOptions)
-    const lemmyClient = createLemmyClient(instanceURL)
-    const site = await lemmyClient.getSite({
-        auth: session?.accessToken,
+    const { data: site } = await getSite({
+        instanceURL,
     })
 
     return (

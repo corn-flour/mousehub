@@ -2,6 +2,7 @@
 
 import { updateCommunitySubscription } from "@/app/actions/communities"
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/ui/use-toast"
 import { cn } from "@/lib/utils"
 import { type SubscribedType } from "lemmy-js-client"
 import { Check, Loader } from "lucide-react"
@@ -16,11 +17,12 @@ export const ServerSubscriptionButton = (props: {
     const [loading, setLoading] = useState(false)
     const params = useParams()
     const router = useRouter()
+    const { toast } = useToast()
 
     const handleSubscribe = async () => {
         setLoading(true)
 
-        await updateCommunitySubscription({
+        const response = await updateCommunitySubscription({
             instanceURL: params["instance_url"],
             communityID,
             type:
@@ -28,7 +30,18 @@ export const ServerSubscriptionButton = (props: {
                     ? "subscribe"
                     : "unsubscribe",
         })
-        router.refresh()
+
+        if (response.status === "success") {
+            router.refresh()
+        } else {
+            toast({
+                description:
+                    userSubscription === "NotSubscribed"
+                        ? "Failed to subscribe to community"
+                        : "Failed to unsubscribe from community",
+                variant: "destructive",
+            })
+        }
         setLoading(false)
     }
 

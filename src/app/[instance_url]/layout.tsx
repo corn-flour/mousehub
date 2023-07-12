@@ -12,9 +12,10 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { SidebarLink } from "./sidebar-link"
 import { Home } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
-import { createLemmyClient, formatCommunityInfo } from "@/lib/lemmy"
+import { formatCommunityInfo } from "@/lib/lemmy"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { SearchBar } from "@/components/search-bar"
+import { getSite } from "@/services/lemmy"
 
 const NavBar = ({
     instanceURL,
@@ -64,22 +65,20 @@ const NavBar = ({
 }
 
 const SubscriptionList = async ({ instanceURL }: { instanceURL: string }) => {
-    const session = await getServerSession(authOptions)
-    const lemmyClient = createLemmyClient(instanceURL)
-    const siteData = await lemmyClient.getSite({
-        auth: session?.accessToken,
+    const { data: siteData } = await getSite({
+        instanceURL,
     })
 
     return (
         <>
             {siteData.my_user?.follows?.length ? (
                 siteData.my_user?.follows.map(({ community }) => {
-                    const communityName =
-                        formatCommunityInfo(community).communityName
+                    const { communityName, domain } =
+                        formatCommunityInfo(community)
                     return (
                         <SidebarLink
                             key={community.id}
-                            href={`/${instanceURL}/c/${communityName}`}
+                            href={`/${instanceURL}/c/${communityName}@${domain}`}
                         >
                             <Avatar className="h-5 w-5">
                                 <AvatarImage src={community.icon} />
