@@ -5,7 +5,7 @@ import { Button } from "../ui/button"
 import { Loader, Send } from "lucide-react"
 import { useParams } from "next/navigation"
 import { useState } from "react"
-import { createComment } from "@/app/actions/comments"
+import { postComment } from "@/app/actions/comments"
 import { useRouter } from "next/navigation"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -40,7 +40,7 @@ export const CommentForm = ({
 
     const onSubmit = async (data: { text: string }) => {
         setLoading(true)
-        await createComment({
+        await postComment({
             instanceURL: params["instance_url"],
             postID,
 

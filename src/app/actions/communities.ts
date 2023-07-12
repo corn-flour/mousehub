@@ -1,24 +1,17 @@
 "use server"
-
-import { getServerSession } from "next-auth"
-import { authOptions } from "../api/auth/[...nextauth]/route"
-import { createLemmyClient } from "@/lib/lemmy"
+import { followCommunity } from "@/services/lemmy"
 
 export const updateCommunitySubscription = async (props: {
     instanceURL: string
     communityID: number
     type: "subscribe" | "unsubscribe"
 }) => {
-    const session = await getServerSession(authOptions)
-    if (!session) {
-        throw new Error("Unauthorized")
-    }
-
-    const lemmyClient = createLemmyClient(props.instanceURL)
-    const subscriptionResponse = await lemmyClient.followCommunity({
-        community_id: props.communityID,
-        auth: session.accessToken,
-        follow: props.type === "subscribe",
+    const subscriptionResponse = await followCommunity({
+        instanceURL: props.instanceURL,
+        input: {
+            community_id: props.communityID,
+            follow: props.type === "subscribe",
+        },
     })
 
     return subscriptionResponse

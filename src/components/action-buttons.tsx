@@ -15,18 +15,19 @@ const UpvoteButton = (props: {
 }) => {
     return (
         <Tooltip>
-            <TooltipTrigger asChild>
-                <Toggle
-                    size="sm"
-                    className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-transparent data-[state=on]:text-blue-600 data-[state=on]:hover:bg-muted dark:data-[state=on]:text-blue-400"
-                    aria-label="Upvote"
-                    onPressedChange={props.onPress}
-                    pressed={props.isPressed}
-                >
+            <Toggle
+                size="sm"
+                className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-transparent data-[state=on]:text-blue-600 data-[state=on]:hover:bg-muted dark:data-[state=on]:text-blue-400"
+                aria-label="Upvote"
+                onPressedChange={props.onPress}
+                pressed={props.isPressed}
+                asChild
+            >
+                <TooltipTrigger>
                     <ArrowUp />
                     <span>{formatNumber(props.upvotes)}</span>
-                </Toggle>
-            </TooltipTrigger>
+                </TooltipTrigger>
+            </Toggle>
             <TooltipContent>
                 <p>
                     {props.onPress ? "Upvote" : "You need to sign in to upvote"}
@@ -43,18 +44,19 @@ const DownvoteButton = (props: {
 }) => {
     return (
         <Tooltip>
-            <TooltipTrigger asChild>
-                <Toggle
-                    size="sm"
-                    className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-transparent data-[state=on]:text-red-600 data-[state=on]:hover:bg-muted dark:data-[state=on]:text-red-400"
-                    aria-label="Downvote"
-                    onPressedChange={props.onPress}
-                    pressed={props.isPressed}
-                >
+            <Toggle
+                size="sm"
+                className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-transparent data-[state=on]:text-red-600 data-[state=on]:hover:bg-muted dark:data-[state=on]:text-red-400"
+                aria-label="Downvote"
+                onPressedChange={props.onPress}
+                pressed={props.isPressed}
+                asChild
+            >
+                <TooltipTrigger>
                     <ArrowDown />
                     <span>{formatNumber(props.downvotes)}</span>
-                </Toggle>
-            </TooltipTrigger>
+                </TooltipTrigger>
+            </Toggle>
             <TooltipContent>
                 <p>
                     {props.onPress

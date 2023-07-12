@@ -1,11 +1,19 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import type {
+    CommentResponse,
+    CommunityResponse,
+    CreateComment,
+    CreateCommentLike,
+    CreatePost,
+    CreatePostLike,
+    FollowCommunity,
     GetComment,
     GetComments,
     GetCommunity,
     GetPersonDetails,
     GetPost,
     GetPosts,
+    PostResponse,
 } from "lemmy-js-client"
 import { LemmyHttp } from "lemmy-js-client"
 import { getServerSession } from "next-auth"
@@ -13,8 +21,23 @@ import { getServerSession } from "next-auth"
 type ServiceProp<T> = {
     instanceURL: string
     opt?: RequestInit
-    input: T
+    input: Omit<T, "auth">
 }
+
+type ServiceResponse<T> =
+    | {
+          status: "success"
+          data: T
+      }
+    | {
+          status: "error"
+          code: number
+          message: string
+      }
+
+type PostService<TInput, TOutput> = (
+    props: ServiceProp<TInput>,
+) => Promise<ServiceResponse<TOutput>>
 
 const initService = async (props: {
     instanceURL: string
@@ -158,5 +181,163 @@ export const getComment = async (props: ServiceProp<GetComment>) => {
     return {
         authed: !!session,
         data: response,
+    }
+}
+
+export const createPost: PostService<CreatePost, PostResponse> = async (
+    props,
+) => {
+    try {
+        const { input, ...rest } = props
+        const { client, session } = await initService(rest)
+
+        if (!session) {
+            return {
+                status: "error",
+                code: 401,
+                message: "User not signed in",
+            }
+        }
+        const response = await client.createPost({
+            ...input,
+            auth: session.accessToken,
+        })
+        return {
+            status: "success",
+            data: response,
+        }
+    } catch (e) {
+        return {
+            status: "error",
+            code: 500,
+            message: JSON.stringify(e),
+        }
+    }
+}
+
+export const createComment: PostService<
+    CreateComment,
+    CommentResponse
+> = async (props) => {
+    try {
+        const { input, ...rest } = props
+        const { client, session } = await initService(rest)
+
+        if (!session) {
+            return {
+                status: "error",
+                code: 401,
+                message: "User not signed in",
+            }
+        }
+        const response = await client.createComment({
+            ...input,
+            auth: session.accessToken,
+        })
+        return {
+            status: "success",
+            data: response,
+        }
+    } catch (e) {
+        return {
+            status: "error",
+            code: 500,
+            message: JSON.stringify(e),
+        }
+    }
+}
+
+export const followCommunity: PostService<
+    FollowCommunity,
+    CommunityResponse
+> = async (props) => {
+    try {
+        const { input, ...rest } = props
+        const { client, session } = await initService(rest)
+
+        if (!session) {
+            return {
+                status: "error",
+                code: 401,
+                message: "User not signed in",
+            }
+        }
+        const response = await client.followCommunity({
+            ...input,
+            auth: session.accessToken,
+        })
+        return {
+            status: "success",
+            data: response,
+        }
+    } catch (e) {
+        return {
+            status: "error",
+            code: 500,
+            message: JSON.stringify(e),
+        }
+    }
+}
+
+export const likePost: PostService<CreatePostLike, PostResponse> = async (
+    props,
+) => {
+    try {
+        const { input, ...rest } = props
+        const { client, session } = await initService(rest)
+
+        if (!session) {
+            return {
+                status: "error",
+                code: 401,
+                message: "User not signed in",
+            }
+        }
+        const response = await client.likePost({
+            ...input,
+            auth: session.accessToken,
+        })
+        return {
+            status: "success",
+            data: response,
+        }
+    } catch (e) {
+        return {
+            status: "error",
+            code: 500,
+            message: JSON.stringify(e),
+        }
+    }
+}
+
+export const likeComment: PostService<
+    CreateCommentLike,
+    CommentResponse
+> = async (props) => {
+    try {
+        const { input, ...rest } = props
+        const { client, session } = await initService(rest)
+
+        if (!session) {
+            return {
+                status: "error",
+                code: 401,
+                message: "User not signed in",
+            }
+        }
+        const response = await client.likeComment({
+            ...input,
+            auth: session.accessToken,
+        })
+        return {
+            status: "success",
+            data: response,
+        }
+    } catch (e) {
+        return {
+            status: "error",
+            code: 500,
+            message: JSON.stringify(e),
+        }
     }
 }
