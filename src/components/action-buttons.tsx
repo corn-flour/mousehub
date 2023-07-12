@@ -15,7 +15,7 @@ const UpvoteButton = (props: {
 }) => {
     return (
         <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
                 <Toggle
                     size="sm"
                     className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-transparent data-[state=on]:text-blue-600 data-[state=on]:hover:bg-muted dark:data-[state=on]:text-blue-400"
@@ -43,7 +43,7 @@ const DownvoteButton = (props: {
 }) => {
     return (
         <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
                 <Toggle
                     size="sm"
                     className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-transparent data-[state=on]:text-red-600 data-[state=on]:hover:bg-muted dark:data-[state=on]:text-red-400"
