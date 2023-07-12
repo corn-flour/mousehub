@@ -13,12 +13,16 @@ import { ExternalLink } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export const PostVideo = (props: { url: string }) => {
-    if (isVideo(props.url))
+    if (isVideo(props.url)) {
+        const extension =
+            props.url.split(/[#?]/)[0].split(".").pop()?.trim() ?? ""
+
         return (
-            <video className="relative z-10 aspect-video w-full">
-                <source src={props.url} />
+            <video className="relative z-10 aspect-video w-full" controls>
+                <source src={props.url} type={`video/${extension}`} />
             </video>
         )
+    }
     return (
         <iframe src={props.url} className="relative z-10 aspect-video w-full" />
     )

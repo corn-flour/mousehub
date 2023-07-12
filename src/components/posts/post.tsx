@@ -4,11 +4,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { type CommunityModeratorView, type PostView } from "lemmy-js-client"
 import Mdx from "@/components/markdown/mdx"
 import { formatNumber } from "@/lib/utils"
-import {
-    formatCommunityInfo,
-    formatUserInfo,
-    isUserModerator,
-} from "@/lib/lemmy"
+import { formatCommunityInfo, isUserModerator } from "@/lib/lemmy"
 import { Button } from "../ui/button"
 import { NSFWMask } from "./nsfw-mask"
 import { getPostType } from "./helpers"
@@ -22,7 +18,6 @@ const Post = (props: {
     moderators?: CommunityModeratorView[]
 }) => {
     const { post, instanceURL } = props
-    const creator = formatUserInfo(post.creator)
     const community = formatCommunityInfo(post.community)
 
     const postType = getPostType(post)
@@ -35,7 +30,7 @@ const Post = (props: {
                 communityName={community.communityName}
                 communityTitle={post.community.title}
                 instanceURL={instanceURL}
-                creatorUserName={creator.userName}
+                creator={post.creator}
                 published={post.post.published}
                 postTitle={post.post.name}
                 communityIcon={community.icon}

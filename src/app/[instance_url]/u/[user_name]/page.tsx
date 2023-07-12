@@ -13,6 +13,7 @@ import { PostLink } from "@/components/posts/post-link"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { createLemmyClient } from "@/lib/lemmy"
+import { ITEM_LIST_SIZE } from "@/config/consts"
 
 type UserPageParams = {
     instanceURL: string
@@ -53,6 +54,7 @@ const UserPosts = async ({
         sort: sort ?? "New",
         page: pageNum,
         auth: session?.accessToken,
+        limit: ITEM_LIST_SIZE,
     })
 
     const { prev, next } = buildURL({
@@ -79,9 +81,16 @@ const UserPosts = async ({
                         <Link href={prev}>Last page</Link>
                     </Button>
                 )}
-                <Button asChild variant="outline">
-                    <Link href={next}>Next page</Link>
-                </Button>
+
+                {/** This doesn't fully fix the button issue, there's a small chance the post list has exactly 20 posts left
+                 * in which case it will still display the next page button even though there's nothing there
+                 * this will be removed when we move to infinite scrolling
+                 */}
+                {userInfo.posts.length === ITEM_LIST_SIZE && (
+                    <Button asChild variant="outline">
+                        <Link href={next}>Next page</Link>
+                    </Button>
+                )}
             </div>
         </>
     )
