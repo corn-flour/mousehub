@@ -67,7 +67,7 @@ export const components: Partial<
         return (
             <Link
                 className={cn(
-                    "font-medium underline underline-offset-4",
+                    "break-words font-medium underline underline-offset-4",
                     className,
                 )}
                 href={href ?? ""}
