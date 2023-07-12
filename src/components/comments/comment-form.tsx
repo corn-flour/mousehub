@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FormMarkdownEditor } from "../markdown/markdown-editor"
+import { useToast } from "../ui/use-toast"
 
 const commentFormSchema = z.object({
     text: z.string().min(1),
@@ -37,10 +38,11 @@ export const CommentForm = ({
 
     const [loading, setLoading] = useState(false)
     const router = useRouter()
+    const { toast } = useToast()
 
     const onSubmit = async (data: { text: string }) => {
         setLoading(true)
-        await postComment({
+        const response = await postComment({
             instanceURL: params["instance_url"],
             postID,
 
@@ -49,7 +51,14 @@ export const CommentForm = ({
         })
         setLoading(false)
         onCancel()
-        router.refresh()
+        if (response.status === "success") {
+            router.refresh()
+        } else {
+            toast({
+                description: "Failed to submit comment.",
+                variant: "destructive",
+            })
+        }
     }
 
     return (

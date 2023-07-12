@@ -14,6 +14,8 @@ import Image from "next/image"
 import { Suspense, type ReactNode } from "react"
 import { ServerSubscriptionButton } from "./server-subscription-button"
 import { getCommunity } from "@/services/lemmy"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
 const CommunityHeader = async ({
     communityName,
@@ -22,6 +24,8 @@ const CommunityHeader = async ({
     communityName: string
     instanceURL: string
 }) => {
+    const session = await getServerSession(authOptions)
+
     const { data: community } = await getCommunity({
         instanceURL,
         input: {
@@ -62,14 +66,16 @@ const CommunityHeader = async ({
                                     !{decodeURIComponent(communityName)}
                                 </p>
                             </div>
-                            <ServerSubscriptionButton
-                                communityID={
-                                    community.community_view.community.id
-                                }
-                                userSubscription={
-                                    community.community_view.subscribed
-                                }
-                            />
+                            {!!session && (
+                                <ServerSubscriptionButton
+                                    communityID={
+                                        community.community_view.community.id
+                                    }
+                                    userSubscription={
+                                        community.community_view.subscribed
+                                    }
+                                />
+                            )}
                         </div>
                     </div>
                 </div>

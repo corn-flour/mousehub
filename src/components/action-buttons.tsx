@@ -7,6 +7,7 @@ import { useParams, useRouter } from "next/navigation"
 import { Toggle } from "./ui/toggle"
 import { useSession } from "next-auth/react"
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
+import { useToast } from "./ui/use-toast"
 
 const UpvoteButton = (props: {
     upvotes: number
@@ -93,6 +94,7 @@ export const VotingButtons = (props: {
     const params = useParams()
     const { data: session } = useSession()
     const router = useRouter()
+    const { toast } = useToast()
 
     if (!session) {
         // this renders the toggles without event handler
@@ -135,19 +137,42 @@ export const VotingButtons = (props: {
 
         // call serverAction
         if (props.type === "post") {
-            await votePost({
+            const response = await votePost({
                 instanceURL: params["instance_url"],
                 score: myNewVote,
                 id: props.id,
+            })
+
+            if (response.status === "success") {
+                router.refresh()
+                return
+            }
+            toast({
+                description:
+                    myNewVote === 1
+                        ? "Failed to upvote post."
+                        : "Failed to downvote post.",
+                variant: "destructive",
             })
         } else {
-            await voteComment({
+            const response = await voteComment({
                 instanceURL: params["instance_url"],
                 score: myNewVote,
                 id: props.id,
             })
+
+            if (response.status === "success") {
+                router.refresh()
+                return
+            }
+            toast({
+                description:
+                    myNewVote === 1
+                        ? "Failed to upvote comment."
+                        : "Failed to downvote comment.",
+                variant: "destructive",
+            })
         }
-        router.refresh()
     }
 
     const handleDownvote = async () => {

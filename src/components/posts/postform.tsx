@@ -27,6 +27,7 @@ import { submitPost } from "@/app/actions/posts"
 import { useParams, useRouter } from "next/navigation"
 import { Loader, Send } from "lucide-react"
 import { type Community } from "lemmy-js-client"
+import { useToast } from "../ui/use-toast"
 
 const postFormSchema = z.object({
     // The community the post will go to
@@ -67,8 +68,11 @@ export const PostForm = ({
                 icon: initialCommunity?.icon,
             },
             nsfw: false,
+            name: "",
+            body: "",
         },
     })
+    const { toast } = useToast()
 
     const onSubmit: SubmitHandler<PostFormData> = async (data) => {
         const { community, ...rest } = data
@@ -81,11 +85,18 @@ export const PostForm = ({
         })
 
         if (postFormResponse.status === "success") {
+            toast({
+                description: "Post created!",
+            })
+
             router.push(
                 `/${params["instance_url"]}/post/${postFormResponse.data.post_view.post.id}`,
             )
         } else {
-            // TODO: handle error here
+            toast({
+                description: "Failed to create post.",
+                variant: "destructive",
+            })
         }
     }
     return (
