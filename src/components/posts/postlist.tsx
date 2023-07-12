@@ -10,6 +10,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { createLemmyClient } from "@/lib/lemmy"
 import SortSelector from "@/components/sort-selector"
+import { ITEM_LIST_SIZE } from "@/config/consts"
 
 type PostListProps = {
     instanceURL: string
@@ -147,6 +148,7 @@ export const CommunityPostList = async ({
             type_: type,
             sort,
             page: pageNum,
+            limit: ITEM_LIST_SIZE,
         }),
         lemmyClient.getCommunity({
             auth: session?.accessToken,
@@ -185,15 +187,23 @@ export const CommunityPostList = async ({
                     />
                 ))}
             </div>
+
             <div className="mt-4 flex items-center justify-center gap-4">
                 {pageNum > 1 && (
                     <Button asChild variant="outline">
                         <Link href={prev}>Last page</Link>
                     </Button>
                 )}
-                <Button asChild variant="outline">
-                    <Link href={next}>Next page</Link>
-                </Button>
+
+                {/** This doesn't fully fix the button issue, there's a small chance the post list has exactly 20 posts left
+                 * in which case it will still display the next page button even though there's nothing there
+                 * this will be removed when we move to infinite scrolling
+                 */}
+                {posts.posts.length === ITEM_LIST_SIZE && (
+                    <Button asChild variant="outline">
+                        <Link href={next}>Next page</Link>
+                    </Button>
+                )}
             </div>
         </>
     )
