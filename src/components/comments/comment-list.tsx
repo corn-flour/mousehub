@@ -37,10 +37,12 @@ const CommentHeader = ({
     const params = useParams()
     const instanceURL = params["instance_url"]
 
+    const userURL = `/${instanceURL}/u/${creator.userName}@${creator.domain}`
+
     return (
         <div className="flex items-center gap-2">
             <Link
-                href={`/u/${creator.userName}`}
+                href={userURL}
                 className="hover:underline"
                 aria-hidden
                 tabIndex={-1}
@@ -55,7 +57,7 @@ const CommentHeader = ({
             <div className="flex flex-wrap items-end gap-1">
                 <div className="inline-flex items-center gap-1">
                     <Link
-                        href={`/${instanceURL}/u/${creator.userName}@${creator.domain}`}
+                        href={userURL}
                         className={cn(
                             "hover:underline",
                             isOriginalPoster
