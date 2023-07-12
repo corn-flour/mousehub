@@ -6,6 +6,7 @@ import { experimental_useOptimistic as useOptimistic } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { Toggle } from "./ui/toggle"
 import { useSession } from "next-auth/react"
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
 
 const UpvoteButton = (props: {
     upvotes: number
@@ -13,16 +14,25 @@ const UpvoteButton = (props: {
     onPress?: () => void
 }) => {
     return (
-        <Toggle
-            size="sm"
-            className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-transparent data-[state=on]:text-blue-600 data-[state=on]:hover:bg-muted dark:data-[state=on]:text-blue-400"
-            aria-label="Upvote"
-            onPressedChange={props.onPress}
-            pressed={props.isPressed}
-        >
-            <ArrowUp />
-            <span>{formatNumber(props.upvotes)}</span>
-        </Toggle>
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <Toggle
+                    size="sm"
+                    className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-transparent data-[state=on]:text-blue-600 data-[state=on]:hover:bg-muted dark:data-[state=on]:text-blue-400"
+                    aria-label="Upvote"
+                    onPressedChange={props.onPress}
+                    pressed={props.isPressed}
+                >
+                    <ArrowUp />
+                    <span>{formatNumber(props.upvotes)}</span>
+                </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>
+                <p>
+                    {props.onPress ? "Upvote" : "You need to sign in to upvote"}
+                </p>
+            </TooltipContent>
+        </Tooltip>
     )
 }
 
@@ -32,16 +42,27 @@ const DownvoteButton = (props: {
     onPress?: () => void
 }) => {
     return (
-        <Toggle
-            size="sm"
-            className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-transparent data-[state=on]:text-red-600 data-[state=on]:hover:bg-muted dark:data-[state=on]:text-red-400"
-            aria-label="Downvote"
-            onPressedChange={props.onPress}
-            pressed={props.isPressed}
-        >
-            <ArrowDown />
-            <span>{formatNumber(props.downvotes)}</span>
-        </Toggle>
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <Toggle
+                    size="sm"
+                    className="relative z-10 h-auto gap-1 py-1 pl-2 pr-3 data-[state=on]:bg-transparent data-[state=on]:text-red-600 data-[state=on]:hover:bg-muted dark:data-[state=on]:text-red-400"
+                    aria-label="Downvote"
+                    onPressedChange={props.onPress}
+                    pressed={props.isPressed}
+                >
+                    <ArrowDown />
+                    <span>{formatNumber(props.downvotes)}</span>
+                </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>
+                <p>
+                    {props.onPress
+                        ? "Downvote"
+                        : "You need to sign in to downvote"}
+                </p>
+            </TooltipContent>
+        </Tooltip>
     )
 }
 

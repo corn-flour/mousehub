@@ -37,7 +37,9 @@ const NavBar = ({
                             className="flex items-center gap-2"
                         >
                             <Rat className="h-6 w-6" />
-                            <span className="text-lg">{instanceURL}</span>
+                            <span className="hidden text-lg sm:block">
+                                {instanceURL}
+                            </span>
                         </Link>
                     </Button>
                 </div>

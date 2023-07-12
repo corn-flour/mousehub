@@ -11,6 +11,7 @@ import { PostListSkeleton } from "../../../post-skeleton"
 import SortSelector from "@/components/sort-selector"
 import CommentLink from "@/components/comments/comment-link"
 import { createLemmyClient } from "@/lib/lemmy"
+import { ITEM_LIST_SIZE } from "@/config/consts"
 
 type UserPageParams = {
     instanceURL: string
@@ -52,6 +53,7 @@ const UserComments = async ({
         username: userName,
         sort: sort ?? "New",
         page: pageNum,
+        limit: ITEM_LIST_SIZE,
     })
 
     const { prev, next } = buildURL({
@@ -78,9 +80,16 @@ const UserComments = async ({
                         <Link href={prev}>Last page</Link>
                     </Button>
                 )}
-                <Button asChild variant="outline">
-                    <Link href={next}>Next page</Link>
-                </Button>
+
+                {/** This doesn't fully fix the button issue, there's a small chance the post list has exactly 20 posts left
+                 * in which case it will still display the next page button even though there's nothing there
+                 * this will be removed when we move to infinite scrolling
+                 */}
+                {userInfo.comments.length === ITEM_LIST_SIZE && (
+                    <Button asChild variant="outline">
+                        <Link href={next}>Next page</Link>
+                    </Button>
+                )}
             </div>
         </>
     )
