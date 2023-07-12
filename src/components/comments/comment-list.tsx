@@ -52,10 +52,10 @@ const CommentHeader = ({
                     </AvatarFallback>
                 </Avatar>
             </Link>
-            <div className="flex items-end gap-1">
+            <div className="flex flex-wrap items-end gap-1">
                 <div className="inline-flex items-center gap-1">
                     <Link
-                        href={`/${instanceURL}/u/${creator.userName}`}
+                        href={`/${instanceURL}/u/${creator.userName}@${creator.domain}`}
                         className={cn(
                             "hover:underline",
                             isOriginalPoster
