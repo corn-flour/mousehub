@@ -135,7 +135,7 @@ export const SearchBar = () => {
                                                 key={userView.person.id}
                                                 onSelect={() => {
                                                     router.push(
-                                                        `/${instanceURL}/u/${user.userName}`,
+                                                        `/${instanceURL}/u/${user.userName}@${user.domain}`,
                                                     )
                                                     setOpen(false)
                                                 }}
