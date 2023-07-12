@@ -16,6 +16,7 @@ import { ServerSubscriptionButton } from "./server-subscription-button"
 import { getCommunity } from "@/services/lemmy"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { formatCommunityInfo } from "@/lib/lemmy"
 
 const CommunityHeader = async ({
     communityName,
@@ -26,19 +27,23 @@ const CommunityHeader = async ({
 }) => {
     const session = await getServerSession(authOptions)
 
-    const { data: community } = await getCommunity({
+    const { data: communityResponse } = await getCommunity({
         instanceURL,
         input: {
             name: decodeURIComponent(communityName),
         },
     })
 
+    const community = formatCommunityInfo(
+        communityResponse.community_view.community,
+    )
+
     return (
         <section>
             <div className="relative h-96 w-full bg-muted-foreground">
-                {community.community_view.community.banner && (
+                {community.banner && (
                     <Image
-                        src={community.community_view.community.banner}
+                        src={community.banner}
                         alt=""
                         className="object-cover"
                         fill
@@ -50,9 +55,7 @@ const CommunityHeader = async ({
                 <div className="absolute left-1/2 top-0 mx-auto w-full max-w-7xl -translate-x-1/2 -translate-y-7">
                     <div className="flex items-end gap-4">
                         <Avatar className="h-24 w-24 border-[5px] border-muted bg-muted">
-                            <AvatarImage
-                                src={community.community_view.community.icon}
-                            />
+                            <AvatarImage src={community.icon} />
                             <AvatarFallback className="bg-primary-foreground">
                                 <Rat className="h-12 w-12 text-primary" />
                             </AvatarFallback>
@@ -60,19 +63,23 @@ const CommunityHeader = async ({
                         <div className="flex items-center gap-4">
                             <div>
                                 <h1 className="text-2xl font-bold">
-                                    {community.community_view.community.name}
+                                    {community.displayName}
                                 </h1>
-                                <p className="text-lg text-muted-foreground">
-                                    !{decodeURIComponent(communityName)}
-                                </p>
+                                <div className="flex items-center gap-1">
+                                    <p className="text-lg text-muted-foreground">
+                                        !{community.communityName}
+                                    </p>
+                                    <span className="rounded-lg bg-black/40 px-2 py-1.5 text-sm leading-none tracking-wider text-muted-foreground">
+                                        @{community.domain}
+                                    </span>
+                                </div>
                             </div>
                             {!!session && (
                                 <ServerSubscriptionButton
-                                    communityID={
-                                        community.community_view.community.id
-                                    }
+                                    communityID={community.id}
                                     userSubscription={
-                                        community.community_view.subscribed
+                                        communityResponse.community_view
+                                            .subscribed
                                     }
                                 />
                             )}

@@ -49,14 +49,15 @@ const UserHeader = async ({
                                 <Rat className="h-12 w-12 text-primary" />
                             </AvatarFallback>
                         </Avatar>
-                        <div className="flex items-center gap-4">
-                            <div>
-                                <h1 className="text-2xl font-bold">
-                                    {user.displayName}
-                                </h1>
-                                <p className="text-lg text-muted-foreground">
-                                    @{user.userName}
-                                </p>
+                        <div className="flex flex-col gap-1">
+                            <h1 className="text-2xl font-bold">
+                                {user.displayName}
+                            </h1>
+                            <div className="flex items-center gap-1">
+                                <p className="text-lg">@{user.userName}</p>
+                                <span className="rounded-lg bg-black/40 px-2 py-1.5 text-sm leading-none tracking-wider text-muted-foreground">
+                                    @{user.domain}
+                                </span>
                             </div>
                         </div>
                     </div>

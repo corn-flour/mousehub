@@ -73,12 +73,12 @@ const SubscriptionList = async ({ instanceURL }: { instanceURL: string }) => {
         <>
             {siteData.my_user?.follows?.length ? (
                 siteData.my_user?.follows.map(({ community }) => {
-                    const communityName =
-                        formatCommunityInfo(community).communityName
+                    const { communityName, domain } =
+                        formatCommunityInfo(community)
                     return (
                         <SidebarLink
                             key={community.id}
-                            href={`/${instanceURL}/c/${communityName}`}
+                            href={`/${instanceURL}/c/${communityName}@${domain}`}
                         >
                             <Avatar className="h-5 w-5">
                                 <AvatarImage src={community.icon} />

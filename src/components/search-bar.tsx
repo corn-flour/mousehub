@@ -167,7 +167,7 @@ export const SearchBar = () => {
                                                 key={communityView.community.id}
                                                 onSelect={() => {
                                                     router.push(
-                                                        `/${instanceURL}/c/${community.communityName}`,
+                                                        `/${instanceURL}/c/${community.communityName}@${community.domain}`,
                                                     )
                                                     setOpen(false)
                                                 }}

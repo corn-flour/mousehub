@@ -14,6 +14,7 @@ import type {
     GetPost,
     GetPosts,
     PostResponse,
+    Search,
 } from "lemmy-js-client"
 import { LemmyHttp } from "lemmy-js-client"
 import { getServerSession } from "next-auth"
@@ -175,6 +176,19 @@ export const getComment = async (props: ServiceProp<GetComment>) => {
     const { input, ...rest } = props
     const { client, session } = await initService(rest)
     const response = await client.getComment({
+        ...input,
+        auth: session?.accessToken,
+    })
+    return {
+        authed: !!session,
+        data: response,
+    }
+}
+
+export const search = async (props: ServiceProp<Search>) => {
+    const { input, ...rest } = props
+    const { client, session } = await initService(rest)
+    const response = await client.search({
         ...input,
         auth: session?.accessToken,
     })

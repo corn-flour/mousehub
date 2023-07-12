@@ -1,4 +1,3 @@
-import { formatCommunityInfo } from "@/lib/lemmy"
 import { type PostView } from "lemmy-js-client"
 import { Card, CardContent, CardFooter } from "../ui/card"
 import Link from "next/link"
@@ -14,7 +13,6 @@ import { PostHeader } from "./post-header"
 
 export const PostLink = (props: { post: PostView; instanceURL: string }) => {
     const { post, instanceURL } = props
-    const community = formatCommunityInfo(post.community)
 
     const postType = getPostType(post)
 
@@ -27,14 +25,12 @@ export const PostLink = (props: { post: PostView; instanceURL: string }) => {
                 <span className="sr-only">{post.post.name}</span>
             </Link>
             <PostHeader
-                communityName={community.communityName}
-                communityTitle={post.community.title}
                 instanceURL={instanceURL}
                 creator={post.creator}
                 published={post.post.published}
                 postTitle={post.post.name}
                 isBot={post.creator.bot_account}
-                communityIcon={community.icon}
+                community={post.community}
                 isExplore
             />
             <CardContent>
