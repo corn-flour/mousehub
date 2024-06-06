@@ -7,6 +7,7 @@ export default async function Home() {
     if (session) {
         redirect(`/${session.instanceURL}`)
     } else {
-        redirect(`/login`)
+        // redirect(`/login`)
+        redirect(`/lemmy.world`)
     }
 }

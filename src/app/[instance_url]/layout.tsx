@@ -5,8 +5,6 @@ import { type ReactNode } from "react"
 import ThemeSwitch from "./theme-switch"
 import { getServerSession } from "next-auth"
 import { authOptions } from "../api/auth/[...nextauth]/route"
-import { redirect } from "next/navigation"
-import { ProfileButton } from "./profile-button"
 import { LeftAsideLayout } from "@/components/left-column-layout"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { SidebarLink } from "./sidebar-link"
@@ -19,7 +17,6 @@ import { getSite } from "@/services/lemmy"
 
 const NavBar = ({
     instanceURL,
-    localUser,
 }: {
     instanceURL: string
     localUser?: {
@@ -47,17 +44,6 @@ const NavBar = ({
                 <div className="flex items-center gap-2">
                     <SearchBar />
                     <ThemeSwitch />
-
-                    {!localUser ? (
-                        <Button asChild>
-                            <Link href="/login">Login</Link>
-                        </Button>
-                    ) : (
-                        <ProfileButton
-                            user={localUser}
-                            instanceURL={instanceURL}
-                        />
-                    )}
                 </div>
             </div>
         </header>
@@ -114,14 +100,14 @@ const InstanceViewLayout = async ({
     }
 }) => {
     const session = await getServerSession(authOptions)
-    if (session && session.instanceURL !== params.instance_url) {
-        // the user is log in but not in the right instance
-        // redirect to the right instance
-        //? do we want to handle viewing other instance when the user is signed in?
-        //? the user can then automatically be viewed as guest?
-        redirect(`/${session.instanceURL}`)
-        return null
-    }
+    // if (session && session.instanceURL !== params.instance_url) {
+    //     // the user is log in but not in the right instance
+    //     // redirect to the right instance
+    //     //? do we want to handle viewing other instance when the user is signed in?
+    //     //? the user can then automatically be viewed as guest?
+    //     redirect(`/${session.instanceURL}`)
+    //     return null
+    // }
 
     return (
         <>

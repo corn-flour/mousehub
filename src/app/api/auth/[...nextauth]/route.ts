@@ -77,6 +77,8 @@ export const authOptions: NextAuthOptions = {
                     auth: authResponse.jwt,
                 })
 
+                console.log("debug", JSON.stringify(siteData))
+
                 if (!siteData.my_user) throw new Error("cannot get my user")
                 const myUser = siteData.my_user
 
